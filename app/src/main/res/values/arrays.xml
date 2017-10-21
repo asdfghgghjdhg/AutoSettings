@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sound_equalizer_presets">
+        <item>{"bass":"7","middle":"7","treble":"7"}</item>
+        <item>{"bass":"13","middle":"7","treble":"11"}</item>
+        <item>{"bass":"11","middle":"7","treble":"13"}</item>
+        <item>{"bass":"11","middle":"7","treble":"11"}</item>
+        <item>{"bass":"13","middle":"7","treble":"13"}</item>
+        <item>{"bass":"5","middle":"7","treble":"5"}</item>
+        <item>{"bass":"11","middle":"7","treble":"12"}</item>
+        <item>{"bass":"12","middle":"7","treble":"13"}</item>
+        <item>{"bass":"10","middle":"7","treble":"5"}</item>
+        <item>{"bass":"12","middle":"7","treble":"10"}</item>
+    </string-array>
+</resources>

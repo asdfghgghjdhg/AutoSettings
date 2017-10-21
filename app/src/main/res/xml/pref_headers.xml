@@ -1,0 +1,28 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_general" />
+
+    <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$SoundPreferenceFragment"
+        android:icon="@drawable/audio_settings"
+        android:title="@string/pref_header_sound" />
+
+    <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$ScreenPreferenceFragment"
+        android:title="@string/pref_header_screen" />
+
+    <!--<header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$TouchPanelFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/pref_header_touch" />
+
+    <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$OtherSettingsFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/pref_header_other" />-->
+
+</preference-headers>

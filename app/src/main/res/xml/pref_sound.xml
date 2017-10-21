@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autosettings="http://schemas.android.com/apk/res/com.dgl.auto.autosettings">
+
+    <PreferenceCategory android:title="@string/pref_sound_volumeheader">
+
+        <SeekBarPreference
+            android:title="@string/pref_sound_volume_title"
+            android:key="@string/sp_sound_volume"
+            android:icon="@drawable/audio_settings"
+            android:shouldDisableView="false"
+            android:defaultValue="20"
+            android:max="40" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_sound_balanceheader">
+
+        <SeekBarPreference
+            android:title="@string/pref_sound_balance_title"
+            android:key="@string/sp_sound_balance"
+            android:icon="@drawable/balance_settings"
+            android:shouldDisableView="false"
+            android:defaultValue="7"
+            android:max="14" />
+
+        <SeekBarPreference
+            android:title="@string/pref_sound_fade_title"
+            android:key="@string/sp_sound_fade"
+            android:icon="@drawable/fade_settings"
+            android:shouldDisableView="false"
+            android:defaultValue="7"
+            android:max="14" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_sound_eqheader">
+
+        <com.dgl.auto.autosettings.EqualizerPreference
+            android:title="@string/pref_sound_eq_title"
+            android:key="@string/sp_sound_equalizer"
+            android:icon="@drawable/eq_settings"
+            android:defaultValue="0"
+            autosettings:bassDefaultValue="7"
+            autosettings:bassMaxValue="14"
+            autosettings:middleDefaultValue="7"
+            autosettings:middleMaxValue="14"
+            autosettings:trebleDefaultValue="7"
+            autosettings:trebleMaxValue="14"
+            autosettings:subwooferDefaultValue="0"
+            autosettings:subwooferMaxValue="14"
+            autosettings:defaultPreset="0" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/sp_sound_loud"
+            android:title="@string/pref_sound_loudmode" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

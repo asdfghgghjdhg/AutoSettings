@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/colorpicker-1.0.1" />
             <option value="$PROJECT_DIR$/com.dgl.auto" />
             <option value="$PROJECT_DIR$/seekbarpreference" />
           </set>

@@ -32,4 +32,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     provided project(':com.dgl.auto')
     provided project(':seekbarpreference')
+    compile project(':colorpicker-1.0.1')
 }

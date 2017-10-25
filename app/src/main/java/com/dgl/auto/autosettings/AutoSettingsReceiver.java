@@ -75,6 +75,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (settingManager != null) {
+            // Звук
             try {
                 if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_volume))) {
                     settingManager.setMcuVol(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_volume), 0));
@@ -156,14 +157,89 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+
+            // Радио
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_radio_region))) {
+                    int savedRegion = Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_radio_region), "0"));
+                    if (savedRegion != settingManager.getRadioField()) { settingManager.setRadioField(savedRegion); }
+                } else {
+                    editor.putString(context.getResources().getString(R.string.sp_radio_region), String.valueOf(settingManager.getRadioField()));
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+            // Экран
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_brightness))) {
+                    //settingManager.setBrightness(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_brightness), 0));
+                } else {
+                    editor.putInt(context.getResources().getString(R.string.sp_screen_brightness), settingManager.getScreenBrightness());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_contrast))) {
+                    settingManager.setContrast(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_contrast), 0));
+                } else {
+                    editor.putInt(context.getResources().getString(R.string.sp_screen_contrast), settingManager.getContrast());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_detect_illumination))) {
+                    settingManager.setIllumeDetection(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_screen_detect_illumination), false));
+                } else {
+                    editor.putBoolean(context.getResources().getString(R.string.sp_sound_equalizer_subwoofer), settingManager.getIllumeDetection());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_hue))) {
+                    settingManager.setHueSetting(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_hue), 0));
+                } else {
+                    editor.putInt(context.getResources().getString(R.string.sp_screen_hue), settingManager.getHueSetting());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_saturation))) {
+                    settingManager.setSaturation(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_saturation), 0));
+                } else {
+                    editor.putInt(context.getResources().getString(R.string.sp_screen_saturation), settingManager.getSaturation());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_value))) {
+                    settingManager.setBright(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_value), 0));
+                } else {
+                    editor.putInt(context.getResources().getString(R.string.sp_screen_value), settingManager.getBright());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
 
         if (radioManager != null) {
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_radio_currfreq))) {
-                    radioManager.setFreq((char)sharedPreferences.getInt(context.getResources().getString(R.string.sp_radio_currfreq), IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ));
+                int currBand = radioManager.getBand();
+                String sp;
+                if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
+                    sp = context.getResources().getString(R.string.sp_radio_lastAMfreq);
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_radio_currfreq), radioManager.getCurrFreq());
+                    sp = context.getResources().getString(R.string.sp_radio_lastFMfreq);
+                }
+                if (sharedPreferences.contains(sp)) {
+                    radioManager.setFreq((char)sharedPreferences.getInt(sp, IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ));
+                } else {
+                    editor.putInt(sp, radioManager.getCurrFreq());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -178,6 +254,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (settingManager != null) {
+            // Звук
             try {
                 editor.putInt(context.getResources().getString(R.string.sp_sound_volume), settingManager.getMcuVol());
             } catch (RemoteException e) {
@@ -223,22 +300,66 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        }
 
-        if (radioManager != null) {
+            // Радио
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_radio_currfreq), radioManager.getCurrFreq());
+                editor.putString(context.getResources().getString(R.string.sp_radio_region), String.valueOf(settingManager.getRadioField()));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+            // Экран
+            try {
+                editor.putInt(context.getResources().getString(R.string.sp_screen_brightness), settingManager.getScreenBrightness());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
+                editor.putInt(context.getResources().getString(R.string.sp_screen_contrast), settingManager.getContrast());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putBoolean(context.getResources().getString(R.string.sp_screen_detect_illumination), settingManager.getIllumeDetection());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putInt(context.getResources().getString(R.string.sp_screen_hue), settingManager.getHueSetting());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putInt(context.getResources().getString(R.string.sp_screen_saturation), settingManager.getSaturation());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putInt(context.getResources().getString(R.string.sp_screen_value), settingManager.getBright());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (radioManager != null) {
+            try {
+                int currBand = radioManager.getBand();
+                if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
+                    editor.putInt(context.getResources().getString(R.string.sp_radio_lastAMfreq), radioManager.getCurrFreq());
+                } else {
+                    editor.putInt(context.getResources().getString(R.string.sp_radio_lastFMfreq), radioManager.getCurrFreq());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            /*try {
                 char[] freqs = radioManager.getFreqList();
                 for (int i = 0; i < freqs.length; i++) {
                     editor.putInt(String.format(context.getResources().getString(R.string.sp_radio_presets), i + 1), (int)freqs[i]);
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         editor.commit();

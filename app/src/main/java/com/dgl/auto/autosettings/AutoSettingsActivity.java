@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -24,8 +25,12 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.preference.SeekBarPreference;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dgl.auto.IRadioManager;
@@ -37,12 +42,14 @@ import java.util.List;
 
 public class AutoSettingsActivity extends AppCompatPreferenceActivity {
     private static ISettingManager settingManager = null;
+    private static IRadioManager radioManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         settingManager = SettingManager.getInstance();
+        radioManager = RadioManager.getInstance();
 
         setupActionBar();
         startService(new Intent(this, AutoSettingsService.class));
@@ -74,7 +81,9 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || SoundPreferenceFragment.class.getName().equals(fragmentName)
-                || ScreenPreferenceFragment.class.getName().equals(fragmentName);
+                || RadioPreferenceFragment.class.getName().equals(fragmentName)
+                || ScreenPreferenceFragment.class.getName().equals(fragmentName)
+                || InfoPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -94,6 +103,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             SeekBarPreference fadePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_sound_fade));
             EqualizerPreference eqPref = (EqualizerPreference)findPreference(getResources().getString(R.string.sp_sound_equalizer));
             SwitchPreference loudPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_sound_loud));
+            Preference voloffsetPref = findPreference(getResources().getString(R.string.sp_sound_volume_offset));
 
             int currVol = 0;
             int currBalance = 0;
@@ -104,6 +114,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             int currTreble = 0;
             int currSubwoofer = 0;
             boolean currLoud = false;
+            byte[] offset = {};
 
             if (settingManager != null) {
                 try { currVol = settingManager.getMcuVol(); } catch (RemoteException e) { volumePref.setEnabled(false); }
@@ -117,12 +128,14 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     currSubwoofer = settingManager.getSubwoofer();
                 } catch (RemoteException e) { eqPref.setEnabled(false); }
                 try { currLoud = settingManager.getLound(); } catch (RemoteException e) { loudPref.setEnabled(false); }
+                try { offset = settingManager.getVolumeOffset(); } catch (RemoteException e) {voloffsetPref.setEnabled(false); }
             } else {
                 volumePref.setEnabled(false);
                 balancePref.setEnabled(false);
                 fadePref.setEnabled(false);
                 eqPref.setEnabled(false);
                 loudPref.setEnabled(false);
+                voloffsetPref.setEnabled(false);
             }
 
             volumePref.setProgress(currVol);
@@ -133,6 +146,13 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             String[] names = eqPref.getContext().getResources().getStringArray(R.array.sound_equalizer_presets_names);
             String summary = currEq == 0 ? eqPref.getContext().getResources().getString(R.string.pref_sound_eq_summarycustom) : eqPref.getContext().getResources().getString(R.string.pref_sound_eq_summary);
             eqPref.setSummary(String.format(summary, names[currEq], currBass, currMiddle, currTreble, currSubwoofer));
+
+            String bytes = "";
+            for (byte b: offset) {
+                bytes = bytes + String.valueOf(b) + " ";
+            }
+            summary = String.format(voloffsetPref.getContext().getResources().getString(R.string.pref_sound_volume_offset_summary), bytes);
+            voloffsetPref.setSummary(summary);
 
             volumePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             balancePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
@@ -148,6 +168,182 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         public void updateVolume(int volume) {
             SeekBarPreference volumePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_sound_volume));
             volumePref.setProgress(volume);
+            if (volume > 20) {
+                volumePref.setIcon(R.drawable.ic_volume_up_black_24dp);
+            } else if (volume == 0) {
+                volumePref.setIcon(R.drawable.ic_volume_mute_black_24dp);
+            } else {
+                volumePref.setIcon(R.drawable.ic_volume_down_black_24dp);
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class RadioPreferenceFragment extends PreferenceFragment {
+        private static RadioPreferenceFragment mInstance;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            mInstance = this;
+
+            addPreferencesFromResource(R.xml.pref_radio);
+
+            ListPreference regionPref = (ListPreference)findPreference(getResources().getString(R.string.sp_radio_region));
+
+            int currRegion = 0;
+
+            if (settingManager != null) {
+                try { currRegion = settingManager.getRadioField(); } catch (RemoteException e) { regionPref.setEnabled(false); }
+            } else {
+                regionPref.setEnabled(false);
+            }
+
+            regionPref.setValueIndex(currRegion);
+            regionPref.setTitle(regionPref.getEntry());
+            String summary = "";
+            if (radioManager != null) {
+                try {
+                    int minAM = radioManager.getMinAMFreq();
+                    int maxAM = radioManager.getMaxAMFreq();
+                    int stepAM = radioManager.getAMStep();
+                    float minFM = (float)radioManager.getMinFMFreq() / 100;
+                    float maxFM = (float)radioManager.getMaxFMFreq() / 100;
+                    float stepFM = (float)radioManager.getFMStep() / 100;
+                    summary = String.format(regionPref.getContext().getResources().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+            regionPref.setSummary(summary);
+
+            regionPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+        }
+
+        public static RadioPreferenceFragment getInstance() {
+            return mInstance;
+        }
+
+        public void updateRegionInfo() {
+            ListPreference regionPref = (ListPreference)findPreference(getResources().getString(R.string.sp_radio_region));
+            try {
+                int currRegion = settingManager.getRadioField();
+                regionPref.setValueIndex(currRegion);
+                regionPref.setTitle(regionPref.getEntry());
+                int minAM = radioManager.getMinAMFreq();
+                int maxAM = radioManager.getMaxAMFreq();
+                int stepAM = radioManager.getAMStep();
+                float minFM = (float)radioManager.getMinFMFreq() / 100;
+                float maxFM = (float)radioManager.getMaxFMFreq() / 100;
+                float stepFM = (float)radioManager.getFMStep() / 100;
+                String summary = String.format(regionPref.getContext().getResources().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
+                regionPref.setSummary(summary);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class ScreenPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.pref_screen);
+
+            SeekBarPreference brightnessPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_brightness));
+            SeekBarPreference contrastPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_contrast));
+            SeekBarPreference huePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_hue));
+            SeekBarPreference satPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_saturation));
+            SeekBarPreference valuePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_value));
+            SwitchPreference detectPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_screen_detect_illumination));
+
+            int currBrightness = 0;
+            int currContrast = 0;
+            int currHue = 0;
+            int currSaturation = 0;
+            int currValue = 0;
+            boolean currDetect = false;
+
+            if (settingManager != null) {
+                try { currBrightness = settingManager.getScreenBrightness(); } catch (RemoteException e) { brightnessPref.setEnabled(false); }
+                try { currContrast = settingManager.getContrast(); } catch (RemoteException e) { contrastPref.setEnabled(false); }
+                try { currHue = settingManager.getHueSetting(); } catch (RemoteException e) { huePref.setEnabled(false); }
+                try { currSaturation = settingManager.getSaturation(); } catch (RemoteException e) { satPref.setEnabled(false); }
+                try { currValue = settingManager.getBright(); } catch (RemoteException e) { valuePref.setEnabled(false); }
+                try { currDetect = settingManager.getIllumeDetection(); } catch (RemoteException e) { detectPref.setEnabled(false); }
+            } else {
+                brightnessPref.setEnabled(false);
+                contrastPref.setEnabled(false);
+                huePref.setEnabled(false);
+                satPref.setEnabled(false);
+                valuePref.setEnabled(false);
+                detectPref.setEnabled(false);
+            }
+
+            brightnessPref.setProgress(currBrightness);
+            contrastPref.setProgress(currContrast);
+            huePref.setProgress(currHue);
+            satPref.setProgress(currSaturation);
+            valuePref.setProgress(currValue);
+            detectPref.setChecked(currDetect);
+
+            brightnessPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            contrastPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            huePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            satPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            valuePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            detectPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class InfoPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.pref_info);
+
+            if (settingManager != null) {
+                try {
+                    String version = settingManager.getSystemVersion();
+                    Preference pref = findPreference(getResources().getString(R.string.sp_info_system));
+                    pref.setSummary(version);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    String version = settingManager.GetMcuVersion();
+                    Preference pref = findPreference(getResources().getString(R.string.sp_info_mcu));
+                    pref.setSummary(version);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    String version = settingManager.getBTVersion();
+                    Preference pref = findPreference(getResources().getString(R.string.sp_info_bt));
+                    pref.setSummary(version);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    String version = settingManager.getCanVersion();
+                    Preference pref = findPreference(getResources().getString(R.string.sp_info_can));
+                    pref.setSummary(version);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    String id = settingManager.GetEmmcId();
+                    Preference pref = findPreference(getResources().getString(R.string.sp_info_emmc));
+                    pref.setSummary(id);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -200,6 +396,71 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                 case "sound_loud": {
                     try {
                         settingManager.setLound((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+
+                case "radio_region": {
+                    try {
+                        settingManager.setRadioField(Integer.valueOf((String)value));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+
+                case "screen_brightness": {
+                    try {
+                        settingManager.setBrightness((int)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "screen_contrast": {
+                    try {
+                        settingManager.setContrast((int)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "screen_hue": {
+                    try {
+                        settingManager.setHueSetting((int)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "screen_saturation": {
+                    try {
+                        settingManager.setSaturation((int)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "screen_value": {
+                    try {
+                        settingManager.setBright((int)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "screen_detect_illumination": {
+                    try {
+                        settingManager.setIllumeDetection((boolean)value);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                         return false;
@@ -316,36 +577,6 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("example_text"));
             bindPreferenceSummaryToValue(findPreference("example_list"));*/
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), AutoSettingsActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * This fragment shows data and sync preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class ScreenPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            /*addPreferencesFromResource(R.xml.pref_data_sync);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));*/
         }
 
         @Override

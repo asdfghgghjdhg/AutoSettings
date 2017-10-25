@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_screen_brightnessheader">
+
+        <SeekBarPreference
+            android:title="@string/pref_screen_brightness_title"
+            android:key="@string/sp_screen_brightness"
+            android:icon="@drawable/ic_brightness_high_black_24dp"
+            android:shouldDisableView="false"
+            android:enabled="false"
+            android:defaultValue="0"
+            android:max="127" />
+
+        <SeekBarPreference
+            android:title="@string/pref_screen_contrast_title"
+            android:key="@string/sp_screen_contrast"
+            android:icon="@drawable/icons8_first_quarter"
+            android:shouldDisableView="false"
+            android:defaultValue="0"
+            android:max="127" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_screen_illuminationheader">
+
+        <com.dgl.auto.autosettings.PaddedSwitchPreference
+            android:title="@string/pref_screen_detect_title"
+            android:key="@string/sp_screen_detect_illumination"
+            android:icon="@drawable/ic_wb_incandescent_black_24dp"
+            android:defaultValue="false" />
+
+        <SeekBarPreference
+            android:title="@string/pref_screen_hue_title"
+            android:key="@string/sp_screen_hue"
+            android:shouldDisableView="false"
+            android:defaultValue="0"
+            android:max="127" />
+
+        <SeekBarPreference
+            android:title="@string/pref_screen_saturation_title"
+            android:key="@string/sp_screen_saturation"
+            android:shouldDisableView="false"
+            android:defaultValue="0"
+            android:max="127" />
+
+        <SeekBarPreference
+            android:title="@string/pref_screen_value_title"
+            android:key="@string/sp_screen_value"
+            android:icon="@drawable/ic_brightness_high_black_24dp"
+            android:shouldDisableView="false"
+            android:defaultValue="0"
+            android:max="127" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

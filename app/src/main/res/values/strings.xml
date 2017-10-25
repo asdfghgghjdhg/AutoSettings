@@ -3,9 +3,11 @@
 
     <string name="pref_header_general">General</string>
     <string name="pref_header_sound">Sound</string>
+    <string name="pref_header_radio">Radio</string>
     <string name="pref_header_screen">Screen</string>
     <string name="pref_header_touch">Touch panel</string>
     <string name="pref_header_other">Other</string>
+    <string name="pref_header_info">System information</string>
 
     <string name="pref_sound_volumeheader">General volume</string>
     <string name="pref_sound_volume_title">Volume level</string>
@@ -24,6 +26,8 @@
     <string name="pref_sound_treble">Treble</string>
     <string name="pref_sound_subwoofer">Subwoofer</string>
     <string name="pref_sound_loudmode">Loud mode</string>
+    <string name="pref_sound_volume_offset">Volume offset</string>
+    <string name="pref_sound_volume_offset_summary">Value: %1$s</string>
 
     <string-array name="sound_equalizer_presets_names">
         <item>Custom</item>
@@ -37,6 +41,37 @@
         <item>Movie</item>
         <item>Techno</item>
     </string-array>
+
+    <string name="pref_radio_regionheader">Region settings</string>
+    <string name="pref_radio_region_title">Region</string>
+    <string name="pref_radio_region_summary">AM %1$dkHz - %2$dkHz step %3$dkHz, FM %4$.2fMHz - %5$.2fMHz step %6$.2fMHz</string>
+
+    <string-array name="radio_regions_names">
+        <item>USA</item>
+        <item>Europe</item>
+        <item>Latin america</item>
+        <item>East Europe (OIRT)</item>
+        <item>China</item>
+        <item>Japan</item>
+    </string-array>
+
+    <string name="pref_screen_brightnessheader">Brightness / Contrast</string>
+    <string name="pref_screen_brightness_title">Brightness</string>
+    <string name="pref_screen_contrast_title">Contrast</string>
+
+    <string name="pref_screen_illuminationheader">Illumination</string>
+    <string name="pref_screen_hue_title">Hue</string>
+    <string name="pref_screen_saturation_title">Saturation</string>
+    <string name="pref_screen_value_title">Brightness</string>
+    <string name="pref_screen_detect_title">Detect illumination</string>
+
+    <string name="pref_info_emmc_title">EMMC ID</string>
+    <string name="pref_info_mcu_title">MCU version</string>
+    <string name="pref_info_can_title">CAN version</string>
+    <string name="pref_info_bt_title">Bluetooth version</string>
+    <string name="pref_info_system_title">System version</string>
+
+
 
     <string name="pref_sound_beep">Beep</string>
 

@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
+import com.dgl.auto.RadioManager;
 import com.dgl.auto.SettingManager;
 
 import java.io.File;
@@ -53,6 +56,27 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
     @Override
     public int onGeneralSettingChange() {
         Log.i("SettingsChangeListener", "onGeneralSettingsChange");
+
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        ISettingManager sm = SettingManager.getInstance();
+        if (sm != null) {
+            try {
+                editor.putString(mContext.getResources().getString(R.string.sp_radio_region), String.valueOf(sm.getRadioField()));
+
+                editor.putInt(mContext.getResources().getString(R.string.sp_screen_brightness), sm.getScreenBrightness());
+                editor.putInt(mContext.getResources().getString(R.string.sp_screen_contrast), sm.getContrast());
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_screen_detect_illumination), sm.getIllumeDetection());
+                editor.putInt(mContext.getResources().getString(R.string.sp_screen_hue), sm.getHueSetting());
+                editor.putInt(mContext.getResources().getString(R.string.sp_screen_saturation), sm.getSaturation());
+                editor.putInt(mContext.getResources().getString(R.string.sp_screen_value), sm.getBright());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        editor.commit();
 
         return 0;
     }

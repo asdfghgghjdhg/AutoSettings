@@ -4,16 +4,28 @@
 
     <header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/pref_header_general" />
 
     <header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$SoundPreferenceFragment"
-        android:icon="@drawable/audio_settings"
+        android:icon="@drawable/ic_volume_up_black_24dp"
         android:title="@string/pref_header_sound" />
 
     <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$RadioPreferenceFragment"
+        android:icon="@drawable/ic_radio_black_24dp"
+        android:title="@string/pref_header_radio" />
+
+    <header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$ScreenPreferenceFragment"
+        android:icon="@drawable/ic_settings_brightness_black_24dp"
         android:title="@string/pref_header_screen" />
+
+    <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$InfoPreferenceFragment"
+        android:icon="@drawable/ic_info_outline_black_24dp"
+        android:title="@string/pref_header_info" />
 
     <!--<header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$TouchPanelFragment"

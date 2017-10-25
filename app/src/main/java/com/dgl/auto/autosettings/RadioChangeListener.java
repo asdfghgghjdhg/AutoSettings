@@ -13,6 +13,8 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
 
     protected Context mContext;
 
+    public static boolean updateInfo = true;
+
     RadioChangeListener(Context context) {
         mContext = context;
     }
@@ -21,6 +23,8 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
     public int onTunerInfoChange() {
         Log.i("RadioChangeListener", "onTunerInfoChange");
 
+        if (!updateInfo) { return 0; }
+
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -28,8 +32,12 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
         if (rm != null) {
             try {
                 if (!rm.getSeekStatus() && !rm.getScanSatus()) {
-                    editor.putInt(mContext.getResources().getString(R.string.sp_radio_currband), rm.getBand());
-                    editor.putInt(mContext.getResources().getString(R.string.sp_radio_currfreq), rm.getCurrFreq());
+                    int currBand = rm.getBand();
+                    if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
+                        editor.putInt(mContext.getResources().getString(R.string.sp_radio_lastAMfreq), rm.getCurrFreq());
+                    } else {
+                        editor.putInt(mContext.getResources().getString(R.string.sp_radio_lastFMfreq), rm.getCurrFreq());
+                    }
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -44,7 +52,7 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
     public int onTunerPresetList() {
         Log.i("RadioChangeListener", "onTunerPresetList");
 
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        /*SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         IRadioManager rm = RadioManager.getInstance();
@@ -59,13 +67,39 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
             }
         }
 
-        editor.commit();
+        editor.commit();*/
         return 0;
     }
 
     @Override
     public int onTunerRangeChange() {
         Log.i("RadioChangeListener", "onTunerRangeChange");
+
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        IRadioManager rm = RadioManager.getInstance();
+        if (rm != null) {
+            try {
+                int currBand = rm.getBand();
+                int freq;
+                if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
+                    freq = sharedPreferences.getInt(mContext.getResources().getString(R.string.sp_radio_lastAMfreq), IRadioManager.IRadioConstant.RADIO_AM_DEFUALT_FREQ);
+                    if ((freq < rm.getMinAMFreq()) || (freq > rm.getMaxAMFreq())) {
+                        freq = IRadioManager.IRadioConstant.RADIO_AM_DEFUALT_FREQ;
+                    }
+                } else {
+                    freq = sharedPreferences.getInt(mContext.getResources().getString(R.string.sp_radio_lastFMfreq), IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ);
+                    if ((freq < rm.getMinFMFreq()) || (freq > rm.getMaxFMFreq())) {
+                        freq = IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ;
+                    }
+                }
+                rm.setFreq((char) freq);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        AutoSettingsActivity.RadioPreferenceFragment fragment = AutoSettingsActivity.RadioPreferenceFragment.getInstance();
+        fragment.updateRegionInfo();
 
         return 0;
     }

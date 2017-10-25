@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:title="@string/pref_info_system_title"
+        android:key="@string/sp_info_system"
+        android:persistent="false" />
+
+    <Preference
+        android:title="@string/pref_info_mcu_title"
+        android:key="@string/sp_info_mcu"
+        android:persistent="false" />
+
+    <Preference
+        android:title="@string/pref_info_bt_title"
+        android:key="@string/sp_info_bt"
+        android:persistent="false" />
+
+    <Preference
+        android:title="@string/pref_info_can_title"
+        android:key="@string/sp_info_can"
+        android:persistent="false" />
+
+    <Preference
+        android:title="@string/pref_info_emmc_title"
+        android:key="@string/sp_info_emmc"
+        android:persistent="false" />
+
+</PreferenceScreen>

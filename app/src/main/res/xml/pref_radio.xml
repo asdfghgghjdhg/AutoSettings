@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_radio_regionheader">
+
+        <com.dgl.auto.autosettings.PaddedListPreference
+            android:title="@string/pref_radio_region_title"
+            android:key="@string/sp_radio_region"
+            android:icon="@drawable/ic_public_black_24dp"
+            android:defaultValue="0"
+            android:entries="@array/radio_regions_names"
+            android:entryValues="@array/radio_regions_values" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

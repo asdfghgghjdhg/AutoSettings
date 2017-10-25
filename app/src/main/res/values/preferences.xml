@@ -5,6 +5,7 @@
     <string name="sp_sound_fade">sound_fade</string>
     <string name="sp_sound_equalizer">sound_equalizer</string>
     <string name="sp_sound_loud">sound_loud</string>
+    <string name="sp_sound_volume_offset">sound_volume_offset</string>
 
     <string name="sp_sound_equalizer_bass">sound_equalizer_bass</string>
     <string name="sp_sound_equalizer_middle">sound_equalizer_middle</string>
@@ -12,7 +13,20 @@
     <string name="sp_sound_equalizer_subwoofer">sound_equalizer_subwoofer</string>
     <string name="sp_sound_equalizer_preset">sound_equalizer_preset</string>
 
-    <string name="sp_radio_currfreq">radio_currfreq</string>
-    <string name="sp_radio_currband">radio_currband</string>
-    <string name="sp_radio_presets">radio_preset%1$d</string>
+    <string name="sp_radio_region">radio_region</string>
+    <string name="sp_radio_lastAMfreq">radio_lastAMfreq</string>
+    <string name="sp_radio_lastFMfreq">radio_lastFMfreq</string>
+
+    <string name="sp_screen_brightness">screen_brightness</string>
+    <string name="sp_screen_contrast">screen_contrast</string>
+    <string name="sp_screen_hue">screen_hue</string>
+    <string name="sp_screen_saturation">screen_saturation</string>
+    <string name="sp_screen_value">screen_value</string>
+    <string name="sp_screen_detect_illumination">screen_detect_illumination</string>
+
+    <string name="sp_info_system">info_system</string>
+    <string name="sp_info_mcu">info_mcu</string>
+    <string name="sp_info_can">info_can</string>
+    <string name="sp_info_bt">info_bluetooth</string>
+    <string name="sp_info_emmc">info_emmc</string>
 </resources>

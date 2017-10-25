@@ -33,6 +33,7 @@
         <SeekBarPreference
             android:title="@string/pref_screen_hue_title"
             android:key="@string/sp_screen_hue"
+            android:icon="@drawable/ic_color_lens_black_24dp"
             android:shouldDisableView="false"
             android:defaultValue="0"
             android:max="127" />
@@ -40,6 +41,7 @@
         <SeekBarPreference
             android:title="@string/pref_screen_saturation_title"
             android:key="@string/sp_screen_saturation"
+            android:icon="@drawable/ic_colorize_black_24dp"
             android:shouldDisableView="false"
             android:defaultValue="0"
             android:max="127" />

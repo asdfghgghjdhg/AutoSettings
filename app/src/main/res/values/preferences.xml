@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="sp_general_beep">general_beep</string>
+    <string name="sp_general_boottime">general_boottime</string>
+    <string name="sp_general_playvideo">general_playvideo</string>
+    <string name="sp_general_shortcut_touch_state">general_shortcut_touch_state</string>
+    <string name="sp_general_switch_media_status">general_switch_media_status</string>
+    <string name="sp_general_reverse_aux">general_reverse_aux</string>
+    <string name="sp_general_mirror_rearview">general_mirror_rearview</string>
+    <string name="sp_general_swctype">general_swctype</string>
+    <string name="sp_general_usb0type">general_usb0type</string>
+    <string name="sp_general_usb1type">general_usb1type</string>
+    <string name="sp_general_testmode">general_testmode</string>
+
     <string name="sp_sound_volume">sound_volume</string>
     <string name="sp_sound_balance">sound_balance</string>
     <string name="sp_sound_fade">sound_fade</string>
@@ -25,6 +37,7 @@
     <string name="sp_screen_detect_illumination">screen_detect_illumination</string>
     <string name="sp_screen_illumination_color">screen_illumination_color</string>
 
+    <string name="sp_info_carnumber">info_carnumber</string>
     <string name="sp_info_system">info_system</string>
     <string name="sp_info_mcu">info_mcu</string>
     <string name="sp_info_can">info_can</string>

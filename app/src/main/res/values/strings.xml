@@ -9,6 +9,43 @@
     <string name="pref_header_other">Other</string>
     <string name="pref_header_info">System information</string>
 
+    <string name="pref_general_generalheader">General</string>
+    <string name="pref_general_beep_title">Beep</string>
+    <string name="pref_general_boottime_title">Boot Time</string>
+    <string name="pref_general_playing_video_title">Play Video While Driving</string>
+    <string name="pref_general_playing_video_summary">Enables or disables of playing video content while driving. Device must be connected to handle brake of your car.</string>
+    <string name="pref_general_shortcut_touch_state_title">Shortcut Touch State</string>
+    <string name="pref_general_switch_media_status_title">Switch Media Status</string>
+
+    <string name="pref_general_rearviewheader">Rear View Camera</string>
+    <string name="pref_general_reverse_aux_title">Backcar Aux</string>
+    <string name="pref_general_mirror_rearview_title">Mirror Rear View Image</string>
+    <string name="pref_general_mirror_rearview_summary">Horrizontally mirrors image of rear view camera</string>
+
+    <string name="pref_general_swcheader">Steering Wheel Control</string>
+    <string name="pref_general_swctype_title">SWC Type</string>
+    <string name="pref_general_swctype_summary">Resistant: %1$s</string>
+
+    <string name="pref_general_usbheader">USB</string>
+    <string name="pref_general_usb0_type_title">USB0 Type</string>
+    <string name="pref_general_usb1_type_title">USB1 Type</string>
+
+    <string name="pref_general_otherheader">Other</string>
+    <string name="pref_general_testmode_title">Test Mode</string>
+
+    <string-array name="general_boottime_names">
+        <item>Everytime</item>
+        <item>2 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+    </string-array>
+
+    <string-array name="general_swctype_names">
+        <item>1K</item>
+        <item>10K</item>
+        <item>20K</item>
+    </string-array>
+
     <string name="pref_sound_volumeheader">General volume</string>
     <string name="pref_sound_volume_title">Volume level</string>
 
@@ -66,6 +103,7 @@
     <string name="pref_screen_detect_title">Detect illumination</string>
     <string name="pref_screen_illumination_color_title">Color</string>
 
+    <string name="pref_info_carnumber_title">Car number</string>
     <string name="pref_info_emmc_title">EMMC ID</string>
     <string name="pref_info_mcu_title">MCU version</string>
     <string name="pref_info_can_title">CAN version</string>

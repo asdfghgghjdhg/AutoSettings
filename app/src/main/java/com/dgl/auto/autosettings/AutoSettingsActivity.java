@@ -92,6 +92,84 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class GeneralPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_general);
+
+            SwitchPreference beepPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_beep));
+            ListPreference boottimePref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_boottime));
+            SwitchPreference videoPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_playvideo));
+            SwitchPreference stsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_shortcut_touch_state));
+            SwitchPreference smsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_switch_media_status));
+            SwitchPreference revAuxPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_reverse_aux));
+            SwitchPreference mirrorPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_mirror_rearview));
+            ListPreference swcPref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_swctype));
+            Preference usb0Pref = findPreference(getResources().getString(R.string.sp_general_usb0type));
+            Preference usb1Pref = findPreference(getResources().getString(R.string.sp_general_usb1type));
+
+            boolean beep = false;
+            int boottime = 0;
+            boolean playVideo = false;
+            boolean shortcutTouchState = false;
+            boolean switchMediaStatus = false;
+            boolean reverseAux = false;
+            boolean mirrorRearView = false;
+            int swcType = 0;
+            int usb0Type = 0;
+            int usb1Type = 0;
+
+            if (settingManager != null) {
+                try { beep = settingManager.getBeep(); } catch (RemoteException e) { beepPref.setEnabled(false); }
+                try { boottime = settingManager.getBootTime(); } catch (RemoteException e) { boottimePref.setEnabled(false); }
+                try { videoPref.setEnabled(settingManager.getCanWatchVideo()); } catch (RemoteException e) { videoPref.setEnabled(false); }
+                try { playVideo = settingManager.getCanWatchVideoWhileDriver(); } catch (RemoteException e) { videoPref.setEnabled(false); }
+                try { shortcutTouchState = settingManager.getShortcutTouchState(); } catch (RemoteException e) { stsPref.setEnabled(false); }
+                try { switchMediaStatus = settingManager.GetSwitchMediaStatus(); } catch (RemoteException e) { smsPref.setEnabled(false); }
+                try { reverseAux = settingManager.getReverseAuxLine(); } catch (RemoteException e) { revAuxPref.setEnabled(false); }
+                try { mirrorRearView = settingManager.getReverseMirror(); } catch (RemoteException e) { mirrorPref.setEnabled(false); }
+                try { swcType = settingManager.getSWCTypeValue(); } catch (RemoteException e) { swcPref.setEnabled(false); }
+                try { usb0Type = settingManager.getUSB0TypeValue(); } catch (RemoteException e) { usb0Pref.setEnabled(false); }
+                try { usb1Type = settingManager.getUSB1TypeValue(); } catch (RemoteException e) { usb1Pref.setEnabled(false); }
+            } else {
+                beepPref.setEnabled(false);
+                boottimePref.setEnabled(false);
+                videoPref.setEnabled(false);
+                stsPref.setEnabled(false);
+                smsPref.setEnabled(false);
+                revAuxPref.setEnabled(false);
+                mirrorPref.setEnabled(false);
+                swcPref.setEnabled(false);
+                usb0Pref.setEnabled(false);
+                usb1Pref.setEnabled(false);
+            }
+
+            beepPref.setChecked(beep);
+            boottimePref.setValue(String.valueOf(boottime));
+            boottimePref.setSummary(boottimePref.getEntry());
+            videoPref.setChecked(playVideo);
+            stsPref.setChecked(shortcutTouchState);
+            smsPref.setChecked(switchMediaStatus);
+            revAuxPref.setChecked(reverseAux);
+            mirrorPref.setChecked(mirrorRearView);
+            swcPref.setValue(String.valueOf(swcType));
+            swcPref.setSummary(String.format(getResources().getString(R.string.pref_general_swctype_summary), swcPref.getEntry()));
+            usb0Pref.setSummary(String.valueOf(usb0Type));
+            usb1Pref.setSummary(String.valueOf(usb1Type));
+
+            beepPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            boottimePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            videoPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            stsPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            smsPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            revAuxPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            mirrorPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            swcPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class SoundPreferenceFragment extends PreferenceFragment {
         private static SoundPreferenceFragment mInstance;
 
@@ -311,6 +389,13 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
             if (settingManager != null) {
                 try {
+                    String carNumber = settingManager.getCarNumber();
+                    Preference pref = findPreference(getResources().getString(R.string.sp_info_carnumber));
+                    pref.setSummary(carNumber);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                try {
                     String version = settingManager.getSystemVersion();
                     Preference pref = findPreference(getResources().getString(R.string.sp_info_system));
                     pref.setSummary(version);
@@ -355,6 +440,79 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             if (!preference.hasKey()) { return false; }
 
             switch (preference.getKey()) {
+                case "general_beep": {
+                    try {
+                        settingManager.setBeep((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_boottime": {
+                    try {
+                        settingManager.setBootTime(Integer.valueOf((String)value));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_playvideo": {
+                    try {
+                        settingManager.setCanWatchVideoWhileDriver((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_shortcut_touch_state": {
+                    try {
+                        settingManager.setShortcutTouchState((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_switch_media_status": {
+                    try {
+                        settingManager.SetSwitchMediaStatus((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_reverse_aux": {
+                    try {
+                        settingManager.setReverseAuxLine((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_mirror_rearview": {
+                    try {
+                        settingManager.setReverseMirror((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_swctype": {
+                    try {
+                        settingManager.setSWCTypeValue(Integer.valueOf((String)value));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+
                 case "sound_volume": {
                     try {
                         settingManager.setMcuVol((int)value);
@@ -554,23 +712,23 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            /*addPreferencesFromResource(R.xml.pref_general);
+            addPreferencesFromResource(R.xml.pref_general);
 
             SwitchPreference test = (SwitchPreference)findPreference("example_switch");
-            test.setOnPreferenceChangeListener(mcuPreferenceChangeListener);*/
-            /*setHasOptionsMenu(true);
+            test.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));*/
+            bindPreferenceSummaryToValue(findPreference("example_list"));
         }
 
         @Override
@@ -582,5 +740,5 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 }

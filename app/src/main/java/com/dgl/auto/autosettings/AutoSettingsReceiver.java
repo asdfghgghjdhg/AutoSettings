@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.RemoteException;
 import android.preference.PreferenceFragment;
 import android.preference.SeekBarPreference;
@@ -171,7 +172,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             }
 
             // Экран
-            try {
+            /*try {
                 if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_brightness))) {
                     //settingManager.setBrightness(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_brightness), 0));
                 } else {
@@ -179,7 +180,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
-            }
+            }*/
             try {
                 if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_contrast))) {
                     settingManager.setContrast(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_contrast), 0));
@@ -193,34 +194,27 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_detect_illumination))) {
                     settingManager.setIllumeDetection(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_screen_detect_illumination), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_sound_equalizer_subwoofer), settingManager.getIllumeDetection());
+                    editor.putBoolean(context.getResources().getString(R.string.sp_screen_detect_illumination), settingManager.getIllumeDetection());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_hue))) {
-                    settingManager.setHueSetting(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_hue), 0));
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_illumination_color))) {
+                    float[] hsv = {0xFF, 0xFF, 0xFF};
+                    Color.colorToHSV(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_illumination_color), 0), hsv);
+                    int h = Math.round(hsv[0] / 360 * 127);
+                    int s = Math.round(hsv[1] * 127);
+                    int v = Math.round(hsv[2] * 127);
+                    settingManager.setHueSetting(h);
+                    settingManager.setSaturation(s);
+                    settingManager.setBright(v);
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_screen_hue), settingManager.getHueSetting());
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_saturation))) {
-                    settingManager.setSaturation(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_saturation), 0));
-                } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_screen_saturation), settingManager.getSaturation());
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_value))) {
-                    settingManager.setBright(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_value), 0));
-                } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_screen_value), settingManager.getBright());
+                    float h = (float)settingManager.getHueSetting() / 127 * 360;
+                    float s = (float)settingManager.getSaturation() / 127;
+                    float v = (float)settingManager.getBright() / 127;
+                    float[] hsv = {h, s, v};
+                    editor.putInt(context.getResources().getString(R.string.sp_screen_illumination_color), Color.HSVToColor(hsv));
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -309,11 +303,11 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             }
 
             // Экран
-            try {
+            /*try {
                 editor.putInt(context.getResources().getString(R.string.sp_screen_brightness), settingManager.getScreenBrightness());
             } catch (RemoteException e) {
                 e.printStackTrace();
-            }
+            }*/
             try {
                 editor.putInt(context.getResources().getString(R.string.sp_screen_contrast), settingManager.getContrast());
             } catch (RemoteException e) {
@@ -325,17 +319,11 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_screen_hue), settingManager.getHueSetting());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            try {
-                editor.putInt(context.getResources().getString(R.string.sp_screen_saturation), settingManager.getSaturation());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            try {
-                editor.putInt(context.getResources().getString(R.string.sp_screen_value), settingManager.getBright());
+                float h = (float)settingManager.getHueSetting() / 127 * 360;
+                float s = (float)settingManager.getSaturation() / 127;
+                float v = (float)settingManager.getBright() / 127;
+                float[] hsv = {h, s, v};
+                editor.putInt(context.getResources().getString(R.string.sp_screen_illumination_color), Color.HSVToColor(hsv));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

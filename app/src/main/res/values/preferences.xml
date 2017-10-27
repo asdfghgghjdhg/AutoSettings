@@ -23,6 +23,7 @@
     <string name="sp_screen_saturation">screen_saturation</string>
     <string name="sp_screen_value">screen_value</string>
     <string name="sp_screen_detect_illumination">screen_detect_illumination</string>
+    <string name="sp_screen_illumination_color">screen_illumination_color</string>
 
     <string name="sp_info_system">info_system</string>
     <string name="sp_info_mcu">info_mcu</string>

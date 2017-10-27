@@ -2,6 +2,7 @@ package com.dgl.auto.autosettings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
@@ -65,12 +66,15 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
             try {
                 editor.putString(mContext.getResources().getString(R.string.sp_radio_region), String.valueOf(sm.getRadioField()));
 
-                editor.putInt(mContext.getResources().getString(R.string.sp_screen_brightness), sm.getScreenBrightness());
+                //editor.putInt(mContext.getResources().getString(R.string.sp_screen_brightness), sm.getScreenBrightness());
                 editor.putInt(mContext.getResources().getString(R.string.sp_screen_contrast), sm.getContrast());
                 editor.putBoolean(mContext.getResources().getString(R.string.sp_screen_detect_illumination), sm.getIllumeDetection());
-                editor.putInt(mContext.getResources().getString(R.string.sp_screen_hue), sm.getHueSetting());
-                editor.putInt(mContext.getResources().getString(R.string.sp_screen_saturation), sm.getSaturation());
-                editor.putInt(mContext.getResources().getString(R.string.sp_screen_value), sm.getBright());
+
+                float h = (float)sm.getHueSetting() / 127 * 360;
+                float s = (float)sm.getSaturation() / 127;
+                float v = (float)sm.getBright() / 127;
+                float[] hsv = {h, s, v};
+                editor.putInt(mContext.getResources().getString(R.string.sp_screen_illumination_color), Color.HSVToColor(hsv));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

@@ -8,10 +8,11 @@
             android:title="@string/pref_screen_brightness_title"
             android:key="@string/sp_screen_brightness"
             android:icon="@drawable/ic_brightness_high_black_24dp"
+            android:persistent="false"
             android:shouldDisableView="false"
-            android:enabled="false"
-            android:defaultValue="0"
-            android:max="127" />
+            android:enabled="true"
+            android:defaultValue="127"
+            android:max="255" />
 
         <SeekBarPreference
             android:title="@string/pref_screen_contrast_title"
@@ -31,33 +32,14 @@
             android:icon="@drawable/ic_wb_incandescent_black_24dp"
             android:defaultValue="false" />
 
-        <SeekBarPreference
-            android:title="@string/pref_screen_hue_title"
-            android:key="@string/sp_screen_hue"
+        <com.dgl.auto.autosettings.PaddedColorPreference
+            android:title="@string/pref_screen_illumination_color_title"
+            android:key="@string/sp_screen_illumination_color"
             android:icon="@drawable/ic_color_lens_black_24dp"
-            android:shouldDisableView="false"
-            android:defaultValue="0"
-            android:max="127" />
-
-        <SeekBarPreference
-            android:title="@string/pref_screen_saturation_title"
-            android:key="@string/sp_screen_saturation"
-            android:icon="@drawable/ic_colorize_black_24dp"
-            android:shouldDisableView="false"
-            android:defaultValue="0"
-            android:max="127" />
-
-        <SeekBarPreference
-            android:title="@string/pref_screen_value_title"
-            android:key="@string/sp_screen_value"
-            android:icon="@drawable/ic_brightness_high_black_24dp"
-            android:shouldDisableView="false"
-            android:defaultValue="0"
-            android:max="127" />
-
-        <com.jaredrummler.android.colorpicker.ColorPreference
-            android:title="Test"
-            />
+            app:cpv_allowPresets="false"
+            app:cpv_showAlphaSlider="false"
+            app:cpv_dialogType="custom"
+            android:defaultValue="@android:color/white" />
 
     </PreferenceCategory>
 

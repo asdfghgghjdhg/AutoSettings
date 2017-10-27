@@ -3,10 +3,12 @@ package com.dgl.auto.autosettings;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,6 +20,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.SwitchPreference;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
@@ -30,6 +33,7 @@ import android.view.MenuItem;
 import android.preference.SeekBarPreference;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,6 +41,7 @@ import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
 import com.dgl.auto.RadioManager;
 import com.dgl.auto.SettingManager;
+import com.jaredrummler.android.colorpicker.ColorPreference;
 
 import java.util.List;
 
@@ -255,10 +260,8 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
             SeekBarPreference brightnessPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_brightness));
             SeekBarPreference contrastPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_contrast));
-            SeekBarPreference huePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_hue));
-            SeekBarPreference satPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_saturation));
-            SeekBarPreference valuePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_value));
             SwitchPreference detectPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_screen_detect_illumination));
+            ColorPreference colorPref = (ColorPreference)findPreference(getResources().getString(R.string.sp_screen_illumination_color));
 
             int currBrightness = 0;
             int currContrast = 0;
@@ -270,32 +273,31 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             if (settingManager != null) {
                 try { currBrightness = settingManager.getScreenBrightness(); } catch (RemoteException e) { brightnessPref.setEnabled(false); }
                 try { currContrast = settingManager.getContrast(); } catch (RemoteException e) { contrastPref.setEnabled(false); }
-                try { currHue = settingManager.getHueSetting(); } catch (RemoteException e) { huePref.setEnabled(false); }
-                try { currSaturation = settingManager.getSaturation(); } catch (RemoteException e) { satPref.setEnabled(false); }
-                try { currValue = settingManager.getBright(); } catch (RemoteException e) { valuePref.setEnabled(false); }
+                try { currHue = settingManager.getHueSetting(); } catch (RemoteException e) { colorPref.setEnabled(false); }
+                try { currSaturation = settingManager.getSaturation(); } catch (RemoteException e) { colorPref.setEnabled(false); }
+                try { currValue = settingManager.getBright(); } catch (RemoteException e) { colorPref.setEnabled(false); }
                 try { currDetect = settingManager.getIllumeDetection(); } catch (RemoteException e) { detectPref.setEnabled(false); }
             } else {
                 brightnessPref.setEnabled(false);
                 contrastPref.setEnabled(false);
-                huePref.setEnabled(false);
-                satPref.setEnabled(false);
-                valuePref.setEnabled(false);
+                colorPref.setEnabled(false);
                 detectPref.setEnabled(false);
             }
 
             brightnessPref.setProgress(currBrightness);
             contrastPref.setProgress(currContrast);
-            huePref.setProgress(currHue);
-            satPref.setProgress(currSaturation);
-            valuePref.setProgress(currValue);
             detectPref.setChecked(currDetect);
+
+            float h = (float)currHue / 127 * 360;
+            float s = (float)currSaturation / 127;
+            float v = (float)currValue / 127;
+            float[] hsv = {h, s, v};
+            colorPref.saveValue(Color.HSVToColor(hsv));
 
             brightnessPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             contrastPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
-            huePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
-            satPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
-            valuePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             detectPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            colorPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
         }
     }
 
@@ -415,8 +417,11 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
                 case "screen_brightness": {
                     try {
-                        settingManager.setBrightness((int)value);
-                    } catch (RemoteException e) {
+                        //settingManager.setBrightness((int)value);
+                        ContentResolver c = preference.getContext().getContentResolver();
+                        Settings.System.putInt(c, Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                        Settings.System.putInt(c, Settings.System.SCREEN_BRIGHTNESS, (int)value);
+                    } catch (Exception e) {
                         e.printStackTrace();
                         return false;
                     }
@@ -431,36 +436,25 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     }
                     return true;
                 }
-                case "screen_hue": {
-                    try {
-                        settingManager.setHueSetting((int)value);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                    return true;
-                }
-                case "screen_saturation": {
-                    try {
-                        settingManager.setSaturation((int)value);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                    return true;
-                }
-                case "screen_value": {
-                    try {
-                        settingManager.setBright((int)value);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                    return true;
-                }
                 case "screen_detect_illumination": {
                     try {
                         settingManager.setIllumeDetection((boolean)value);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "screen_illumination_color": {
+                    try {
+                        float[] hsv = {0xFF, 0xFF, 0xFF};
+                        Color.colorToHSV((int)value, hsv);
+                        int h = Math.round(hsv[0] / 360 * 127);
+                        int s = Math.round(hsv[1] * 127);
+                        int v = Math.round(hsv[2] * 127);
+                        settingManager.setHueSetting(h);
+                        settingManager.setSaturation(s);
+                        settingManager.setBright(v);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                         return false;

@@ -65,6 +65,24 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     private SeekBar mSubSeekBar;
     private Spinner mPresetsSpinner;
 
+    public EqualizerPreference(Context context) {
+        super(context);
+
+        setPersistent(false);
+
+        mBassMaxValue = DEFAULT_MAX_VALUE;
+        mBassDefaultValue = DEFAULT_VALUE;
+        mMiddleMaxValue = DEFAULT_MAX_VALUE;
+        mMiddleDefaultValue = DEFAULT_VALUE;
+        mTrebleMaxValue = DEFAULT_MAX_VALUE;
+        mTrebleDefaultValue = DEFAULT_VALUE;
+        mSubwooferMaxValue = DEFAULT_MAX_VALUE;
+        mSubwooferDefaultValue = DEFAULT_VALUE;
+        mDefaultPreset = DEFAULT_VALUE;
+
+        setDialogLayoutResource(R.layout.equalizer_preference);
+    }
+
     public EqualizerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -79,6 +97,44 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
         mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
         mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
         mDefaultPreset = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_DEFAULT_PRESET, DEFAULT_VALUE);
+
+        setDialogLayoutResource(R.layout.equalizer_preference);
+    }
+
+    public EqualizerPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+        setPersistent(false);
+
+        mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
+        mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mMiddleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_DEFAULT_VALUE, DEFAULT_VALUE);
+        mTrebleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
+        mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
+        mDefaultPreset = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_DEFAULT_PRESET, DEFAULT_VALUE);
+
+        setDialogLayoutResource(R.layout.equalizer_preference);
+    }
+
+    public EqualizerPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        setPersistent(false);
+
+        mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
+        mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mMiddleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_DEFAULT_VALUE, DEFAULT_VALUE);
+        mTrebleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
+        mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
+        mDefaultPreset = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_DEFAULT_PRESET, DEFAULT_VALUE);
+
+        setDialogLayoutResource(R.layout.equalizer_preference);
     }
 
     @Override
@@ -91,26 +147,27 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
 
     @Override
     protected View onCreateDialogView() {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.equalizer_preference, null);
+        View view = super.onCreateDialogView();
+        //LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //View view = inflater.inflate(R.layout.equalizer_preference, null);
 
-        mBassSeekBar = (SeekBar)view.findViewById(R.id.seekBarBass);
+        mBassSeekBar = view.findViewById(R.id.seekBarBass);
         mBassSeekBar.setMax(mBassMaxValue);
         mBassSeekBar.setOnSeekBarChangeListener(this);
 
-        mMiddleSeekBar = (SeekBar)view.findViewById(R.id.seekBarMiddle);
+        mMiddleSeekBar = view.findViewById(R.id.seekBarMiddle);
         mMiddleSeekBar.setMax(mMiddleMaxValue);
         mMiddleSeekBar.setOnSeekBarChangeListener(this);
 
-        mTrebleSeekBar = (SeekBar)view.findViewById(R.id.seekBarTreble);
+        mTrebleSeekBar = view.findViewById(R.id.seekBarTreble);
         mTrebleSeekBar.setMax(mTrebleMaxValue);
         mTrebleSeekBar.setOnSeekBarChangeListener(this);
 
-        mSubSeekBar = (SeekBar)view.findViewById(R.id.seekBarSubwoofer);
+        mSubSeekBar = view.findViewById(R.id.seekBarSubwoofer);
         mSubSeekBar.setMax(mSubwooferMaxValue);
         mSubSeekBar.setOnSeekBarChangeListener(this);
 
-        mPresetsSpinner = (Spinner)view.findViewById(R.id.spinnerPresets);
+        mPresetsSpinner = view.findViewById(R.id.spinnerPresets);
         mPresetsSpinner.setOnItemSelectedListener(this);
 
         return view;

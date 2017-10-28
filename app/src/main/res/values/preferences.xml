@@ -5,8 +5,9 @@
     <string name="sp_general_playvideo">general_playvideo</string>
     <string name="sp_general_shortcut_touch_state">general_shortcut_touch_state</string>
     <string name="sp_general_switch_media_status">general_switch_media_status</string>
-    <string name="sp_general_reverse_aux">general_reverse_aux</string>
+    <string name="sp_general_rearview_camera">general_rearview_camera</string>
     <string name="sp_general_mirror_rearview">general_mirror_rearview</string>
+    <string name="sp_general_rearview_disable_audio">general_rearview_disable_audio</string>
     <string name="sp_general_swctype">general_swctype</string>
     <string name="sp_general_usb0type">general_usb0type</string>
     <string name="sp_general_usb1type">general_usb1type</string>

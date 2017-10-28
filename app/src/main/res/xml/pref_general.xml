@@ -35,8 +35,9 @@
     <PreferenceCategory android:title="@string/pref_general_rearviewheader">
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
-            android:title="@string/pref_general_reverse_aux_title"
-            android:key="@string/sp_general_reverse_aux"
+            android:title="@string/pref_general_rearview_title"
+            android:key="@string/sp_general_rearview_camera"
+            android:summary="@string/pref_general_rearview_summary"
             android:defaultValue="false" />
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
@@ -44,6 +45,12 @@
             android:key="@string/sp_general_mirror_rearview"
             android:summary="@string/pref_general_mirror_rearview_summary"
             android:defaultValue="false" />
+
+        <com.dgl.auto.autosettings.PaddedSwitchPreference
+            android:title="@string/pref_general_rearview_audio_title"
+            android:key="@string/sp_general_rearview_disable_audio"
+            android:summary="@string/pref_general_rearview_audio_summary"
+            android:defaultValue="true" />
 
     </PreferenceCategory>
 

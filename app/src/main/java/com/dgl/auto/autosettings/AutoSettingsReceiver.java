@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.RemoteException;
 import android.preference.PreferenceFragment;
 import android.preference.SeekBarPreference;
+import android.preference.SwitchPreference;
 import android.widget.Toast;
 
 import com.dgl.auto.IRadioManager;
@@ -21,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class AutoSettingsReceiver extends BroadcastReceiver {
 
@@ -32,7 +34,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         File fileToWrite = new File(context.getFilesDir(), "broadcast.txt");
-        String date_str = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(System.currentTimeMillis());
+        String date_str = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.US).format(System.currentTimeMillis());
         String output =  date_str + ": action:" + action + "\n";
 
         try {
@@ -55,12 +57,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             booted = true;
         }
 
-        if (action.equalsIgnoreCase(Intent.ACTION_PACKAGE_REPLACED)) {
-            getMCUValues(context);
-            booted = true;
-        }
-
-        if (action.equalsIgnoreCase(Intent.ACTION_PACKAGE_ADDED)) {
+        if (action.equalsIgnoreCase(Intent.ACTION_PACKAGE_REPLACED) || action.equalsIgnoreCase(Intent.ACTION_PACKAGE_ADDED)) {
             getMCUValues(context);
             booted = true;
         }
@@ -69,6 +66,12 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             if (!booted) { return; }
             volumeChange(context);
         }
+
+        if (action.equalsIgnoreCase("BackAudioStatus")) {
+            if (!booted) { return; }
+            int backaudio = intent.getIntExtra("backaudio", 0);
+            rearViewAudioChange(context, backaudio != 1);
+        }
     }
 
     private void setMCUValues(Context context) {
@@ -76,6 +79,108 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (settingManager != null) {
+            // Основные
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_beep))) {
+                    settingManager.setBeep(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_beep), false));
+                } else {
+                    editor.putBoolean(context.getResources().getString(R.string.sp_general_beep), settingManager.getBeep());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_boottime))) {
+                    settingManager.setBootTime(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_boottime), "0")));
+                } else {
+                    editor.putString(context.getResources().getString(R.string.sp_general_boottime), String.valueOf(settingManager.getBootTime()));
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_playvideo))) {
+                    settingManager.setCanWatchVideoWhileDriver(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_playvideo), false));
+                } else {
+                    editor.putBoolean(context.getResources().getString(R.string.sp_general_playvideo), settingManager.getCanWatchVideoWhileDriver());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_shortcut_touch_state))) {
+                    settingManager.setShortcutTouchState(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_shortcut_touch_state), false));
+                } else {
+                    editor.putBoolean(context.getResources().getString(R.string.sp_general_shortcut_touch_state), settingManager.getShortcutTouchState());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_switch_media_status))) {
+                    settingManager.SetSwitchMediaStatus(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_switch_media_status), false));
+                } else {
+                    editor.putBoolean(context.getResources().getString(R.string.sp_general_switch_media_status), settingManager.GetSwitchMediaStatus());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_rearview_camera))) {
+                    settingManager.setReverseAuxLine(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_rearview_camera), false));
+                } else {
+                    editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_camera), settingManager.getReverseAuxLine());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_mirror_rearview))) {
+                    settingManager.setReverseMirror(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_mirror_rearview), false));
+                } else {
+                    editor.putBoolean(context.getResources().getString(R.string.sp_general_mirror_rearview), settingManager.getReverseMirror());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_rearview_disable_audio))) {
+                    boolean disableAudio = sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_rearview_disable_audio), true);
+                    Intent intent = new Intent("BackAudioStatus");
+                    intent.putExtra("backaudio", disableAudio ? 0 : 1);
+                    context.sendBroadcast(intent);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_swctype))) {
+                    settingManager.setSWCTypeValue(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_swctype), "0")));
+                } else {
+                    editor.putString(context.getResources().getString(R.string.sp_general_swctype), String.valueOf(settingManager.getSWCTypeValue()));
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_usb0type))) {
+                    settingManager.setUSB0TypeValue(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_usb0type), "0")));
+                } else {
+                    editor.putString(context.getResources().getString(R.string.sp_general_usb0type), String.valueOf(settingManager.getUSB0TypeValue()));
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_usb1type))) {
+                    settingManager.setUSB1TypeValue(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_usb1type), "0")));
+                } else {
+                    editor.putString(context.getResources().getString(R.string.sp_general_usb1type), String.valueOf(settingManager.getUSB1TypeValue()));
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
             // Звук
             try {
                 if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_volume))) {
@@ -240,7 +345,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             }
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     private void getMCUValues(Context context) {
@@ -248,6 +353,58 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (settingManager != null) {
+            // Основные
+            try {
+                editor.putBoolean(context.getResources().getString(R.string.sp_general_beep), settingManager.getBeep());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putString(context.getResources().getString(R.string.sp_general_boottime), String.valueOf(settingManager.getBootTime()));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putBoolean(context.getResources().getString(R.string.sp_general_playvideo), settingManager.getCanWatchVideoWhileDriver());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putBoolean(context.getResources().getString(R.string.sp_general_shortcut_touch_state), settingManager.getShortcutTouchState());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putBoolean(context.getResources().getString(R.string.sp_general_switch_media_status), settingManager.GetSwitchMediaStatus());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_camera), settingManager.getReverseAuxLine());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putBoolean(context.getResources().getString(R.string.sp_general_mirror_rearview), settingManager.getReverseMirror());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putString(context.getResources().getString(R.string.sp_general_swctype), String.valueOf(settingManager.getSWCTypeValue()));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putString(context.getResources().getString(R.string.sp_general_usb0type), String.valueOf(settingManager.getUSB0TypeValue()));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            try {
+                editor.putString(context.getResources().getString(R.string.sp_general_usb1type), String.valueOf(settingManager.getUSB1TypeValue()));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
             // Звук
             try {
                 editor.putInt(context.getResources().getString(R.string.sp_sound_volume), settingManager.getMcuVol());
@@ -350,7 +507,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             }*/
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     private void volumeChange(Context context) {
@@ -366,6 +523,20 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 fragment.updateVolume(mVolume);
             }
         } catch (RemoteException e) { e.printStackTrace(); }
-        editor.commit();
+        editor.apply();
+    }
+
+    private void rearViewAudioChange(Context context, boolean disabled) {
+        if (settingManager == null) { return; }
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_disable_audio), disabled);
+        AutoSettingsActivity.GeneralPreferenceFragment fragment = AutoSettingsActivity.GeneralPreferenceFragment.getInstance();
+        if (fragment != null) {
+            SwitchPreference pref = (SwitchPreference)fragment.findPreference(context.getResources().getString(R.string.sp_general_rearview_disable_audio));
+            pref.setChecked(disabled);
+        }
+        editor.apply();
     }
 }

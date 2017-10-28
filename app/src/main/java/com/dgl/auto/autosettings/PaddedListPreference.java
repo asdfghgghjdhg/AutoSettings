@@ -15,6 +15,14 @@ public class PaddedListPreference extends ListPreference {
         super(context, attrs);
     }
 
+    public PaddedListPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public PaddedListPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
     @Override
     protected View onCreateView(ViewGroup parent) {
         final View layout = super.onCreateView(parent);

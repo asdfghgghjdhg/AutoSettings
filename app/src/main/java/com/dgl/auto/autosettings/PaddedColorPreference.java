@@ -11,6 +11,10 @@ public class PaddedColorPreference extends com.jaredrummler.android.colorpicker.
         super(context, attrs);
     }
 
+    public PaddedColorPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
     @Override
     protected View onCreateView(ViewGroup parent) {
         final View layout = super.onCreateView(parent);

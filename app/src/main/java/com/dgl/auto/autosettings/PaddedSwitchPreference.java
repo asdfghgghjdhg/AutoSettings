@@ -16,6 +16,14 @@ public class PaddedSwitchPreference extends SwitchPreference {
         super(context, attrs);
     }
 
+    public PaddedSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public PaddedSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
     @Override
     protected View onCreateView(ViewGroup parent) {
         final View layout = super.onCreateView(parent);

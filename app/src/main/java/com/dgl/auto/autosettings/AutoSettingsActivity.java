@@ -2,40 +2,22 @@ package com.dgl.auto.autosettings;
 
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.SwitchPreference;
-import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.preference.SeekBarPreference;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
@@ -93,9 +75,14 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
+        private static GeneralPreferenceFragment mInstance;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            mInstance = this;
+
             addPreferencesFromResource(R.xml.pref_general);
 
             SwitchPreference beepPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_beep));
@@ -103,8 +90,9 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             SwitchPreference videoPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_playvideo));
             SwitchPreference stsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_shortcut_touch_state));
             SwitchPreference smsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_switch_media_status));
-            SwitchPreference revAuxPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_reverse_aux));
+            SwitchPreference rearCameraPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_rearview_camera));
             SwitchPreference mirrorPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_mirror_rearview));
+            SwitchPreference disableAudioPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_rearview_disable_audio));
             ListPreference swcPref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_swctype));
             Preference usb0Pref = findPreference(getResources().getString(R.string.sp_general_usb0type));
             Preference usb1Pref = findPreference(getResources().getString(R.string.sp_general_usb1type));
@@ -114,7 +102,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             boolean playVideo = false;
             boolean shortcutTouchState = false;
             boolean switchMediaStatus = false;
-            boolean reverseAux = false;
+            boolean rearCamera = false;
             boolean mirrorRearView = false;
             int swcType = 0;
             int usb0Type = 0;
@@ -123,11 +111,10 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             if (settingManager != null) {
                 try { beep = settingManager.getBeep(); } catch (RemoteException e) { beepPref.setEnabled(false); }
                 try { boottime = settingManager.getBootTime(); } catch (RemoteException e) { boottimePref.setEnabled(false); }
-                try { videoPref.setEnabled(settingManager.getCanWatchVideo()); } catch (RemoteException e) { videoPref.setEnabled(false); }
                 try { playVideo = settingManager.getCanWatchVideoWhileDriver(); } catch (RemoteException e) { videoPref.setEnabled(false); }
                 try { shortcutTouchState = settingManager.getShortcutTouchState(); } catch (RemoteException e) { stsPref.setEnabled(false); }
                 try { switchMediaStatus = settingManager.GetSwitchMediaStatus(); } catch (RemoteException e) { smsPref.setEnabled(false); }
-                try { reverseAux = settingManager.getReverseAuxLine(); } catch (RemoteException e) { revAuxPref.setEnabled(false); }
+                try { rearCamera = settingManager.getReverseAuxLine(); } catch (RemoteException e) { rearCameraPref.setEnabled(false); }
                 try { mirrorRearView = settingManager.getReverseMirror(); } catch (RemoteException e) { mirrorPref.setEnabled(false); }
                 try { swcType = settingManager.getSWCTypeValue(); } catch (RemoteException e) { swcPref.setEnabled(false); }
                 try { usb0Type = settingManager.getUSB0TypeValue(); } catch (RemoteException e) { usb0Pref.setEnabled(false); }
@@ -138,8 +125,9 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                 videoPref.setEnabled(false);
                 stsPref.setEnabled(false);
                 smsPref.setEnabled(false);
-                revAuxPref.setEnabled(false);
+                rearCameraPref.setEnabled(false);
                 mirrorPref.setEnabled(false);
+                disableAudioPref.setEnabled(false);
                 swcPref.setEnabled(false);
                 usb0Pref.setEnabled(false);
                 usb1Pref.setEnabled(false);
@@ -151,7 +139,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             videoPref.setChecked(playVideo);
             stsPref.setChecked(shortcutTouchState);
             smsPref.setChecked(switchMediaStatus);
-            revAuxPref.setChecked(reverseAux);
+            rearCameraPref.setChecked(rearCamera);
             mirrorPref.setChecked(mirrorRearView);
             swcPref.setValue(String.valueOf(swcType));
             swcPref.setSummary(String.format(getResources().getString(R.string.pref_general_swctype_summary), swcPref.getEntry()));
@@ -163,9 +151,14 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             videoPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             stsPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             smsPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
-            revAuxPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            rearCameraPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             mirrorPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            disableAudioPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             swcPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+        }
+
+        public static GeneralPreferenceFragment getInstance() {
+            return mInstance;
         }
     }
 
@@ -485,7 +478,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     }
                     return true;
                 }
-                case "general_reverse_aux": {
+                case "general_rearview_camera": {
                     try {
                         settingManager.setReverseAuxLine((boolean)value);
                     } catch (RemoteException e) {
@@ -502,6 +495,11 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                         return false;
                     }
                     return true;
+                }
+                case "general_rearview_disable_audio": {
+                    Intent intent = new Intent("BackAudioStatus");
+                    intent.putExtra("backaudio", (boolean)value ? 0 : 1);
+                    preference.getContext().sendBroadcast(intent);
                 }
                 case "general_swctype": {
                     try {
@@ -679,39 +677,6 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         }
     };
 
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
-
-
-
-
-
-
-
-
-
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
     /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
         @Override

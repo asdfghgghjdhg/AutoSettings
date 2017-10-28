@@ -18,9 +18,12 @@
     <string name="pref_general_switch_media_status_title">Switch Media Status</string>
 
     <string name="pref_general_rearviewheader">Rear View Camera</string>
-    <string name="pref_general_reverse_aux_title">Backcar Aux</string>
+    <string name="pref_general_rearview_title">Rear View Camera</string>
+    <string name="pref_general_rearview_summary">Enables switching to rear camera view when rear drive activated</string>
     <string name="pref_general_mirror_rearview_title">Mirror Rear View Image</string>
     <string name="pref_general_mirror_rearview_summary">Horrizontally mirrors image of rear view camera</string>
+    <string name="pref_general_rearview_audio_title">Disable Audio</string>
+    <string name="pref_general_rearview_audio_summary">Disables sound when rear view camera is on</string>
 
     <string name="pref_general_swcheader">Steering Wheel Control</string>
     <string name="pref_general_swctype_title">SWC Type</string>
@@ -34,7 +37,7 @@
     <string name="pref_general_testmode_title">Test Mode</string>
 
     <string-array name="general_boottime_names">
-        <item>Everytime</item>
+        <item>Every time</item>
         <item>2 hours</item>
         <item>12 hours</item>
         <item>24 hours</item>

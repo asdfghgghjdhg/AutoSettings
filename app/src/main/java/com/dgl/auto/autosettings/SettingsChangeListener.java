@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 
 public class SettingsChangeListener implements ISettingManager.IDataChange {
 
-    protected Context mContext;
+    private Context mContext;
 
     SettingsChangeListener(Context context) {
         mContext = context;
@@ -50,7 +50,7 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
             }
         }
 
-        editor.commit();
+        editor.apply();
         return 0;
     }
 
@@ -64,6 +64,17 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
         ISettingManager sm = SettingManager.getInstance();
         if (sm != null) {
             try {
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_beep), sm.getBeep());
+                editor.putString(mContext.getResources().getString(R.string.sp_general_boottime), String.valueOf(sm.getBootTime()));
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_playvideo), sm.getCanWatchVideoWhileDriver());
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_shortcut_touch_state), sm.getShortcutTouchState());
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_switch_media_status), sm.GetSwitchMediaStatus());
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_rearview_camera), sm.getReverseAuxLine());
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_mirror_rearview), sm.getReverseMirror());
+                editor.putString(mContext.getResources().getString(R.string.sp_general_swctype), String.valueOf(sm.getSWCTypeValue()));
+                editor.putString(mContext.getResources().getString(R.string.sp_general_usb0type), String.valueOf(sm.getUSB0TypeValue()));
+                editor.putString(mContext.getResources().getString(R.string.sp_general_usb1type), String.valueOf(sm.getUSB1TypeValue()));
+
                 editor.putString(mContext.getResources().getString(R.string.sp_radio_region), String.valueOf(sm.getRadioField()));
 
                 //editor.putInt(mContext.getResources().getString(R.string.sp_screen_brightness), sm.getScreenBrightness());
@@ -80,7 +91,7 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
             }
         }
 
-        editor.commit();
+        editor.apply();
 
         return 0;
     }

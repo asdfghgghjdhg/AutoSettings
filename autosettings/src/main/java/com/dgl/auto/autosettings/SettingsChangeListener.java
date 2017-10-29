@@ -5,18 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.RemoteException;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
-import com.dgl.auto.RadioManager;
 import com.dgl.auto.SettingManager;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
 
 public class SettingsChangeListener implements ISettingManager.IDataChange {
 

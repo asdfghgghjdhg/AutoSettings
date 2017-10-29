@@ -4,16 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dgl.auto.IRadioManager;
 import com.dgl.auto.RadioManager;
 
 public class RadioChangeListener implements IRadioManager.IDataChange {
 
-    protected Context mContext;
+    private Context mContext;
 
-    public static boolean updateInfo = true;
+    //private static boolean updateInfo = true;
 
     RadioChangeListener(Context context) {
         mContext = context;
@@ -23,7 +22,7 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
     public int onTunerInfoChange() {
         Log.i("RadioChangeListener", "onTunerInfoChange");
 
-        if (!updateInfo) { return 0; }
+        //if (!updateInfo) { return 0; }
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -44,7 +43,7 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
             }
         }
 
-        editor.commit();
+        editor.apply();
         return 0;
     }
 

@@ -1,7 +1,6 @@
 package com.dgl.auto.autosettings;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -11,12 +10,6 @@ import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
 import com.dgl.auto.RadioManager;
 import com.dgl.auto.SettingManager;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.text.SimpleDateFormat;
 
 public class AutoSettingsService extends Service {
 

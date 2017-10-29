@@ -1,1 +1,1 @@
-include ':app', ':com.dgl.auto', ':seekbarpreference', ':colorpicker-1.0.1'
+include ':autosettings', ':seekbarpreference', ':colorpicker-1.0.1', ':com.dgl.auto'

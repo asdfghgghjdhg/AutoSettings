@@ -16,7 +16,6 @@ import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.SeekBarPreference;
 
 import com.dgl.auto.IRadioManager;

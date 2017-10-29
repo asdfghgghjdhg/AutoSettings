@@ -18,6 +18,7 @@
     <string name="sp_sound_fade">sound_fade</string>
     <string name="sp_sound_equalizer">sound_equalizer</string>
     <string name="sp_sound_loud">sound_loud</string>
+    <string name="sp_sound_speed_compensation">sound_speed_compensation</string>
     <string name="sp_sound_volume_offset">sound_volume_offset</string>
 
     <string name="sp_sound_equalizer_bass">sound_equalizer_bass</string>

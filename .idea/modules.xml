@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AutoSettings.iml" filepath="$PROJECT_DIR$/AutoSettings.iml" />
-      <module fileurl="file://$PROJECT_DIR$/autosettings/app.iml" filepath="$PROJECT_DIR$/autosettings/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/autosettings/autosettings.iml" filepath="$PROJECT_DIR$/autosettings/autosettings.iml" />
       <module fileurl="file://$PROJECT_DIR$/colorpicker-1.0.1/colorpicker-1.0.1.iml" filepath="$PROJECT_DIR$/colorpicker-1.0.1/colorpicker-1.0.1.iml" />
       <module fileurl="file://$PROJECT_DIR$/com.dgl.auto/com.dgl.auto.iml" filepath="$PROJECT_DIR$/com.dgl.auto/com.dgl.auto.iml" />
       <module fileurl="file://$PROJECT_DIR$/seekbarpreference/seekbarpreference.iml" filepath="$PROJECT_DIR$/seekbarpreference/seekbarpreference.iml" />

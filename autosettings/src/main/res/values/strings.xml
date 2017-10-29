@@ -66,6 +66,11 @@
     <string name="pref_sound_treble">Treble</string>
     <string name="pref_sound_subwoofer">Subwoofer</string>
     <string name="pref_sound_loudmode">Loud mode</string>
+
+    <string name="pref_sound_speedcompheader">Speed compensation</string>
+    <string name="pref_sound_speedcomp_title">Speed Compensation</string>
+    <string name="pref_sound_speedcomp_summary">Enables automatic volume speed compensation</string>
+
     <string name="pref_sound_volume_offset">Volume offset</string>
     <string name="pref_sound_volume_offset_summary">Value: %1$s</string>
 

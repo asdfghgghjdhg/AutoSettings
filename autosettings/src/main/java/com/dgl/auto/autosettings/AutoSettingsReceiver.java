@@ -3,14 +3,10 @@ package com.dgl.auto.autosettings;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.RemoteException;
-import android.preference.PreferenceFragment;
-import android.preference.SeekBarPreference;
 import android.preference.SwitchPreference;
-import android.widget.Toast;
 
 import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;

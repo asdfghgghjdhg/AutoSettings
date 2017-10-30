@@ -5,11 +5,14 @@ import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dgl.auto.ISettingManager;
 import com.dgl.auto.SettingManager;
@@ -29,7 +32,11 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     private static final String ATTR_TREBLE_MAX_VALUE = "trebleMaxValue";
     private static final String ATTR_SUBWOOFER_DEFAULT_VALUE = "subwooferDefaultValue";
     private static final String ATTR_SUBWOOFER_MAX_VALUE = "subwooferMaxValue";
-    private static final String ATTR_DEFAULT_PRESET = "defaultPreset";
+
+    public static final String BASS_SUBKEY = "_bass";
+    public static final String MIDDLE_SUBKEY = "_middle";
+    public static final String TREBLE_SUBKEY = "_treble";
+    public static final String SUBWOOFER_SUBKEY = "_subwoofer";
 
     private static final int DEFAULT_VALUE = 0;
     private static final int DEFAULT_MAX_VALUE = 14;
@@ -42,7 +49,6 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     private final int mTrebleMaxValue;
     private final int mSubwooferDefaultValue;
     private final int mSubwooferMaxValue;
-    private final int mDefaultPreset;
 
     private int mCurrentBassValue;
     private int mCurrentMiddleValue;
@@ -65,8 +71,6 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     public EqualizerPreference(Context context) {
         super(context);
 
-        setPersistent(false);
-
         mBassMaxValue = DEFAULT_MAX_VALUE;
         mBassDefaultValue = DEFAULT_VALUE;
         mMiddleMaxValue = DEFAULT_MAX_VALUE;
@@ -75,16 +79,15 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
         mTrebleDefaultValue = DEFAULT_VALUE;
         mSubwooferMaxValue = DEFAULT_MAX_VALUE;
         mSubwooferDefaultValue = DEFAULT_VALUE;
-        mDefaultPreset = DEFAULT_VALUE;
 
-        setDialogLayoutResource(R.layout.equalizer_preference);
+        setWidgetLayoutResource(R.layout.equalizer_preference_widget);
+        setDialogLayoutResource(R.layout.equalizer_preference_dialog);
+
     }
 
     public EqualizerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        setPersistent(false);
-
         mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
         mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
         mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
@@ -93,16 +96,14 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
         mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
         mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
         mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
-        mDefaultPreset = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_DEFAULT_PRESET, DEFAULT_VALUE);
 
-        setDialogLayoutResource(R.layout.equalizer_preference);
+        setWidgetLayoutResource(R.layout.equalizer_preference_widget);
+        setDialogLayoutResource(R.layout.equalizer_preference_dialog);
     }
 
     public EqualizerPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        setPersistent(false);
-
         mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
         mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
         mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
@@ -111,16 +112,14 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
         mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
         mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
         mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
-        mDefaultPreset = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_DEFAULT_PRESET, DEFAULT_VALUE);
 
-        setDialogLayoutResource(R.layout.equalizer_preference);
+        setWidgetLayoutResource(R.layout.equalizer_preference_widget);
+        setDialogLayoutResource(R.layout.equalizer_preference_dialog);
     }
 
     public EqualizerPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        setPersistent(false);
-
         mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
         mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
         mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
@@ -129,24 +128,53 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
         mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
         mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
         mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
-        mDefaultPreset = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_DEFAULT_PRESET, DEFAULT_VALUE);
 
-        setDialogLayoutResource(R.layout.equalizer_preference);
+        setWidgetLayoutResource(R.layout.equalizer_preference_widget);
+        setDialogLayoutResource(R.layout.equalizer_preference_dialog);
+    }
+
+    @Override
+    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
+        if (restorePersistedValue) {
+            mPreset = getPersistedInt(DEFAULT_VALUE);
+
+            SharedPreferences sharedPreferences = getSharedPreferences();
+            mBassValue = sharedPreferences.getInt(getKey()+BASS_SUBKEY, mBassDefaultValue);
+            mMiddleValue = sharedPreferences.getInt(getKey()+MIDDLE_SUBKEY, mMiddleDefaultValue);
+            mTrebleValue = sharedPreferences.getInt(getKey()+TREBLE_SUBKEY, mTrebleDefaultValue);
+            mSubValue = sharedPreferences.getInt(getKey()+SUBWOOFER_SUBKEY, mSubwooferDefaultValue);
+        } else {
+            mPreset = (Integer)defaultValue;
+            persistInt(mPreset);
+
+            mBassValue = mBassDefaultValue;
+            mMiddleValue = mMiddleDefaultValue;
+            mTrebleValue = mTrebleDefaultValue;
+            mSubValue = mSubwooferDefaultValue;
+        }
+
+        setSummary("");
     }
 
     @Override
     protected View onCreateView(ViewGroup parent) {
         final View layout = super.onCreateView(parent);
-
         layout.setPadding(layout.getPaddingLeft() + 15, layout.getPaddingTop(), layout.getPaddingRight(), layout.getPaddingBottom());
         return layout;
     }
 
     @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+        TextView eqText = view.findViewById(R.id.textView);
+        if (eqText != null) {
+            eqText.setText(getContext().getResources().getStringArray(R.array.sound_equalizer_presets_names)[mPreset]);
+        }
+    }
+
+    @Override
     protected View onCreateDialogView() {
         View view = super.onCreateDialogView();
-        //LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //View view = inflater.inflate(R.layout.equalizer_preference, null);
 
         mBassSeekBar = view.findViewById(R.id.seekBarBass);
         mBassSeekBar.setMax(mBassMaxValue);
@@ -174,31 +202,11 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        SharedPreferences sharedPreferences = getSharedPreferences();
-        mCurrentBassValue = sharedPreferences.getInt(getContext().getResources().getString(R.string.sp_sound_equalizer_bass), mBassDefaultValue);
-        mCurrentMiddleValue = sharedPreferences.getInt(getContext().getResources().getString(R.string.sp_sound_equalizer_middle), mMiddleDefaultValue);
-        mCurrentTrebleValue = sharedPreferences.getInt(getContext().getResources().getString(R.string.sp_sound_equalizer_treble), mTrebleDefaultValue);
-        mCurrentSubValue = sharedPreferences.getInt(getContext().getResources().getString(R.string.sp_sound_equalizer_subwoofer), mSubwooferDefaultValue);
-        mCurrentPreset = sharedPreferences.getInt(getContext().getResources().getString(R.string.sp_sound_equalizer_preset), mDefaultPreset);
-
-        ISettingManager sm = SettingManager.getInstance();
-        if (sm != null) {
-            try {
-                mCurrentBassValue = sm.getBass();
-                mCurrentMiddleValue = sm.getMiddle();
-                mCurrentTrebleValue = sm.getTreble();
-                mCurrentSubValue = sm.getSubwoofer();
-                mCurrentPreset = sm.getEQ();
-
-                mBassValue = mCurrentBassValue;
-                mMiddleValue = mCurrentMiddleValue;
-                mTrebleValue = mCurrentTrebleValue;
-                mSubValue = mCurrentSubValue;
-                mPreset = mCurrentPreset;
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
+        mCurrentPreset = mPreset;
+        mCurrentBassValue = mBassValue;
+        mCurrentMiddleValue = mMiddleValue;
+        mCurrentTrebleValue = mTrebleValue;
+        mCurrentSubValue = mSubValue;
 
         mBassSeekBar.setProgress(mCurrentBassValue);
         mMiddleSeekBar.setProgress(mCurrentMiddleValue);
@@ -212,15 +220,23 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
         super.onDialogClosed(positiveResult);
 
         if (positiveResult) {
-            SharedPreferences.Editor editor = getEditor();
-            editor.putInt(getContext().getResources().getString(R.string.sp_sound_equalizer_bass), mCurrentBassValue);
-            editor.putInt(getContext().getResources().getString(R.string.sp_sound_equalizer_middle), mCurrentMiddleValue);
-            editor.putInt(getContext().getResources().getString(R.string.sp_sound_equalizer_treble), mCurrentTrebleValue);
-            editor.putInt(getContext().getResources().getString(R.string.sp_sound_equalizer_subwoofer), mCurrentSubValue);
-            editor.putInt(getContext().getResources().getString(R.string.sp_sound_equalizer_preset), mCurrentPreset);
-            editor.commit();
+            mPreset = mCurrentPreset;
+            mBassValue = mCurrentBassValue;
+            mMiddleValue = mCurrentMiddleValue;
+            mTrebleValue = mCurrentTrebleValue;
+            mSubValue = mCurrentSubValue;
 
-            callChangeListener(null);
+            persistInt(mPreset);
+            SharedPreferences.Editor editor = getEditor();
+            editor.putInt(getKey()+BASS_SUBKEY, mBassValue);
+            editor.putInt(getKey()+MIDDLE_SUBKEY, mMiddleValue);
+            editor.putInt(getKey()+TREBLE_SUBKEY, mTrebleValue);
+            editor.putInt(getKey()+SUBWOOFER_SUBKEY, mSubValue);
+            editor.apply();
+
+            notifyChanged();
+            setSummary("");
+            callChangeListener(mCurrentPreset);
         } else {
             ISettingManager sm = SettingManager.getInstance();
             if (sm != null) {
@@ -255,6 +271,63 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
 
     public int getPreset() {
         return mCurrentPreset;
+    }
+
+    public void setPreset(int value) {
+        mPreset = value;
+        persistInt(mPreset);
+        notifyChanged();
+    }
+
+    public void setBass(int value) {
+        mBassValue = value;
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt(getKey()+BASS_SUBKEY, mBassValue);
+        editor.apply();
+        notifyChanged();
+        setSummary("");
+    }
+
+    public void setMiddle(int value) {
+        mMiddleValue = value;
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt(getKey()+MIDDLE_SUBKEY, mMiddleValue);
+        editor.apply();
+        notifyChanged();
+        setSummary("");
+    }
+
+    public void setTreble(int value) {
+        mTrebleValue = value;
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt(getKey()+TREBLE_SUBKEY, mTrebleValue);
+        editor.apply();
+        notifyChanged();
+        setSummary("");
+    }
+
+    public void setSubwoofer(int value) {
+        mSubValue = value;
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt(getKey()+SUBWOOFER_SUBKEY, mSubValue);
+        editor.apply();
+        notifyChanged();
+        setSummary("");
+    }
+
+    @Override
+    public void setSummary(int summaryResId) {
+        setSummary("");
+    }
+
+    @Override
+    public void setSummary(CharSequence summary) {
+        int bassPerc = Math.round((float)mBassValue * 100 / mBassMaxValue);
+        int middlePerc = Math.round((float)mMiddleValue * 100 / mMiddleMaxValue);
+        int treblePerc = Math.round((float)mTrebleValue * 100 / mTrebleMaxValue);
+        int subPerc = Math.round((float)mSubValue * 100 / mSubwooferMaxValue);
+        summary = String.format(getContext().getResources().getString(R.string.equalizer_preference_summary_text), bassPerc, middlePerc, treblePerc, subPerc);
+        super.setSummary(summary);
     }
 
     public void onProgressChanged(SeekBar seek, int value, boolean fromTouch) {

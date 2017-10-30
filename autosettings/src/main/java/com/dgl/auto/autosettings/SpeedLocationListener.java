@@ -6,9 +6,12 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 public class SpeedLocationListener implements LocationListener, GpsStatus.Listener {
     private Context mContext;
+    private float prevSpeed = 0;
 
     SpeedLocationListener(Context context) {
         mContext = context;
@@ -21,10 +24,12 @@ public class SpeedLocationListener implements LocationListener, GpsStatus.Listen
 
     @Override
     public void onLocationChanged(Location location) {
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(mContext.getResources().getString(R.string.sp_sound_speed_compensation), false)) {
-            // TODO: Обработать изменение скорости
-        }
+        // TODO: Обработать изменение скорости
+        float currSpeed = location.getSpeed() * (float)3.6;
+        Log.i("SpeedLocationListener", String.valueOf(location.getSpeed()));
+
+
+        if (currSpeed != prevSpeed) { prevSpeed = currSpeed; }
     }
 
     @Override

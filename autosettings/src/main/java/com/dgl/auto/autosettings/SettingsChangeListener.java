@@ -30,11 +30,11 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
                 editor.putInt(mContext.getResources().getString(R.string.sp_sound_volume), sm.getMcuVol());
                 editor.putInt(mContext.getResources().getString(R.string.sp_sound_balance), sm.getBalance());
                 editor.putInt(mContext.getResources().getString(R.string.sp_sound_fade), sm.getFade());
-                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer_bass), sm.getBass());
-                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer_middle), sm.getMiddle());
-                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer_treble), sm.getTreble());
-                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer_subwoofer), sm.getSubwoofer());
-                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer_preset), sm.getEQ());
+                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, sm.getBass());
+                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, sm.getMiddle());
+                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, sm.getTreble());
+                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, sm.getSubwoofer());
+                editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer), sm.getEQ());
                 editor.putBoolean(mContext.getResources().getString(R.string.sp_sound_loud), sm.getLound());
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -60,7 +60,7 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
                 editor.putBoolean(mContext.getResources().getString(R.string.sp_general_playvideo), sm.getCanWatchVideoWhileDriver());
                 editor.putBoolean(mContext.getResources().getString(R.string.sp_general_shortcut_touch_state), sm.getShortcutTouchState());
                 editor.putBoolean(mContext.getResources().getString(R.string.sp_general_switch_media_status), sm.GetSwitchMediaStatus());
-                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_rearview_camera), sm.getReverseAuxLine());
+                editor.putBoolean(mContext.getResources().getString(R.string.sp_general_rearview_addlines), sm.getReverseAuxLine());
                 editor.putBoolean(mContext.getResources().getString(R.string.sp_general_mirror_rearview), sm.getReverseMirror());
                 editor.putString(mContext.getResources().getString(R.string.sp_general_swctype), String.valueOf(sm.getSWCTypeValue()));
                 editor.putString(mContext.getResources().getString(R.string.sp_general_usb0type), String.valueOf(sm.getUSB0TypeValue()));

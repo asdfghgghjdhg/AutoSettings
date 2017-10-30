@@ -2,17 +2,21 @@
 
     <PreferenceCategory android:title="@string/pref_general_generalheader">
 
-        <com.dgl.auto.autosettings.PaddedSwitchPreference
+        <!--<com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_general_beep_title"
             android:key="@string/sp_general_beep"
-            android:defaultValue="false" />
+            android:defaultValue="false" />-->
 
         <com.dgl.auto.autosettings.PaddedListPreference
             android:title="@string/pref_general_boottime_title"
             android:key="@string/sp_general_boottime"
             android:defaultValue="0"
             android:entries="@array/general_boottime_names"
-            android:entryValues="@array/general_boottime_values" />
+            android:entryValues="@array/general_boottime_values"
+            android:dialogTitle="@null"
+            android:dialogMessage="@null"
+            android:positiveButtonText="@null"
+            android:negativeButtonText="@null" />
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_general_playing_video_title"
@@ -35,9 +39,9 @@
     <PreferenceCategory android:title="@string/pref_general_rearviewheader">
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
-            android:title="@string/pref_general_rearview_title"
-            android:key="@string/sp_general_rearview_camera"
-            android:summary="@string/pref_general_rearview_summary"
+            android:title="@string/pref_general_rearview_addlines_title"
+            android:key="@string/sp_general_rearview_addlines"
+            android:summary="@string/pref_general_rearview_addlines_summary"
             android:defaultValue="false" />
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
@@ -61,20 +65,36 @@
             android:key="@string/sp_general_swctype"
             android:defaultValue="0"
             android:entries="@array/general_swctype_names"
-            android:entryValues="@array/general_swctype_values" />
+            android:entryValues="@array/general_swctype_values"
+            android:dialogTitle="@null"
+            android:dialogMessage="@null"
+            android:positiveButtonText="@null"
+            android:negativeButtonText="@null" />
 
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_general_usbheader">
 
-        <Preference
+        <com.dgl.auto.autosettings.PaddedListPreference
             android:title="@string/pref_general_usb0_type_title"
             android:key="@string/sp_general_usb0type"
-            android:persistent="false" />
-        <Preference
+            android:defaultValue="0"
+            android:entries="@array/general_usbtype_names"
+            android:entryValues="@array/general_usbtype_values"
+            android:dialogTitle="@null"
+            android:dialogMessage="@null"
+            android:positiveButtonText="@null"
+            android:negativeButtonText="@null" />
+        <com.dgl.auto.autosettings.PaddedListPreference
             android:title="@string/pref_general_usb1_type_title"
             android:key="@string/sp_general_usb1type"
-            android:persistent="false" />
+            android:defaultValue="0"
+            android:entries="@array/general_usbtype_names"
+            android:entryValues="@array/general_usbtype_values"
+            android:dialogTitle="@null"
+            android:dialogMessage="@null"
+            android:positiveButtonText="@null"
+            android:negativeButtonText="@null" />
 
     </PreferenceCategory>
 

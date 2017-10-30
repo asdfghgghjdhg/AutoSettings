@@ -49,8 +49,7 @@
             autosettings:trebleDefaultValue="7"
             autosettings:trebleMaxValue="14"
             autosettings:subwooferDefaultValue="0"
-            autosettings:subwooferMaxValue="14"
-            autosettings:defaultPreset="0" />
+            autosettings:subwooferMaxValue="14" />
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_sound_loudmode"
@@ -68,11 +67,17 @@
             android:summary="@string/pref_sound_speedcomp_summary"
             android:defaultValue="false" />
 
+        <com.dgl.auto.autosettings.SpeedPreference
+            android:title="@string/pref_sound_min_speed_title"
+            android:key="@string/sp_sound_min_speed"
+            android:defaultValue="40"
+            android:summary="@string/pref_sound_min_speed_summary" />
+
     </PreferenceCategory>
 
-    <Preference
+    <!--<Preference
         android:title="@string/pref_sound_volume_offset"
         android:key="@string/sp_sound_volume_offset"
-        android:persistent="false" />
+        android:persistent="false" />-->
 
 </PreferenceScreen>

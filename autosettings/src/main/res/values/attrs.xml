@@ -9,6 +9,11 @@
         <attr name="trebleDefaultValue" format="integer" />
         <attr name="subwooferMaxValue" format="integer" />
         <attr name="subwooferDefaultValue" format="integer" />
-        <attr name="defaultPreset" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="com.dgl.auto.autosettings.SpeedPreferences">
+        <attr name="speedMaxValue" format="integer" />
+        <attr name="speedMinValue" format="integer" />
+        <attr name="speedStepValue" format="integer" />
     </declare-styleable>
 </resources>

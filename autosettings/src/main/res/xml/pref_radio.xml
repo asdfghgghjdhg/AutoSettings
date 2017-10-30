@@ -9,7 +9,11 @@
             android:icon="@drawable/ic_public_black_24dp"
             android:defaultValue="0"
             android:entries="@array/radio_regions_names"
-            android:entryValues="@array/radio_regions_values" />
+            android:entryValues="@array/radio_regions_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:dialogTitle="@null"
+            android:dialogMessage="@null" />
 
     </PreferenceCategory>
 

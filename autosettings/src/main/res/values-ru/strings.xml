@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">Настройки ГУ</string>
 
+    <string name="speed_preference_widget_text">%1$d км/ч</string>
+
+    <string name="equalizer_preference_summary_text">Текущие уровни: Бас %1$d%%, Средние %2$d%%, Высокие %3$d%%, Сабвуфер %4$d%%</string>
+    <string name="equalizer_preference_bass">Бас</string>
+    <string name="equalizer_preference_middle">Средние</string>
+    <string name="equalizer_preference_treble">Высокие</string>
+    <string name="equalizer_preference_subwoofer">Сабвуфер</string>
+    <string name="equalizer_preference_presets_title">Предустановки</string>
+
     <string name="pref_header_general">Общие</string>
     <string name="pref_header_sound">Звук</string>
     <string name="pref_header_screen">Экран</string>
@@ -16,13 +25,6 @@
 
     <string name="pref_sound_eqheader">Эквалайзер</string>
     <string name="pref_sound_eq_title">Настройки эквалайзера</string>
-    <string name="pref_sound_eq_presets">Предустановки</string>
-    <string name="pref_sound_eq_summary">Текущий выбор: %1$s Сабвуфер: %5$d</string>
-    <string name="pref_sound_eq_summarycustom">Текущий выбор: %1$s Басы: %2$d Средние: %3$d Высокие: %4$d Сабвуфер: %5$d</string>
-    <string name="pref_sound_bass">Басы</string>
-    <string name="pref_sound_middle">Средние</string>
-    <string name="pref_sound_treble">Высокие</string>
-    <string name="pref_sound_subwoofer">Сабвуфер</string>
     <string name="pref_sound_loudmode">Тонокомпенсация</string>
 
     <string-array name="sound_equalizer_presets_names">

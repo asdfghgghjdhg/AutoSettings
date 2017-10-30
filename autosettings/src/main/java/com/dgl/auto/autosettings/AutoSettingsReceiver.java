@@ -122,10 +122,10 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_rearview_camera))) {
-                    settingManager.setReverseAuxLine(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_rearview_camera), false));
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_rearview_addlines))) {
+                    settingManager.setReverseAuxLine(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_rearview_addlines), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_camera), settingManager.getReverseAuxLine());
+                    editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_addlines), settingManager.getReverseAuxLine());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -206,46 +206,46 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer_preset))) {
-                    settingManager.setEQ(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer_preset), 0));
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer))) {
+                    settingManager.setEQ(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer), 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_preset), settingManager.getEQ());
+                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer), settingManager.getEQ());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer_bass))) {
-                    settingManager.setBass(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer_bass), 0));
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY)) {
+                    settingManager.setBass(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_bass), settingManager.getBass());
+                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, settingManager.getBass());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer_middle))) {
-                    settingManager.setMiddle(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer_middle), 0));
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY)) {
+                    settingManager.setMiddle(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_middle), settingManager.getMiddle());
+                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, settingManager.getMiddle());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer_treble))) {
-                    settingManager.setTreble(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer_treble), 0));
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY)) {
+                    settingManager.setTreble(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_treble), settingManager.getTreble());
+                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, settingManager.getTreble());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer_subwoofer))) {
-                    settingManager.setSubwoofer(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer_subwoofer), 0));
+                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY)) {
+                    settingManager.setSubwoofer(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_subwoofer), settingManager.getSubwoofer());
+                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, settingManager.getSubwoofer());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -376,7 +376,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_camera), settingManager.getReverseAuxLine());
+                editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_addlines), settingManager.getReverseAuxLine());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -418,27 +418,27 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_bass), settingManager.getBass());
+                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, settingManager.getBass());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_middle), settingManager.getMiddle());
+                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, settingManager.getMiddle());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_treble), settingManager.getTreble());
+                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, settingManager.getTreble());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_subwoofer), settingManager.getSubwoofer());
+                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, settingManager.getSubwoofer());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer_preset), settingManager.getEQ());
+                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer), settingManager.getEQ());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

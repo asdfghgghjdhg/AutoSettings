@@ -1,10 +1,14 @@
 package com.dgl.auto.autosettings;
 
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -14,9 +18,13 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.SeekBarPreference;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.MenuItem;
 
 import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
@@ -29,16 +37,30 @@ import java.util.List;
 public class AutoSettingsActivity extends AppCompatPreferenceActivity {
     private static ISettingManager settingManager = null;
     private static IRadioManager radioManager = null;
+    private static AutoSettingsActivity mActivity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mActivity = this;
+
         settingManager = SettingManager.getInstance();
         radioManager = RadioManager.getInstance();
 
         setupActionBar();
-        startService(new Intent(this, AutoSettingsService.class));
+
+        SharedPreferences sharedPreferences = getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        boolean speedComp = sharedPreferences.getBoolean(getResources().getString(R.string.sp_sound_speed_compensation), false);
+        if (speedComp) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                speedComp = false;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(getResources().getString(R.string.sp_sound_speed_compensation), speedComp);
+                editor.apply();
+            }
+        }
+        startService(new Intent(this, AutoSettingsService.class).putExtra(AutoSettingsService.ENABLE_LOCATION_LISTENER, speedComp));
     }
 
     private void setupActionBar() {
@@ -84,17 +106,17 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
             addPreferencesFromResource(R.xml.pref_general);
 
-            SwitchPreference beepPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_beep));
+            //SwitchPreference beepPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_beep));
             ListPreference boottimePref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_boottime));
             SwitchPreference videoPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_playvideo));
             SwitchPreference stsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_shortcut_touch_state));
             SwitchPreference smsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_switch_media_status));
-            SwitchPreference rearCameraPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_rearview_camera));
+            SwitchPreference rearCameraPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_rearview_addlines));
             SwitchPreference mirrorPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_mirror_rearview));
             SwitchPreference disableAudioPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_rearview_disable_audio));
             ListPreference swcPref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_swctype));
-            Preference usb0Pref = findPreference(getResources().getString(R.string.sp_general_usb0type));
-            Preference usb1Pref = findPreference(getResources().getString(R.string.sp_general_usb1type));
+            ListPreference usb0Pref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_usb0type));
+            ListPreference usb1Pref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_usb1type));
 
             boolean beep = false;
             int boottime = 0;
@@ -108,7 +130,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             int usb1Type = 0;
 
             if (settingManager != null) {
-                try { beep = settingManager.getBeep(); } catch (RemoteException e) { beepPref.setEnabled(false); }
+                //try { beep = settingManager.getBeep(); } catch (RemoteException e) { beepPref.setEnabled(false); }
                 try { boottime = settingManager.getBootTime(); } catch (RemoteException e) { boottimePref.setEnabled(false); }
                 try { playVideo = settingManager.getCanWatchVideoWhileDriver(); } catch (RemoteException e) { videoPref.setEnabled(false); }
                 try { shortcutTouchState = settingManager.getShortcutTouchState(); } catch (RemoteException e) { stsPref.setEnabled(false); }
@@ -119,7 +141,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                 try { usb0Type = settingManager.getUSB0TypeValue(); } catch (RemoteException e) { usb0Pref.setEnabled(false); }
                 try { usb1Type = settingManager.getUSB1TypeValue(); } catch (RemoteException e) { usb1Pref.setEnabled(false); }
             } else {
-                beepPref.setEnabled(false);
+                //beepPref.setEnabled(false);
                 boottimePref.setEnabled(false);
                 videoPref.setEnabled(false);
                 stsPref.setEnabled(false);
@@ -132,7 +154,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                 usb1Pref.setEnabled(false);
             }
 
-            beepPref.setChecked(beep);
+            //beepPref.setChecked(beep);
             boottimePref.setValue(String.valueOf(boottime));
             boottimePref.setSummary(boottimePref.getEntry());
             videoPref.setChecked(playVideo);
@@ -141,11 +163,13 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             rearCameraPref.setChecked(rearCamera);
             mirrorPref.setChecked(mirrorRearView);
             swcPref.setValue(String.valueOf(swcType));
-            swcPref.setSummary(String.format(getResources().getString(R.string.pref_general_swctype_summary), swcPref.getEntry()));
-            usb0Pref.setSummary(String.valueOf(usb0Type));
-            usb1Pref.setSummary(String.valueOf(usb1Type));
+            swcPref.setSummary(swcPref.getEntries()[swcType]);
+            usb0Pref.setValue(String.valueOf(usb0Type));
+            usb0Pref.setSummary(usb0Pref.getEntries()[usb0Type]);
+            usb1Pref.setValue(String.valueOf(usb1Type));
+            usb1Pref.setSummary(usb1Pref.getEntries()[usb1Type]);
 
-            beepPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            //beepPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             boottimePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             videoPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             stsPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
@@ -154,10 +178,24 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             mirrorPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             disableAudioPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             swcPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            usb0Pref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            usb1Pref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+
+            setHasOptionsMenu(true);
         }
 
         public static GeneralPreferenceFragment getInstance() {
             return mInstance;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), AutoSettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -178,7 +216,9 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             SeekBarPreference fadePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_sound_fade));
             EqualizerPreference eqPref = (EqualizerPreference)findPreference(getResources().getString(R.string.sp_sound_equalizer));
             SwitchPreference loudPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_sound_loud));
-            Preference voloffsetPref = findPreference(getResources().getString(R.string.sp_sound_volume_offset));
+            SwitchPreference soundCompPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_sound_speed_compensation));
+            SpeedPreference minSpeedPref = (SpeedPreference)findPreference(getResources().getString(R.string.sp_sound_min_speed));
+            //Preference voloffsetPref = findPreference(getResources().getString(R.string.sp_sound_volume_offset));
 
             int currVol = 0;
             int currBalance = 0;
@@ -203,14 +243,16 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     currSubwoofer = settingManager.getSubwoofer();
                 } catch (RemoteException e) { eqPref.setEnabled(false); }
                 try { currLoud = settingManager.getLound(); } catch (RemoteException e) { loudPref.setEnabled(false); }
-                try { offset = settingManager.getVolumeOffset(); } catch (RemoteException e) {voloffsetPref.setEnabled(false); }
+                //try { offset = settingManager.getVolumeOffset(); } catch (RemoteException e) {voloffsetPref.setEnabled(false); }
             } else {
                 volumePref.setEnabled(false);
                 balancePref.setEnabled(false);
                 fadePref.setEnabled(false);
                 eqPref.setEnabled(false);
                 loudPref.setEnabled(false);
-                voloffsetPref.setEnabled(false);
+                soundCompPref.setEnabled(false);
+                minSpeedPref.setEnabled(false);
+                //voloffsetPref.setEnabled(false);
             }
 
             volumePref.setProgress(currVol);
@@ -218,22 +260,38 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             fadePref.setProgress(currFade);
             loudPref.setChecked(currLoud);
 
-            String[] names = eqPref.getContext().getResources().getStringArray(R.array.sound_equalizer_presets_names);
-            String summary = currEq == 0 ? eqPref.getContext().getResources().getString(R.string.pref_sound_eq_summarycustom) : eqPref.getContext().getResources().getString(R.string.pref_sound_eq_summary);
-            eqPref.setSummary(String.format(summary, names[currEq], currBass, currMiddle, currTreble, currSubwoofer));
+            eqPref.setPreset(currEq);
+            eqPref.setBass(currBass);
+            eqPref.setMiddle(currMiddle);
+            eqPref.setTreble(currTreble);
+            eqPref.setSubwoofer(currSubwoofer);
 
-            String bytes = "";
+            /*String bytes = "";
             for (byte b: offset) {
                 bytes = bytes + String.valueOf(b) + " ";
             }
-            summary = String.format(voloffsetPref.getContext().getResources().getString(R.string.pref_sound_volume_offset_summary), bytes);
-            voloffsetPref.setSummary(summary);
+            String summary = String.format(voloffsetPref.getContext().getResources().getString(R.string.pref_sound_volume_offset_summary), bytes);
+            voloffsetPref.setSummary(summary);*/
 
             volumePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             balancePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             fadePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             eqPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             loudPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            soundCompPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            minSpeedPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+
+            setHasOptionsMenu(true);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), AutoSettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
 
         public static SoundPreferenceFragment getInstance() {
@@ -294,6 +352,18 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             regionPref.setSummary(summary);
 
             regionPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+
+            setHasOptionsMenu(true);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), AutoSettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
 
         public static RadioPreferenceFragment getInstance() {
@@ -368,6 +438,18 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             contrastPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             detectPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             colorPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+
+            setHasOptionsMenu(true);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), AutoSettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -423,6 +505,18 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     e.printStackTrace();
                 }
             }
+
+            setHasOptionsMenu(true);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), AutoSettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -442,6 +536,8 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
                 case "general_boottime": {
+                    ListPreference pref = (ListPreference)preference;
+                    pref.setSummary(pref.getEntries()[Integer.valueOf((String)value)]);
                     try {
                         settingManager.setBootTime(Integer.valueOf((String)value));
                     } catch (RemoteException e) {
@@ -477,7 +573,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     }
                     return true;
                 }
-                case "general_rearview_camera": {
+                case "general_rearview_addlines": {
                     try {
                         settingManager.setReverseAuxLine((boolean)value);
                     } catch (RemoteException e) {
@@ -499,10 +595,35 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     Intent intent = new Intent("BackAudioStatus");
                     intent.putExtra("backaudio", (boolean)value ? 0 : 1);
                     preference.getContext().sendBroadcast(intent);
+                    return true;
                 }
                 case "general_swctype": {
                     try {
+                        ListPreference pref = (ListPreference)preference;
+                        pref.setSummary(pref.getEntries()[Integer.valueOf((String)value)]);
                         settingManager.setSWCTypeValue(Integer.valueOf((String)value));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_usb0type": {
+                    try {
+                        ListPreference pref = (ListPreference)preference;
+                        pref.setSummary(pref.getEntries()[Integer.valueOf((String)value)]);
+                        settingManager.setUSB0TypeValue(Integer.valueOf((String)value));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
+                }
+                case "general_usb1type": {
+                    try {
+                        ListPreference pref = (ListPreference)preference;
+                        pref.setSummary(pref.getEntries()[Integer.valueOf((String)value)]);
+                        settingManager.setUSB1TypeValue(Integer.valueOf((String)value));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                         return false;
@@ -544,9 +665,16 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     int currMiddle = eqPref.getMiddle();
                     int currTreble = eqPref.getTreble();
                     int currSub = eqPref.getSubwoofer();
-                    String[] names = preference.getContext().getResources().getStringArray(R.array.sound_equalizer_presets_names);
-                    String summary = currPreset == 0 ? preference.getContext().getResources().getString(R.string.pref_sound_eq_summarycustom) : preference.getContext().getResources().getString(R.string.pref_sound_eq_summary);
-                    preference.setSummary(String.format(summary, names[currPreset], currBass, currMiddle, currTreble, currSub));
+                    try {
+                        settingManager.setEQ(currPreset);
+                        settingManager.setBass(currBass);
+                        settingManager.setMiddle(currMiddle);
+                        settingManager.setTreble(currTreble);
+                        settingManager.setSubwoofer(currSub);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
 
                     return true;
                 }
@@ -557,6 +685,30 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                         e.printStackTrace();
                         return false;
                     }
+                    return true;
+                }
+                case "sound_speed_compensation": {
+                    if ((boolean)value) {
+                        if (ActivityCompat.checkSelfPermission(preference.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(preference.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Запрос привилегий для получения текущей позиции
+
+                            //ActivityCompat.requestPermissions(AutoSettingsActivity.mActivity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                        } else {
+                            preference.getContext().startService(new Intent(preference.getContext(), AutoSettingsService.class).putExtra("EnableLocationListener", true));
+                        }
+                    } else {
+                        preference.getContext().startService(new Intent(preference.getContext(), AutoSettingsService.class).putExtra("EnableLocationListener", false));
+                    }
+
+                    return true;
+                }
+                case "sound_min_speed": {
                     return true;
                 }
 
@@ -675,34 +827,4 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             return true;
         }
     };
-
-    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
-
-            SwitchPreference test = (SwitchPreference)findPreference("example_switch");
-            test.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), AutoSettingsActivity.class));
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-    }*/
 }

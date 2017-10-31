@@ -3,13 +3,14 @@ package com.dgl.auto.autosettings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.dgl.auto.IRadioManager;
 import com.dgl.auto.RadioManager;
 
 public class RadioChangeListener implements IRadioManager.IDataChange {
-
+    private static final String LOG_TAG = "RadioChangeListener";
     private Context mContext;
 
     //private static boolean updateInfo = true;
@@ -20,11 +21,11 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
 
     @Override
     public int onTunerInfoChange() {
-        Log.i("RadioChangeListener", "onTunerInfoChange");
+        Log.i(LOG_TAG, "onTunerInfoChange");
 
         //if (!updateInfo) { return 0; }
 
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         IRadioManager rm = RadioManager.getInstance();
@@ -49,9 +50,9 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
 
     @Override
     public int onTunerPresetList() {
-        Log.i("RadioChangeListener", "onTunerPresetList");
+        Log.i(LOG_TAG, "onTunerPresetList");
 
-        /*SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         IRadioManager rm = RadioManager.getInstance();
@@ -72,9 +73,9 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
 
     @Override
     public int onTunerRangeChange() {
-        Log.i("RadioChangeListener", "onTunerRangeChange");
+        Log.i(LOG_TAG, "onTunerRangeChange");
 
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         IRadioManager rm = RadioManager.getInstance();
         if (rm != null) {
             try {
@@ -105,14 +106,14 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
 
     @Override
     public int onTunerReady() {
-        Log.i("RadioChangeListener", "onTunerReady");
+        Log.i(LOG_TAG, "onTunerReady");
 
         return 0;
     }
 
     @Override
     public int onTunerUpdateRdsInfo() {
-        Log.i("RadioChangeListener", "onTunerUpdateRdsInfo");
+        Log.i(LOG_TAG, "onTunerUpdateRdsInfo");
 
         return 0;
     }

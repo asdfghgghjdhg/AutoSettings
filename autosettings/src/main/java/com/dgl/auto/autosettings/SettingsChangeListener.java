@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.dgl.auto.ISettingManager;
@@ -11,6 +12,7 @@ import com.dgl.auto.SettingManager;
 
 public class SettingsChangeListener implements ISettingManager.IDataChange {
 
+    private static final String LOG_TAG = "SettingsChangeListener";
     private Context mContext;
 
     SettingsChangeListener(Context context) {
@@ -19,15 +21,15 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
 
     @Override
     public int onAudioSettingChange() {
-        Log.i("SettingsChangeListener", "onAudioSettingsChange");
+        Log.i(LOG_TAG, "onAudioSettingsChange");
 
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         ISettingManager sm = SettingManager.getInstance();
         if (sm != null) {
             try {
-                editor.putInt(mContext.getResources().getString(R.string.sp_sound_volume), sm.getMcuVol());
+                //editor.putInt(mContext.getResources().getString(R.string.sp_sound_volume), sm.getMcuVol());
                 editor.putInt(mContext.getResources().getString(R.string.sp_sound_balance), sm.getBalance());
                 editor.putInt(mContext.getResources().getString(R.string.sp_sound_fade), sm.getFade());
                 editor.putInt(mContext.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, sm.getBass());
@@ -47,9 +49,9 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
 
     @Override
     public int onGeneralSettingChange() {
-        Log.i("SettingsChangeListener", "onGeneralSettingsChange");
+        Log.i(LOG_TAG, "onGeneralSettingsChange");
 
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         ISettingManager sm = SettingManager.getInstance();
@@ -89,7 +91,7 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
 
     @Override
     public int onUpdateMcuVersion() {
-        Log.i("SettingsChangeListener", "onUpdateMcuVersion");
+        Log.i(LOG_TAG, "onUpdateMcuVersion");
 
         return 0;
     }

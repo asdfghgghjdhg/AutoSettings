@@ -1,17 +1,22 @@
 package com.dgl.auto.autosettings;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.support.v4.app.ActivityCompat;
 
 import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
 import com.dgl.auto.RadioManager;
 import com.dgl.auto.SettingManager;
+import com.dgl.auto.constant.GlobalConstant;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class AutoSettingsReceiver extends BroadcastReceiver {
+
+    private static final String ACTION_QUICKBOOT_POWERON = "android.intent.action.QUICKBOOT_POWERON";
 
     private static ISettingManager settingManager = null;
     private static IRadioManager radioManager = null;
@@ -47,31 +54,43 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         if (settingManager == null) { settingManager = SettingManager.getInstance(); }
         if (radioManager == null) { radioManager = RadioManager.getInstance(); }
 
-        if (action.equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED) || action.equalsIgnoreCase("android.intent.action.QUICKBOOT_POWERON")/* || (action.equalsIgnoreCase(Intent.ACTION_USER_PRESENT))*/) {
-            setMCUValues(context);
-            context.startService(new Intent(context, AutoSettingsService.class));
+        if (Intent.ACTION_BOOT_COMPLETED.equalsIgnoreCase(action) || ACTION_QUICKBOOT_POWERON.equalsIgnoreCase(action)/* || (Intent.ACTION_USER_PRESENT.equalsIgnoreCase(action))*/) {
+            onBoot(context);
             booted = true;
         }
 
-        if (action.equalsIgnoreCase(Intent.ACTION_PACKAGE_REPLACED) || action.equalsIgnoreCase(Intent.ACTION_PACKAGE_ADDED)) {
-            getMCUValues(context);
+        if (Intent.ACTION_PACKAGE_REPLACED.equalsIgnoreCase(action) || Intent.ACTION_PACKAGE_ADDED.equalsIgnoreCase(action)) {
+            onFirstRun(context);
             booted = true;
         }
 
-        if (action.equalsIgnoreCase("AutoMuteStatus")) {
+        if (GlobalConstant.AutoBroadcastEvent.ACTION_MUTE_STATUS.equalsIgnoreCase(action)) {
             if (!booted) { return; }
-            volumeChange(context);
+            onVolumeChange(context);
         }
 
+        if (GlobalConstant.AutoBroadcastEvent.ACTION_KEY_EVENT.equalsIgnoreCase(action)) {
+            onKeyEvent(context);
+        }
+
+        // TODO: find or set BackAudioStatus constant
         if (action.equalsIgnoreCase("BackAudioStatus")) {
             if (!booted) { return; }
             int backaudio = intent.getIntExtra("backaudio", 0);
-            rearViewAudioChange(context, backaudio != 1);
+            onRearViewAudioChange(context, backaudio != 1);
         }
     }
 
-    private void setMCUValues(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+    private void onBoot(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean speedComp = sharedPreferences.getBoolean(context.getString(R.string.sp_sound_speed_compensation), false);
+        if (speedComp) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                speedComp = false;
+            }
+        }
+        context.startService(new Intent(context, AutoSettingsService.class).putExtra(AutoSettingsService.ENABLE_LOCATION_LISTENER, speedComp));
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (settingManager != null) {
@@ -142,6 +161,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             try {
                 if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_rearview_disable_audio))) {
                     boolean disableAudio = sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_rearview_disable_audio), true);
+                    // TODO: find or set BackAudioStatus constant
                     Intent intent = new Intent("BackAudioStatus");
                     intent.putExtra("backaudio", disableAudio ? 0 : 1);
                     context.sendBroadcast(intent);
@@ -344,8 +364,8 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         editor.apply();
     }
 
-    private void getMCUValues(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+    private void onFirstRun(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (settingManager != null) {
@@ -506,10 +526,10 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         editor.apply();
     }
 
-    private void volumeChange(Context context) {
+    private void onVolumeChange(Context context) {
         if (settingManager == null) { return; }
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         try {
             int mVolume = settingManager.getMcuVol();
@@ -522,10 +542,14 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         editor.apply();
     }
 
-    private void rearViewAudioChange(Context context, boolean disabled) {
+    private void onKeyEvent(Context context) {
+        // TODO: Обработать включение / выключение
+    }
+
+    private void onRearViewAudioChange(Context context, boolean disabled) {
         if (settingManager == null) { return; }
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_disable_audio), disabled);
         AutoSettingsActivity.GeneralPreferenceFragment fragment = AutoSettingsActivity.GeneralPreferenceFragment.getInstance();

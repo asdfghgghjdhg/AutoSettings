@@ -42,6 +42,9 @@
                 <data android:scheme="package" />
             </intent-filter>
             <intent-filter>
+                <action android:name="AutoActionKeyEvent" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="AutoMuteStatus" />
             </intent-filter>
             <intent-filter>

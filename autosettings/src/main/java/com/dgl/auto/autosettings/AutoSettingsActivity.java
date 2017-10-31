@@ -3,7 +3,6 @@ package com.dgl.auto.autosettings;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,14 +15,13 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.SeekBarPreference;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 
 import com.dgl.auto.IRadioManager;
@@ -37,20 +35,17 @@ import java.util.List;
 public class AutoSettingsActivity extends AppCompatPreferenceActivity {
     private static ISettingManager settingManager = null;
     private static IRadioManager radioManager = null;
-    private static AutoSettingsActivity mActivity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mActivity = this;
 
         settingManager = SettingManager.getInstance();
         radioManager = RadioManager.getInstance();
 
         setupActionBar();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("com.dgl.auto.autosettings_preferences", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean speedComp = sharedPreferences.getBoolean(getResources().getString(R.string.sp_sound_speed_compensation), false);
         if (speedComp) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -118,7 +113,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             ListPreference usb0Pref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_usb0type));
             ListPreference usb1Pref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_usb1type));
 
-            boolean beep = false;
+            //boolean beep = false;
             int boottime = 0;
             boolean playVideo = false;
             boolean shortcutTouchState = false;
@@ -229,7 +224,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             int currTreble = 0;
             int currSubwoofer = 0;
             boolean currLoud = false;
-            byte[] offset = {};
+            //byte[] offset = {};
 
             if (settingManager != null) {
                 try { currVol = settingManager.getMcuVol(); } catch (RemoteException e) { volumePref.setEnabled(false); }
@@ -774,57 +769,4 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         }
     };
 
-
-
-
-
-
-
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            /*String stringValue = value.toString();
-
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
-
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
-            }*/
-            return true;
-        }
-    };
 }

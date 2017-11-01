@@ -40,6 +40,7 @@ public class AutoSettingsService extends Service {
         if ((mSpeedListener != null) && speedListenerActive) {
             LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             if (locationManager != null) { locationManager.removeUpdates(mSpeedListener); }
+            mSpeedListener.stopVolumeChange();
         }
         speedListenerActive = false;
         settingManager.setDataChangeListener(null);

@@ -3,9 +3,11 @@ package com.dgl.auto.autosettings;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -19,9 +21,11 @@ import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.SeekBarPreference;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.dgl.auto.IRadioManager;
@@ -33,15 +37,35 @@ import com.jaredrummler.android.colorpicker.ColorPreference;
 import java.util.List;
 
 public class AutoSettingsActivity extends AppCompatPreferenceActivity {
+    public static final String ACTION_FINISH = "com.dgl.auto.autosettings.action.FINISH";
+    private static final String LOG_TAG = "AutoSettingsActivity";
+
     private static ISettingManager settingManager = null;
     private static IRadioManager radioManager = null;
+
+    BroadcastReceiver finishBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(ACTION_FINISH)){
+                finish();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.i(LOG_TAG, "onCreate");
+
         settingManager = SettingManager.getInstance();
         radioManager = RadioManager.getInstance();
+
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_FINISH);
+        localBroadcastManager.registerReceiver(finishBroadcastReceiver, intentFilter);
 
         setupActionBar();
 
@@ -56,6 +80,14 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             }
         }
         startService(new Intent(this, AutoSettingsService.class).putExtra(AutoSettingsService.ENABLE_LOCATION_LISTENER, speedComp));
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(LOG_TAG, "onDestroy");
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.unregisterReceiver(finishBroadcastReceiver);
+        super.onDestroy();
     }
 
     private void setupActionBar() {
@@ -153,6 +185,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             boottimePref.setValue(String.valueOf(boottime));
             boottimePref.setSummary(boottimePref.getEntry());
             videoPref.setChecked(playVideo);
+            if (playVideo) { videoPref.setIcon(R.drawable.ic_videocam_black_24dp); } else { videoPref.setIcon(R.drawable.ic_videocam_off_black_24dp); };
             stsPref.setChecked(shortcutTouchState);
             smsPref.setChecked(switchMediaStatus);
             rearCameraPref.setChecked(rearCamera);
@@ -544,6 +577,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                 case "general_playvideo": {
                     try {
                         settingManager.setCanWatchVideoWhileDriver((boolean)value);
+                        if ((boolean)value) { preference.setIcon(R.drawable.ic_videocam_black_24dp); } else { preference.setIcon(R.drawable.ic_videocam_off_black_24dp); };
                     } catch (RemoteException e) {
                         e.printStackTrace();
                         return false;

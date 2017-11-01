@@ -42,6 +42,13 @@ public class AutoSettingsService extends Service {
             if (locationManager != null) { locationManager.removeUpdates(mSpeedListener); }
         }
         speedListenerActive = false;
+        settingManager.setDataChangeListener(null);
+        radioManager.setDataChangeListener(null);
+        settingManager = null;
+        radioManager = null;
+        mSettingsChangeListener = null;
+        mRadioChangeListener = null;
+        mSpeedListener = null;
         Log.i("AutoSettingsService", "onDestroy");
         super.onDestroy();
     }

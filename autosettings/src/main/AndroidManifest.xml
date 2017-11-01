@@ -28,9 +28,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
             <intent-filter>
@@ -42,7 +39,10 @@
                 <data android:scheme="package" />
             </intent-filter>
             <intent-filter>
-                <action android:name="AutoActionKeyEvent" />
+                <action android:name="autochips.intent.action.QB_POWERON" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="autochips.intent.action.QB_POWEROFF" />
             </intent-filter>
             <intent-filter>
                 <action android:name="AutoMuteStatus" />

@@ -21,6 +21,7 @@
         <com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_general_playing_video_title"
             android:key="@string/sp_general_playvideo"
+            android:icon="@drawable/ic_videocam_black_24dp"
             android:summary="@string/pref_general_playing_video_summary"
             android:defaultValue="false" />
 
@@ -41,18 +42,21 @@
         <com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_general_rearview_addlines_title"
             android:key="@string/sp_general_rearview_addlines"
+            android:icon="@drawable/ic_border_clear_black_24dp"
             android:summary="@string/pref_general_rearview_addlines_summary"
             android:defaultValue="false" />
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_general_mirror_rearview_title"
             android:key="@string/sp_general_mirror_rearview"
+            android:icon="@drawable/ic_switch_video_black_24dp"
             android:summary="@string/pref_general_mirror_rearview_summary"
             android:defaultValue="false" />
 
         <com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_general_rearview_audio_title"
             android:key="@string/sp_general_rearview_disable_audio"
+            android:icon="@drawable/ic_volume_off_black_24dp"
             android:summary="@string/pref_general_rearview_audio_summary"
             android:defaultValue="true" />
 
@@ -78,6 +82,7 @@
         <com.dgl.auto.autosettings.PaddedListPreference
             android:title="@string/pref_general_usb0_type_title"
             android:key="@string/sp_general_usb0type"
+            android:icon="@drawable/ic_usb_black_24dp"
             android:defaultValue="0"
             android:entries="@array/general_usbtype_names"
             android:entryValues="@array/general_usbtype_values"
@@ -88,6 +93,7 @@
         <com.dgl.auto.autosettings.PaddedListPreference
             android:title="@string/pref_general_usb1_type_title"
             android:key="@string/sp_general_usb1type"
+            android:icon="@drawable/ic_usb_black_24dp"
             android:defaultValue="0"
             android:entries="@array/general_usbtype_names"
             android:entryValues="@array/general_usbtype_values"
@@ -98,13 +104,13 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_general_otherheader">
+    <!--<PreferenceCategory android:title="@string/pref_general_otherheader">
 
         <Preference
             android:title="@string/pref_general_testmode_title"
             android:key="@string/sp_general_testmode"
             android:persistent="false" />
 
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 
 </PreferenceScreen>

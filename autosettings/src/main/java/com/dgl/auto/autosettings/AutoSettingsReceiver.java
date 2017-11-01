@@ -1,6 +1,7 @@
 package com.dgl.auto.autosettings;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.dgl.auto.IRadioManager;
 import com.dgl.auto.ISettingManager;
@@ -54,13 +56,25 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         if (settingManager == null) { settingManager = SettingManager.getInstance(); }
         if (radioManager == null) { radioManager = RadioManager.getInstance(); }
 
-        if (Intent.ACTION_BOOT_COMPLETED.equalsIgnoreCase(action) || ACTION_QUICKBOOT_POWERON.equalsIgnoreCase(action)/* || (Intent.ACTION_USER_PRESENT.equalsIgnoreCase(action))*/) {
+        if (Intent.ACTION_BOOT_COMPLETED.equalsIgnoreCase(action)/* || (Intent.ACTION_USER_PRESENT.equalsIgnoreCase(action))*/) {
             onBoot(context);
             booted = true;
         }
 
         if (Intent.ACTION_PACKAGE_REPLACED.equalsIgnoreCase(action) || Intent.ACTION_PACKAGE_ADDED.equalsIgnoreCase(action)) {
-            onFirstRun(context);
+            onInstall(context);
+            booted = true;
+        }
+
+        // TODO: find or set autochips.intent.action.QB_POWEROFF constant
+        if (action.equalsIgnoreCase("autochips.intent.action.QB_POWEROFF")) {
+            onPowerOff(context);
+            booted = false;
+        }
+
+        // TODO: find or set autochips.intent.action.QB_POWERON constant
+        if (action.equalsIgnoreCase("autochips.intent.action.QB_POWERON")) {
+            onPowerOn(context);
             booted = true;
         }
 
@@ -364,7 +378,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         editor.apply();
     }
 
-    private void onFirstRun(Context context) {
+    private void onInstall(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -526,6 +540,24 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         editor.apply();
     }
 
+    private void onPowerOff(Context context) {
+        context.stopService(new Intent(context, AutoSettingsService.class));
+
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        localBroadcastManager.sendBroadcast(new Intent(AutoSettingsActivity.ACTION_FINISH));
+    }
+
+    private void onPowerOn(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean speedComp = sharedPreferences.getBoolean(context.getString(R.string.sp_sound_speed_compensation), false);
+        if (speedComp) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                speedComp = false;
+            }
+        }
+        context.startService(new Intent(context, AutoSettingsService.class).putExtra(AutoSettingsService.ENABLE_LOCATION_LISTENER, speedComp));
+    }
+
     private void onVolumeChange(Context context) {
         if (settingManager == null) { return; }
 
@@ -547,8 +579,6 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
     }
 
     private void onRearViewAudioChange(Context context, boolean disabled) {
-        if (settingManager == null) { return; }
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_disable_audio), disabled);

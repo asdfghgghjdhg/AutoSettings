@@ -30,6 +30,7 @@
         <com.dgl.auto.autosettings.PaddedSwitchPreference
             android:title="@string/pref_screen_detect_title"
             android:key="@string/sp_screen_detect_illumination"
+            android:summary="@string/pref_screen_detect_summary"
             android:icon="@drawable/ic_wb_incandescent_black_24dp"
             android:defaultValue="false" />
 

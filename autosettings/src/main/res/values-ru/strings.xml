@@ -4,7 +4,7 @@
     <string name="speed_preference_widget_text">%1$d км/ч</string>
 
     <string name="equalizer_preference_summary_text">Текущие уровни: Бас %1$d%%, Средние %2$d%%, Высокие %3$d%%, Сабвуфер %4$d%%</string>
-    <string name="equalizer_preference_bass">Бас</string>
+    <string name="equalizer_preference_bass">Басы</string>
     <string name="equalizer_preference_middle">Средние</string>
     <string name="equalizer_preference_treble">Высокие</string>
     <string name="equalizer_preference_subwoofer">Сабвуфер</string>
@@ -15,6 +15,46 @@
     <string name="pref_header_screen">Экран</string>
     <string name="pref_header_touch">Тач-панель</string>
     <string name="pref_header_other">Дополнительно</string>
+    <string name="pref_header_radio">Радио</string>
+    <string name="pref_header_info">Информация о системе</string>
+
+    <string name="pref_general_generalheader">Основные</string>
+    <string name="pref_general_beep_title">Сигнал</string>
+    <string name="pref_general_boottime_title">Boot Time</string>
+    <string name="pref_general_playing_video_title">Видео во время движения</string>
+    <string name="pref_general_playing_video_summary">Разрешает воспроизведение видео во время движения. Устройство должно быть подключено к стояночному тормозу Вашего автомобиля.</string>
+    <string name="pref_general_shortcut_touch_state_title">Shortcut Touch State</string>
+    <string name="pref_general_switch_media_status_title">Switch Media Status</string>
+
+    <string name="pref_general_rearviewheader">Камера заднего вида</string>
+    <string name="pref_general_rearview_addlines_title">Парковочные линии</string>
+    <string name="pref_general_rearview_addlines_summary">Добавляет парковочные линии к изображению камеры заднего вида</string>
+    <string name="pref_general_mirror_rearview_title">Отразить изображение</string>
+    <string name="pref_general_mirror_rearview_summary">Отображает изображение камыре заднего вида по горизонтали</string>
+    <string name="pref_general_rearview_audio_title">Отключить звук</string>
+    <string name="pref_general_rearview_audio_summary">Отключает звук при включении камеры заднего вида</string>
+
+    <string name="pref_general_swcheader">Управление с руля</string>
+    <string name="pref_general_swctype_title">Тип кнопок</string>
+
+    <string name="pref_general_usbheader">USB</string>
+    <string name="pref_general_usb0_type_title">Тип USB0</string>
+    <string name="pref_general_usb1_type_title">Тип USB1</string>
+
+    <string name="pref_general_otherheader">Другое</string>
+    <string name="pref_general_testmode_title">Test Mode</string>
+
+    <string-array name="general_boottime_names">
+        <item>Каждый раз</item>
+        <item>2 часа</item>
+        <item>12 часов</item>
+        <item>24 часа</item>
+    </string-array>
+
+    <string-array name="general_swctype_names">
+        <item>Тип 1</item>
+        <item>Тип 2</item>
+    </string-array>
 
     <string name="pref_sound_volumeheader">Общая громкость</string>
     <string name="pref_sound_volume_title">Уровень громкости</string>
@@ -26,6 +66,12 @@
     <string name="pref_sound_eqheader">Эквалайзер</string>
     <string name="pref_sound_eq_title">Настройки эквалайзера</string>
     <string name="pref_sound_loudmode">Тонокомпенсация</string>
+
+    <string name="pref_sound_speedcompheader">Звуковая компенсация скорости</string>
+    <string name="pref_sound_speedcomp_title">Компенсация скорости</string>
+    <string name="pref_sound_speedcomp_summary">Включает автоматическую звуковую компенсацию скорости.</string>
+    <string name="pref_sound_min_speed_title">Минимальная скорость</string>
+    <string name="pref_sound_min_speed_summary">Минимальная скорость автомобиля для включения звуковой компенсации.</string>
 
     <string-array name="sound_equalizer_presets_names">
         <item>Пользовательские</item>
@@ -39,4 +85,33 @@
         <item>Кино</item>
         <item>Техно</item>
     </string-array>
+
+    <string name="pref_radio_regionheader">Настройки региона</string>
+    <string name="pref_radio_region_title">Регион</string>
+    <string name="pref_radio_region_summary">AM %1$dkHz - %2$dkHz шаг %3$dkHz, FM %4$.2fMHz - %5$.2fMHz шаг %6$.2fMHz</string>
+
+    <string-array name="radio_regions_names">
+        <item>США</item>
+        <item>Европа</item>
+        <item>Латинская Америка</item>
+        <item>Восточная Европа (OIRT)</item>
+        <item>Китай</item>
+        <item>Япония</item>
+    </string-array>
+
+    <string name="pref_screen_brightnessheader">Яркость / Контрастность</string>
+    <string name="pref_screen_brightness_title">Яркость</string>
+    <string name="pref_screen_contrast_title">Контрастность</string>
+
+    <string name="pref_screen_illuminationheader">Подсветка</string>
+    <string name="pref_screen_detect_title">Автоопределение подсветки</string>
+    <string name="pref_screen_detect_summary">Автоматическое включение подсветки при включении габаритный огней автомобиля.</string>
+    <string name="pref_screen_illumination_color_title">Цвет</string>
+
+    <string name="pref_info_carnumber_title">Номер автомобиля</string>
+    <string name="pref_info_emmc_title">EMMC ID</string>
+    <string name="pref_info_mcu_title">Версия MCU</string>
+    <string name="pref_info_can_title">Версия CAN</string>
+    <string name="pref_info_bt_title">Версия Bluetooth</string>
+    <string name="pref_info_system_title">Версия системы</string>
 </resources>

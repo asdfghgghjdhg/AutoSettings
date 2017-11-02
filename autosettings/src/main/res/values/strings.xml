@@ -75,8 +75,10 @@
     <string name="pref_sound_speedcompheader">Speed compensation</string>
     <string name="pref_sound_speedcomp_title">Speed Compensation</string>
     <string name="pref_sound_speedcomp_summary">Enables automatic volume speed compensation</string>
-    <string name="pref_sound_min_speed_title">Min speed</string>
+    <string name="pref_sound_min_speed_title">Min Speed</string>
     <string name="pref_sound_min_speed_summary">Minimum vehicle speed to start volume compensation</string>
+    <string name="pref_sound_max_speed_title">Max Volume Speed</string>
+    <string name="pref_sound_max_speed_summary">Sets the vehicle speed when volume reaches its maximum. Can be smaller or greater of real vehicle top speed.</string>
 
     <string name="pref_sound_volume_offset">Volume offset</string>
     <string name="pref_sound_volume_offset_summary">Value: %1$s</string>

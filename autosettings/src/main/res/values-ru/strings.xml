@@ -72,6 +72,8 @@
     <string name="pref_sound_speedcomp_summary">Включает автоматическую звуковую компенсацию скорости.</string>
     <string name="pref_sound_min_speed_title">Минимальная скорость</string>
     <string name="pref_sound_min_speed_summary">Минимальная скорость автомобиля для включения звуковой компенсации.</string>
+    <string name="pref_sound_max_speed_title">Скорость максимальной громкости</string>
+    <string name="pref_sound_max_speed_summary">Задает скорость, при которой громкость достигнет своего максимума. Может быть меньше или больше реальной максимальной скорости автомобиля.</string>
 
     <string-array name="sound_equalizer_presets_names">
         <item>Пользовательские</item>

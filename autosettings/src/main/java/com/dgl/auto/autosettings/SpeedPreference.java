@@ -1,6 +1,7 @@
 package com.dgl.auto.autosettings;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -11,12 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class SpeedPreference extends DialogPreference implements NumberPicker.OnValueChangeListener {
-
-    private static final String PREFERENCE_NS = "http://schemas.android.com/apk/res/com.dgl.auto.autosettings";
-
-    private static final String ATTR_SPEED_MIN_VALUE = "speedMinValue";
-    private static final String ATTR_SPEED_MAX_VALUE = "speedMaxValue";
-    private static final String ATTR_SPEED_STEP_VALUE = "speedStepValue";
 
     private static final int DEFAULT_VALUE = 0;
     private static final int DEFAULT_MIN_VALUE = 0;
@@ -43,9 +38,11 @@ public class SpeedPreference extends DialogPreference implements NumberPicker.On
     public SpeedPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mSpeedMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_MIN_VALUE, DEFAULT_MIN_VALUE);
-        mSpeedMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mSpeedStepValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_STEP_VALUE, DEFAULT_STEP_VALUE);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        mSpeedMinValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMinValue, DEFAULT_MIN_VALUE);
+        mSpeedMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMaxValue, DEFAULT_MAX_VALUE);
+        mSpeedStepValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedStepValue, DEFAULT_STEP_VALUE);
+        a.recycle();
 
         setWidgetLayoutResource(R.layout.speed_preference_widget);
         setDialogLayoutResource(R.layout.speed_preference_dialog);
@@ -54,9 +51,11 @@ public class SpeedPreference extends DialogPreference implements NumberPicker.On
     public SpeedPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mSpeedMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_MIN_VALUE, DEFAULT_MIN_VALUE);
-        mSpeedMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mSpeedStepValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_STEP_VALUE, DEFAULT_STEP_VALUE);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        mSpeedMinValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMinValue, DEFAULT_MIN_VALUE);
+        mSpeedMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMaxValue, DEFAULT_MAX_VALUE);
+        mSpeedStepValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedStepValue, DEFAULT_STEP_VALUE);
+        a.recycle();
 
         setWidgetLayoutResource(R.layout.speed_preference_widget);
         setDialogLayoutResource(R.layout.speed_preference_dialog);
@@ -65,9 +64,11 @@ public class SpeedPreference extends DialogPreference implements NumberPicker.On
     public SpeedPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        mSpeedMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_MIN_VALUE, DEFAULT_MIN_VALUE);
-        mSpeedMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mSpeedStepValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SPEED_STEP_VALUE, DEFAULT_STEP_VALUE);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        mSpeedMinValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMinValue, DEFAULT_MIN_VALUE);
+        mSpeedMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMaxValue, DEFAULT_MAX_VALUE);
+        mSpeedStepValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedStepValue, DEFAULT_STEP_VALUE);
+        a.recycle();
 
         setWidgetLayoutResource(R.layout.speed_preference_widget);
         setDialogLayoutResource(R.layout.speed_preference_dialog);
@@ -86,7 +87,7 @@ public class SpeedPreference extends DialogPreference implements NumberPicker.On
         super.onBindView(view);
         TextView speedText = view.findViewById(R.id.textView);
         if (speedText != null) {
-            speedText.setText(String.format(getContext().getResources().getString(R.string.speed_preference_widget_text), speed));
+            speedText.setText(String.format(getContext().getString(R.string.speed_preference_widget_text), speed));
         }
     }
 

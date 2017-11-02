@@ -44,10 +44,9 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
     private static IRadioManager radioManager = null;
 
     BroadcastReceiver finishBroadcastReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(ACTION_FINISH)){
+            if(ACTION_FINISH.equals(intent.getAction())){
                 finish();
             }
         }
@@ -70,16 +69,12 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         setupActionBar();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean speedComp = sharedPreferences.getBoolean(getResources().getString(R.string.sp_sound_speed_compensation), false);
-        if (speedComp) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                speedComp = false;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(getResources().getString(R.string.sp_sound_speed_compensation), speedComp);
-                editor.apply();
-            }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(getString(R.string.sp_sound_speed_compensation), false);
+            editor.apply();
         }
-        startService(new Intent(this, AutoSettingsService.class).putExtra(AutoSettingsService.ENABLE_LOCATION_LISTENER, speedComp));
+        startService(new Intent(this, AutoSettingsService.class));
     }
 
     @Override
@@ -133,17 +128,17 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
             addPreferencesFromResource(R.xml.pref_general);
 
-            //SwitchPreference beepPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_beep));
-            ListPreference boottimePref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_boottime));
-            SwitchPreference videoPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_playvideo));
-            SwitchPreference stsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_shortcut_touch_state));
-            SwitchPreference smsPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_switch_media_status));
-            SwitchPreference rearCameraPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_rearview_addlines));
-            SwitchPreference mirrorPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_mirror_rearview));
-            SwitchPreference disableAudioPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_general_rearview_disable_audio));
-            ListPreference swcPref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_swctype));
-            ListPreference usb0Pref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_usb0type));
-            ListPreference usb1Pref = (ListPreference)findPreference(getResources().getString(R.string.sp_general_usb1type));
+            //SwitchPreference beepPref = (SwitchPreference)findPreference(getString(R.string.sp_general_beep));
+            ListPreference boottimePref = (ListPreference)findPreference(getString(R.string.sp_general_boottime));
+            SwitchPreference videoPref = (SwitchPreference)findPreference(getString(R.string.sp_general_playvideo));
+            SwitchPreference stsPref = (SwitchPreference)findPreference(getString(R.string.sp_general_shortcut_touch_state));
+            SwitchPreference smsPref = (SwitchPreference)findPreference(getString(R.string.sp_general_switch_media_status));
+            SwitchPreference rearCameraPref = (SwitchPreference)findPreference(getString(R.string.sp_general_rearview_addlines));
+            SwitchPreference mirrorPref = (SwitchPreference)findPreference(getString(R.string.sp_general_mirror_rearview));
+            SwitchPreference disableAudioPref = (SwitchPreference)findPreference(getString(R.string.sp_general_rearview_disable_audio));
+            ListPreference swcPref = (ListPreference)findPreference(getString(R.string.sp_general_swctype));
+            ListPreference usb0Pref = (ListPreference)findPreference(getString(R.string.sp_general_usb0type));
+            ListPreference usb1Pref = (ListPreference)findPreference(getString(R.string.sp_general_usb1type));
 
             //boolean beep = false;
             int boottime = 0;
@@ -239,14 +234,15 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
             addPreferencesFromResource(R.xml.pref_sound);
 
-            SeekBarPreference volumePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_sound_volume));
-            SeekBarPreference balancePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_sound_balance));
-            SeekBarPreference fadePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_sound_fade));
-            EqualizerPreference eqPref = (EqualizerPreference)findPreference(getResources().getString(R.string.sp_sound_equalizer));
-            SwitchPreference loudPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_sound_loud));
-            SwitchPreference soundCompPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_sound_speed_compensation));
-            SpeedPreference minSpeedPref = (SpeedPreference)findPreference(getResources().getString(R.string.sp_sound_min_speed));
-            //Preference voloffsetPref = findPreference(getResources().getString(R.string.sp_sound_volume_offset));
+            SeekBarPreference volumePref = (SeekBarPreference)findPreference(getString(R.string.sp_sound_volume));
+            SeekBarPreference balancePref = (SeekBarPreference)findPreference(getString(R.string.sp_sound_balance));
+            SeekBarPreference fadePref = (SeekBarPreference)findPreference(getString(R.string.sp_sound_fade));
+            EqualizerPreference eqPref = (EqualizerPreference)findPreference(getString(R.string.sp_sound_equalizer));
+            SwitchPreference loudPref = (SwitchPreference)findPreference(getString(R.string.sp_sound_loud));
+            SwitchPreference soundCompPref = (SwitchPreference)findPreference(getString(R.string.sp_sound_speed_compensation));
+            SpeedPreference minSpeedPref = (SpeedPreference)findPreference(getString(R.string.sp_sound_min_speed));
+            SpeedPreference maxSpeedPref = (SpeedPreference)findPreference(getString(R.string.sp_sound_max_speed));
+            //Preference voloffsetPref = findPreference(getString(R.string.sp_sound_volume_offset));
 
             int currVol = 0;
             int currBalance = 0;
@@ -280,6 +276,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                 loudPref.setEnabled(false);
                 soundCompPref.setEnabled(false);
                 minSpeedPref.setEnabled(false);
+                maxSpeedPref.setEnabled(false);
                 //voloffsetPref.setEnabled(false);
             }
 
@@ -298,7 +295,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             for (byte b: offset) {
                 bytes = bytes + String.valueOf(b) + " ";
             }
-            String summary = String.format(voloffsetPref.getContext().getResources().getString(R.string.pref_sound_volume_offset_summary), bytes);
+            String summary = String.format(voloffsetPref.getContext().getString(R.string.pref_sound_volume_offset_summary), bytes);
             voloffsetPref.setSummary(summary);*/
 
             volumePref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
@@ -308,6 +305,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             loudPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             soundCompPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
             minSpeedPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
+            maxSpeedPref.setOnPreferenceChangeListener(mcuPreferenceChangeListener);
 
             setHasOptionsMenu(true);
         }
@@ -327,7 +325,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         }
 
         public void updateVolume(int volume) {
-            SeekBarPreference volumePref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_sound_volume));
+            SeekBarPreference volumePref = (SeekBarPreference)findPreference(getString(R.string.sp_sound_volume));
             volumePref.setProgress(volume);
             if (volume > 20) {
                 volumePref.setIcon(R.drawable.ic_volume_up_black_24dp);
@@ -351,7 +349,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
             addPreferencesFromResource(R.xml.pref_radio);
 
-            ListPreference regionPref = (ListPreference)findPreference(getResources().getString(R.string.sp_radio_region));
+            ListPreference regionPref = (ListPreference)findPreference(getString(R.string.sp_radio_region));
 
             int currRegion = 0;
 
@@ -372,7 +370,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     float minFM = (float)radioManager.getMinFMFreq() / 100;
                     float maxFM = (float)radioManager.getMaxFMFreq() / 100;
                     float stepFM = (float)radioManager.getFMStep() / 100;
-                    summary = String.format(regionPref.getContext().getResources().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
+                    summary = String.format(regionPref.getContext().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -399,7 +397,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         }
 
         public void updateRegionInfo() {
-            ListPreference regionPref = (ListPreference)findPreference(getResources().getString(R.string.sp_radio_region));
+            ListPreference regionPref = (ListPreference)findPreference(getString(R.string.sp_radio_region));
             try {
                 int currRegion = settingManager.getRadioField();
                 regionPref.setValueIndex(currRegion);
@@ -410,7 +408,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                 float minFM = (float)radioManager.getMinFMFreq() / 100;
                 float maxFM = (float)radioManager.getMaxFMFreq() / 100;
                 float stepFM = (float)radioManager.getFMStep() / 100;
-                String summary = String.format(regionPref.getContext().getResources().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
+                String summary = String.format(regionPref.getContext().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
                 regionPref.setSummary(summary);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -426,10 +424,10 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
             addPreferencesFromResource(R.xml.pref_screen);
 
-            SeekBarPreference brightnessPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_brightness));
-            SeekBarPreference contrastPref = (SeekBarPreference)findPreference(getResources().getString(R.string.sp_screen_contrast));
-            SwitchPreference detectPref = (SwitchPreference)findPreference(getResources().getString(R.string.sp_screen_detect_illumination));
-            ColorPreference colorPref = (ColorPreference)findPreference(getResources().getString(R.string.sp_screen_illumination_color));
+            SeekBarPreference brightnessPref = (SeekBarPreference)findPreference(getString(R.string.sp_screen_brightness));
+            SeekBarPreference contrastPref = (SeekBarPreference)findPreference(getString(R.string.sp_screen_contrast));
+            SwitchPreference detectPref = (SwitchPreference)findPreference(getString(R.string.sp_screen_detect_illumination));
+            ColorPreference colorPref = (ColorPreference)findPreference(getString(R.string.sp_screen_illumination_color));
 
             int currBrightness = 0;
             int currContrast = 0;
@@ -492,42 +490,42 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
             if (settingManager != null) {
                 try {
                     String carNumber = settingManager.getCarNumber();
-                    Preference pref = findPreference(getResources().getString(R.string.sp_info_carnumber));
+                    Preference pref = findPreference(getString(R.string.sp_info_carnumber));
                     pref.setSummary(carNumber);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 try {
                     String version = settingManager.getSystemVersion();
-                    Preference pref = findPreference(getResources().getString(R.string.sp_info_system));
+                    Preference pref = findPreference(getString(R.string.sp_info_system));
                     pref.setSummary(version);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 try {
                     String version = settingManager.GetMcuVersion();
-                    Preference pref = findPreference(getResources().getString(R.string.sp_info_mcu));
+                    Preference pref = findPreference(getString(R.string.sp_info_mcu));
                     pref.setSummary(version);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 try {
                     String version = settingManager.getBTVersion();
-                    Preference pref = findPreference(getResources().getString(R.string.sp_info_bt));
+                    Preference pref = findPreference(getString(R.string.sp_info_bt));
                     pref.setSummary(version);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 try {
                     String version = settingManager.getCanVersion();
-                    Preference pref = findPreference(getResources().getString(R.string.sp_info_can));
+                    Preference pref = findPreference(getString(R.string.sp_info_can));
                     pref.setSummary(version);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 try {
                     String id = settingManager.GetEmmcId();
-                    Preference pref = findPreference(getResources().getString(R.string.sp_info_emmc));
+                    Preference pref = findPreference(getString(R.string.sp_info_emmc));
                     pref.setSummary(id);
                 } catch (RemoteException e) {
                     e.printStackTrace();
@@ -738,6 +736,15 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
                 case "sound_min_speed": {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+                    int maxSpeed = sharedPreferences.getInt(preference.getContext().getString(R.string.sp_sound_max_speed), SpeedLocationListener.DEFAULT_MAX_SPEED);
+                    if ((int)value >= maxSpeed) { return false; }
+                    return true;
+                }
+                case "sound_max_speed": {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+                    int minSpeed = sharedPreferences.getInt(preference.getContext().getString(R.string.sp_sound_min_speed), SpeedLocationListener.DEFAULT_MIN_SPEED);
+                    if ((int)value <= minSpeed) { return false; }
                     return true;
                 }
 

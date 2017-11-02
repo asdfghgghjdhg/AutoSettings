@@ -20,6 +20,7 @@
     <string name="sp_sound_loud">sound_loud</string>
     <string name="sp_sound_speed_compensation">sound_speed_compensation</string>
     <string name="sp_sound_min_speed">sound_min_speed</string>
+    <string name="sp_sound_max_speed">sound_max_speed</string>
     <string name="sp_sound_volume_offset">sound_volume_offset</string>
 
     <string name="sp_radio_region">radio_region</string>

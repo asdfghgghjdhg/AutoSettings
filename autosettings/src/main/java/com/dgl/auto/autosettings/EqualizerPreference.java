@@ -2,6 +2,7 @@ package com.dgl.auto.autosettings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.RemoteException;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -21,17 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EqualizerPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener, Spinner.OnItemSelectedListener {
-
-    private static final String PREFERENCE_NS = "http://schemas.android.com/apk/res/com.dgl.auto.autosettings";
-
-    private static final String ATTR_BASS_DEFAULT_VALUE = "bassDefaultValue";
-    private static final String ATTR_BASS_MAX_VALUE = "bassMaxValue";
-    private static final String ATTR_MIDDLE_DEFAULT_VALUE = "middleDefaultValue";
-    private static final String ATTR_MIDDLE_MAX_VALUE = "middleMaxValue";
-    private static final String ATTR_TREBLE_DEFAULT_VALUE = "trebleDefaultValue";
-    private static final String ATTR_TREBLE_MAX_VALUE = "trebleMaxValue";
-    private static final String ATTR_SUBWOOFER_DEFAULT_VALUE = "subwooferDefaultValue";
-    private static final String ATTR_SUBWOOFER_MAX_VALUE = "subwooferMaxValue";
 
     public static final String BASS_SUBKEY = "_bass";
     public static final String MIDDLE_SUBKEY = "_middle";
@@ -88,14 +78,16 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     public EqualizerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
-        mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mMiddleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_DEFAULT_VALUE, DEFAULT_VALUE);
-        mTrebleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
-        mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        mBassMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_bassMaxValue, DEFAULT_MAX_VALUE);
+        mBassDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_bassDefaultValue, DEFAULT_VALUE);
+        mMiddleMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_middleMaxValue, DEFAULT_MAX_VALUE);
+        mMiddleDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_middleDefaultValue, DEFAULT_VALUE);
+        mTrebleMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_trebleMaxValue, DEFAULT_MAX_VALUE);
+        mTrebleDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_trebleDefaultValue, DEFAULT_VALUE);
+        mSubwooferMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_subwooferMaxValue, DEFAULT_MAX_VALUE);
+        mSubwooferDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_subwooferDefaultValue, DEFAULT_VALUE);
+        a.recycle();
 
         setWidgetLayoutResource(R.layout.equalizer_preference_widget);
         setDialogLayoutResource(R.layout.equalizer_preference_dialog);
@@ -104,14 +96,16 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     public EqualizerPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
-        mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mMiddleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_DEFAULT_VALUE, DEFAULT_VALUE);
-        mTrebleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
-        mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        mBassMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_bassMaxValue, DEFAULT_MAX_VALUE);
+        mBassDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_bassDefaultValue, DEFAULT_VALUE);
+        mMiddleMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_middleMaxValue, DEFAULT_MAX_VALUE);
+        mMiddleDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_middleDefaultValue, DEFAULT_VALUE);
+        mTrebleMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_trebleMaxValue, DEFAULT_MAX_VALUE);
+        mTrebleDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_trebleDefaultValue, DEFAULT_VALUE);
+        mSubwooferMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_subwooferMaxValue, DEFAULT_MAX_VALUE);
+        mSubwooferDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_subwooferDefaultValue, DEFAULT_VALUE);
+        a.recycle();
 
         setWidgetLayoutResource(R.layout.equalizer_preference_widget);
         setDialogLayoutResource(R.layout.equalizer_preference_dialog);
@@ -120,14 +114,16 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
     public EqualizerPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        mBassMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mBassDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_BASS_DEFAULT_VALUE, DEFAULT_VALUE);
-        mMiddleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mMiddleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIDDLE_DEFAULT_VALUE, DEFAULT_VALUE);
-        mTrebleMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mTrebleDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_TREBLE_DEFAULT_VALUE, DEFAULT_VALUE);
-        mSubwooferMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mSubwooferDefaultValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_SUBWOOFER_DEFAULT_VALUE, DEFAULT_VALUE);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        mBassMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_bassMaxValue, DEFAULT_MAX_VALUE);
+        mBassDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_bassDefaultValue, DEFAULT_VALUE);
+        mMiddleMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_middleMaxValue, DEFAULT_MAX_VALUE);
+        mMiddleDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_middleDefaultValue, DEFAULT_VALUE);
+        mTrebleMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_trebleMaxValue, DEFAULT_MAX_VALUE);
+        mTrebleDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_trebleDefaultValue, DEFAULT_VALUE);
+        mSubwooferMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_subwooferMaxValue, DEFAULT_MAX_VALUE);
+        mSubwooferDefaultValue = a.getInt(R.styleable.com_dgl_auto_autosettings_EqualizerPreferences_subwooferDefaultValue, DEFAULT_VALUE);
+        a.recycle();
 
         setWidgetLayoutResource(R.layout.equalizer_preference_widget);
         setDialogLayoutResource(R.layout.equalizer_preference_dialog);
@@ -326,7 +322,7 @@ public class EqualizerPreference extends DialogPreference implements SeekBar.OnS
         int middlePerc = Math.round((float)mMiddleValue * 100 / mMiddleMaxValue);
         int treblePerc = Math.round((float)mTrebleValue * 100 / mTrebleMaxValue);
         int subPerc = Math.round((float)mSubValue * 100 / mSubwooferMaxValue);
-        summary = String.format(getContext().getResources().getString(R.string.equalizer_preference_summary_text), bassPerc, middlePerc, treblePerc, subPerc);
+        summary = String.format(getContext().getString(R.string.equalizer_preference_summary_text), bassPerc, middlePerc, treblePerc, subPerc);
         super.setSummary(summary);
     }
 

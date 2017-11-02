@@ -28,21 +28,22 @@ public class AutoSettingsService extends Service {
     private IRadioManager.IDataChange mRadioChangeListener;
     private SpeedLocationListener mSpeedListener;
 
-    private boolean speedListenerActive;
-
     public void onCreate() {
         super.onCreate();
-        speedListenerActive = false;
         Log.i("AutoSettingsService", "onCreate");
+        settingManager = null;
+        radioManager = null;
+        mSpeedListener = null;
+        mSettingsChangeListener = null;
+        mRadioChangeListener = null;
     }
 
     public void onDestroy() {
-        if ((mSpeedListener != null) && speedListenerActive) {
+        if (mSpeedListener != null) {
             LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             if (locationManager != null) { locationManager.removeUpdates(mSpeedListener); }
-            mSpeedListener.stopVolumeChange();
+            mSpeedListener.stop();
         }
-        speedListenerActive = false;
         settingManager.setDataChangeListener(null);
         radioManager.setDataChangeListener(null);
         settingManager = null;
@@ -75,33 +76,28 @@ public class AutoSettingsService extends Service {
             radioManager.setDataChangeListener(mRadioChangeListener);
         }
 
-        if (mSpeedListener == null) {
-            mSpeedListener = new SpeedLocationListener(this);
-        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-        boolean startLocationListener;
-        if (intent != null) {
-            startLocationListener = intent.getBooleanExtra(ENABLE_LOCATION_LISTENER, false);
-        } else {
+            boolean startLocationListener;
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             startLocationListener = sharedPreferences.getBoolean(getString(R.string.sp_sound_speed_compensation), false);
-        }
 
-        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager != null) {
-            if (startLocationListener) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (!speedListenerActive) {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager != null) {
+                if (startLocationListener) {
+                    if (mSpeedListener == null) {
+                        mSpeedListener = new SpeedLocationListener(this);
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mSpeedListener);
-                        speedListenerActive = true;
+                    }
+                } else {
+                    if (mSpeedListener != null) {
+                        locationManager.removeUpdates(mSpeedListener);
+                        mSpeedListener.stop();
+                        mSpeedListener = null;
                     }
                 }
-            } else {
-                if (speedListenerActive) {
-                    locationManager.removeUpdates(mSpeedListener);
-                    speedListenerActive = false;
-                }
             }
+
         }
 
         return START_STICKY;

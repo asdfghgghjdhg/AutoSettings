@@ -96,85 +96,79 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
     }
 
     private void onBoot(Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean speedComp = sharedPreferences.getBoolean(context.getString(R.string.sp_sound_speed_compensation), false);
-        if (speedComp) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                speedComp = false;
-            }
-        }
-        context.startService(new Intent(context, AutoSettingsService.class).putExtra(AutoSettingsService.ENABLE_LOCATION_LISTENER, speedComp));
+        context.startService(new Intent(context, AutoSettingsService.class));
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (settingManager != null) {
             // Основные
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_beep))) {
-                    settingManager.setBeep(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_beep), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_beep))) {
+                    settingManager.setBeep(sharedPreferences.getBoolean(context.getString(R.string.sp_general_beep), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_general_beep), settingManager.getBeep());
+                    editor.putBoolean(context.getString(R.string.sp_general_beep), settingManager.getBeep());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_boottime))) {
-                    settingManager.setBootTime(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_boottime), "0")));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_boottime))) {
+                    settingManager.setBootTime(Integer.valueOf(sharedPreferences.getString(context.getString(R.string.sp_general_boottime), "0")));
                 } else {
-                    editor.putString(context.getResources().getString(R.string.sp_general_boottime), String.valueOf(settingManager.getBootTime()));
+                    editor.putString(context.getString(R.string.sp_general_boottime), String.valueOf(settingManager.getBootTime()));
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_playvideo))) {
-                    settingManager.setCanWatchVideoWhileDriver(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_playvideo), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_playvideo))) {
+                    settingManager.setCanWatchVideoWhileDriver(sharedPreferences.getBoolean(context.getString(R.string.sp_general_playvideo), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_general_playvideo), settingManager.getCanWatchVideoWhileDriver());
+                    editor.putBoolean(context.getString(R.string.sp_general_playvideo), settingManager.getCanWatchVideoWhileDriver());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_shortcut_touch_state))) {
-                    settingManager.setShortcutTouchState(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_shortcut_touch_state), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_shortcut_touch_state))) {
+                    settingManager.setShortcutTouchState(sharedPreferences.getBoolean(context.getString(R.string.sp_general_shortcut_touch_state), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_general_shortcut_touch_state), settingManager.getShortcutTouchState());
+                    editor.putBoolean(context.getString(R.string.sp_general_shortcut_touch_state), settingManager.getShortcutTouchState());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_switch_media_status))) {
-                    settingManager.SetSwitchMediaStatus(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_switch_media_status), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_switch_media_status))) {
+                    settingManager.SetSwitchMediaStatus(sharedPreferences.getBoolean(context.getString(R.string.sp_general_switch_media_status), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_general_switch_media_status), settingManager.GetSwitchMediaStatus());
+                    editor.putBoolean(context.getString(R.string.sp_general_switch_media_status), settingManager.GetSwitchMediaStatus());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_rearview_addlines))) {
-                    settingManager.setReverseAuxLine(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_rearview_addlines), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_rearview_addlines))) {
+                    settingManager.setReverseAuxLine(sharedPreferences.getBoolean(context.getString(R.string.sp_general_rearview_addlines), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_addlines), settingManager.getReverseAuxLine());
+                    editor.putBoolean(context.getString(R.string.sp_general_rearview_addlines), settingManager.getReverseAuxLine());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_mirror_rearview))) {
-                    settingManager.setReverseMirror(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_mirror_rearview), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_mirror_rearview))) {
+                    settingManager.setReverseMirror(sharedPreferences.getBoolean(context.getString(R.string.sp_general_mirror_rearview), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_general_mirror_rearview), settingManager.getReverseMirror());
+                    editor.putBoolean(context.getString(R.string.sp_general_mirror_rearview), settingManager.getReverseMirror());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_rearview_disable_audio))) {
-                    boolean disableAudio = sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_general_rearview_disable_audio), true);
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_rearview_disable_audio))) {
+                    boolean disableAudio = sharedPreferences.getBoolean(context.getString(R.string.sp_general_rearview_disable_audio), true);
                     // TODO: find or set BackAudioStatus constant
                     Intent intent = new Intent("BackAudioStatus");
                     intent.putExtra("backaudio", disableAudio ? 0 : 1);
@@ -184,28 +178,28 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_swctype))) {
-                    settingManager.setSWCTypeValue(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_swctype), "0")));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_swctype))) {
+                    settingManager.setSWCTypeValue(Integer.valueOf(sharedPreferences.getString(context.getString(R.string.sp_general_swctype), "0")));
                 } else {
-                    editor.putString(context.getResources().getString(R.string.sp_general_swctype), String.valueOf(settingManager.getSWCTypeValue()));
+                    editor.putString(context.getString(R.string.sp_general_swctype), String.valueOf(settingManager.getSWCTypeValue()));
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_usb0type))) {
-                    settingManager.setUSB0TypeValue(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_usb0type), "0")));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_usb0type))) {
+                    settingManager.setUSB0TypeValue(Integer.valueOf(sharedPreferences.getString(context.getString(R.string.sp_general_usb0type), "0")));
                 } else {
-                    editor.putString(context.getResources().getString(R.string.sp_general_usb0type), String.valueOf(settingManager.getUSB0TypeValue()));
+                    editor.putString(context.getString(R.string.sp_general_usb0type), String.valueOf(settingManager.getUSB0TypeValue()));
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_general_usb1type))) {
-                    settingManager.setUSB1TypeValue(Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_general_usb1type), "0")));
+                if (sharedPreferences.contains(context.getString(R.string.sp_general_usb1type))) {
+                    settingManager.setUSB1TypeValue(Integer.valueOf(sharedPreferences.getString(context.getString(R.string.sp_general_usb1type), "0")));
                 } else {
-                    editor.putString(context.getResources().getString(R.string.sp_general_usb1type), String.valueOf(settingManager.getUSB1TypeValue()));
+                    editor.putString(context.getString(R.string.sp_general_usb1type), String.valueOf(settingManager.getUSB1TypeValue()));
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -213,82 +207,82 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
 
             // Звук
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_volume))) {
-                    settingManager.setMcuVol(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_volume), 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_volume))) {
+                    settingManager.setMcuVol(sharedPreferences.getInt(context.getString(R.string.sp_sound_volume), 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_volume), settingManager.getMcuVol());
+                    editor.putInt(context.getString(R.string.sp_sound_volume), settingManager.getMcuVol());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_balance))) {
-                    settingManager.setBalance(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_balance), 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_balance))) {
+                    settingManager.setBalance(sharedPreferences.getInt(context.getString(R.string.sp_sound_balance), 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_balance), settingManager.getBalance());
+                    editor.putInt(context.getString(R.string.sp_sound_balance), settingManager.getBalance());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_fade))) {
-                    settingManager.setFade(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_fade), 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_fade))) {
+                    settingManager.setFade(sharedPreferences.getInt(context.getString(R.string.sp_sound_fade), 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_fade), settingManager.getFade());
+                    editor.putInt(context.getString(R.string.sp_sound_fade), settingManager.getFade());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer))) {
-                    settingManager.setEQ(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer), 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_equalizer))) {
+                    settingManager.setEQ(sharedPreferences.getInt(context.getString(R.string.sp_sound_equalizer), 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer), settingManager.getEQ());
+                    editor.putInt(context.getString(R.string.sp_sound_equalizer), settingManager.getEQ());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY)) {
-                    settingManager.setBass(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY)) {
+                    settingManager.setBass(sharedPreferences.getInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, settingManager.getBass());
+                    editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, settingManager.getBass());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY)) {
-                    settingManager.setMiddle(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY)) {
+                    settingManager.setMiddle(sharedPreferences.getInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, settingManager.getMiddle());
+                    editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, settingManager.getMiddle());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY)) {
-                    settingManager.setTreble(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY)) {
+                    settingManager.setTreble(sharedPreferences.getInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, settingManager.getTreble());
+                    editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, settingManager.getTreble());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY)) {
-                    settingManager.setSubwoofer(sharedPreferences.getInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY)) {
+                    settingManager.setSubwoofer(sharedPreferences.getInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, settingManager.getSubwoofer());
+                    editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, settingManager.getSubwoofer());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_sound_loud))) {
-                    settingManager.setLound(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_sound_loud), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_sound_loud))) {
+                    settingManager.setLound(sharedPreferences.getBoolean(context.getString(R.string.sp_sound_loud), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_sound_loud), settingManager.getLound());
+                    editor.putBoolean(context.getString(R.string.sp_sound_loud), settingManager.getLound());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -296,11 +290,11 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
 
             // Радио
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_radio_region))) {
-                    int savedRegion = Integer.valueOf(sharedPreferences.getString(context.getResources().getString(R.string.sp_radio_region), "0"));
+                if (sharedPreferences.contains(context.getString(R.string.sp_radio_region))) {
+                    int savedRegion = Integer.valueOf(sharedPreferences.getString(context.getString(R.string.sp_radio_region), "0"));
                     if (savedRegion != settingManager.getRadioField()) { settingManager.setRadioField(savedRegion); }
                 } else {
-                    editor.putString(context.getResources().getString(R.string.sp_radio_region), String.valueOf(settingManager.getRadioField()));
+                    editor.putString(context.getString(R.string.sp_radio_region), String.valueOf(settingManager.getRadioField()));
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -308,36 +302,36 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
 
             // Экран
             /*try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_brightness))) {
-                    //settingManager.setBrightness(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_brightness), 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_screen_brightness))) {
+                    //settingManager.setBrightness(sharedPreferences.getInt(context.getString(R.string.sp_screen_brightness), 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_screen_brightness), settingManager.getScreenBrightness());
+                    editor.putInt(context.getString(R.string.sp_screen_brightness), settingManager.getScreenBrightness());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }*/
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_contrast))) {
-                    settingManager.setContrast(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_contrast), 0));
+                if (sharedPreferences.contains(context.getString(R.string.sp_screen_contrast))) {
+                    settingManager.setContrast(sharedPreferences.getInt(context.getString(R.string.sp_screen_contrast), 0));
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_screen_contrast), settingManager.getContrast());
+                    editor.putInt(context.getString(R.string.sp_screen_contrast), settingManager.getContrast());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_detect_illumination))) {
-                    settingManager.setIllumeDetection(sharedPreferences.getBoolean(context.getResources().getString(R.string.sp_screen_detect_illumination), false));
+                if (sharedPreferences.contains(context.getString(R.string.sp_screen_detect_illumination))) {
+                    settingManager.setIllumeDetection(sharedPreferences.getBoolean(context.getString(R.string.sp_screen_detect_illumination), false));
                 } else {
-                    editor.putBoolean(context.getResources().getString(R.string.sp_screen_detect_illumination), settingManager.getIllumeDetection());
+                    editor.putBoolean(context.getString(R.string.sp_screen_detect_illumination), settingManager.getIllumeDetection());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                if (sharedPreferences.contains(context.getResources().getString(R.string.sp_screen_illumination_color))) {
+                if (sharedPreferences.contains(context.getString(R.string.sp_screen_illumination_color))) {
                     float[] hsv = {0xFF, 0xFF, 0xFF};
-                    Color.colorToHSV(sharedPreferences.getInt(context.getResources().getString(R.string.sp_screen_illumination_color), 0), hsv);
+                    Color.colorToHSV(sharedPreferences.getInt(context.getString(R.string.sp_screen_illumination_color), 0), hsv);
                     int h = Math.round(hsv[0] / 360 * 127);
                     int s = Math.round(hsv[1] * 127);
                     int v = Math.round(hsv[2] * 127);
@@ -349,7 +343,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                     float s = (float)settingManager.getSaturation() / 127;
                     float v = (float)settingManager.getBright() / 127;
                     float[] hsv = {h, s, v};
-                    editor.putInt(context.getResources().getString(R.string.sp_screen_illumination_color), Color.HSVToColor(hsv));
+                    editor.putInt(context.getString(R.string.sp_screen_illumination_color), Color.HSVToColor(hsv));
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -361,9 +355,9 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 int currBand = radioManager.getBand();
                 String sp;
                 if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
-                    sp = context.getResources().getString(R.string.sp_radio_lastAMfreq);
+                    sp = context.getString(R.string.sp_radio_lastAMfreq);
                 } else {
-                    sp = context.getResources().getString(R.string.sp_radio_lastFMfreq);
+                    sp = context.getString(R.string.sp_radio_lastFMfreq);
                 }
                 if (sharedPreferences.contains(sp)) {
                     radioManager.setFreq((char)sharedPreferences.getInt(sp, IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ));
@@ -385,123 +379,123 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         if (settingManager != null) {
             // Основные
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_general_beep), settingManager.getBeep());
+                editor.putBoolean(context.getString(R.string.sp_general_beep), settingManager.getBeep());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putString(context.getResources().getString(R.string.sp_general_boottime), String.valueOf(settingManager.getBootTime()));
+                editor.putString(context.getString(R.string.sp_general_boottime), String.valueOf(settingManager.getBootTime()));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_general_playvideo), settingManager.getCanWatchVideoWhileDriver());
+                editor.putBoolean(context.getString(R.string.sp_general_playvideo), settingManager.getCanWatchVideoWhileDriver());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_general_shortcut_touch_state), settingManager.getShortcutTouchState());
+                editor.putBoolean(context.getString(R.string.sp_general_shortcut_touch_state), settingManager.getShortcutTouchState());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_general_switch_media_status), settingManager.GetSwitchMediaStatus());
+                editor.putBoolean(context.getString(R.string.sp_general_switch_media_status), settingManager.GetSwitchMediaStatus());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_addlines), settingManager.getReverseAuxLine());
+                editor.putBoolean(context.getString(R.string.sp_general_rearview_addlines), settingManager.getReverseAuxLine());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_general_mirror_rearview), settingManager.getReverseMirror());
+                editor.putBoolean(context.getString(R.string.sp_general_mirror_rearview), settingManager.getReverseMirror());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putString(context.getResources().getString(R.string.sp_general_swctype), String.valueOf(settingManager.getSWCTypeValue()));
+                editor.putString(context.getString(R.string.sp_general_swctype), String.valueOf(settingManager.getSWCTypeValue()));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putString(context.getResources().getString(R.string.sp_general_usb0type), String.valueOf(settingManager.getUSB0TypeValue()));
+                editor.putString(context.getString(R.string.sp_general_usb0type), String.valueOf(settingManager.getUSB0TypeValue()));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putString(context.getResources().getString(R.string.sp_general_usb1type), String.valueOf(settingManager.getUSB1TypeValue()));
+                editor.putString(context.getString(R.string.sp_general_usb1type), String.valueOf(settingManager.getUSB1TypeValue()));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
 
             // Звук
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_volume), settingManager.getMcuVol());
+                editor.putInt(context.getString(R.string.sp_sound_volume), settingManager.getMcuVol());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_balance), settingManager.getBalance());
+                editor.putInt(context.getString(R.string.sp_sound_balance), settingManager.getBalance());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_fade), settingManager.getFade());
+                editor.putInt(context.getString(R.string.sp_sound_fade), settingManager.getFade());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, settingManager.getBass());
+                editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.BASS_SUBKEY, settingManager.getBass());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, settingManager.getMiddle());
+                editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.MIDDLE_SUBKEY, settingManager.getMiddle());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, settingManager.getTreble());
+                editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.TREBLE_SUBKEY, settingManager.getTreble());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, settingManager.getSubwoofer());
+                editor.putInt(context.getString(R.string.sp_sound_equalizer)+EqualizerPreference.SUBWOOFER_SUBKEY, settingManager.getSubwoofer());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_sound_equalizer), settingManager.getEQ());
+                editor.putInt(context.getString(R.string.sp_sound_equalizer), settingManager.getEQ());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_sound_loud), settingManager.getLound());
+                editor.putBoolean(context.getString(R.string.sp_sound_loud), settingManager.getLound());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
 
             // Радио
             try {
-                editor.putString(context.getResources().getString(R.string.sp_radio_region), String.valueOf(settingManager.getRadioField()));
+                editor.putString(context.getString(R.string.sp_radio_region), String.valueOf(settingManager.getRadioField()));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
 
             // Экран
             /*try {
-                editor.putInt(context.getResources().getString(R.string.sp_screen_brightness), settingManager.getScreenBrightness());
+                editor.putInt(context.getString(R.string.sp_screen_brightness), settingManager.getScreenBrightness());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }*/
             try {
-                editor.putInt(context.getResources().getString(R.string.sp_screen_contrast), settingManager.getContrast());
+                editor.putInt(context.getString(R.string.sp_screen_contrast), settingManager.getContrast());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             try {
-                editor.putBoolean(context.getResources().getString(R.string.sp_screen_detect_illumination), settingManager.getIllumeDetection());
+                editor.putBoolean(context.getString(R.string.sp_screen_detect_illumination), settingManager.getIllumeDetection());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -510,7 +504,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 float s = (float)settingManager.getSaturation() / 127;
                 float v = (float)settingManager.getBright() / 127;
                 float[] hsv = {h, s, v};
-                editor.putInt(context.getResources().getString(R.string.sp_screen_illumination_color), Color.HSVToColor(hsv));
+                editor.putInt(context.getString(R.string.sp_screen_illumination_color), Color.HSVToColor(hsv));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -520,9 +514,9 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             try {
                 int currBand = radioManager.getBand();
                 if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
-                    editor.putInt(context.getResources().getString(R.string.sp_radio_lastAMfreq), radioManager.getCurrFreq());
+                    editor.putInt(context.getString(R.string.sp_radio_lastAMfreq), radioManager.getCurrFreq());
                 } else {
-                    editor.putInt(context.getResources().getString(R.string.sp_radio_lastFMfreq), radioManager.getCurrFreq());
+                    editor.putInt(context.getString(R.string.sp_radio_lastFMfreq), radioManager.getCurrFreq());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -530,7 +524,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             /*try {
                 char[] freqs = radioManager.getFreqList();
                 for (int i = 0; i < freqs.length; i++) {
-                    editor.putInt(String.format(context.getResources().getString(R.string.sp_radio_presets), i + 1), (int)freqs[i]);
+                    editor.putInt(String.format(context.getString(R.string.sp_radio_presets), i + 1), (int)freqs[i]);
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -548,14 +542,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
     }
 
     private void onPowerOn(Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean speedComp = sharedPreferences.getBoolean(context.getString(R.string.sp_sound_speed_compensation), false);
-        if (speedComp) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                speedComp = false;
-            }
-        }
-        context.startService(new Intent(context, AutoSettingsService.class).putExtra(AutoSettingsService.ENABLE_LOCATION_LISTENER, speedComp));
+        context.startService(new Intent(context, AutoSettingsService.class));
     }
 
     private void onVolumeChange(Context context) {
@@ -565,7 +552,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         try {
             int mVolume = settingManager.getMcuVol();
-            editor.putInt(context.getResources().getString(R.string.sp_sound_volume), mVolume);
+            editor.putInt(context.getString(R.string.sp_sound_volume), mVolume);
             AutoSettingsActivity.SoundPreferenceFragment fragment = AutoSettingsActivity.SoundPreferenceFragment.getInstance();
             if (fragment != null) {
                 fragment.updateVolume(mVolume);
@@ -575,16 +562,16 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
     }
 
     private void onKeyEvent(Context context) {
-        // TODO: Обработать включение / выключение
+
     }
 
     private void onRearViewAudioChange(Context context, boolean disabled) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(context.getResources().getString(R.string.sp_general_rearview_disable_audio), disabled);
+        editor.putBoolean(context.getString(R.string.sp_general_rearview_disable_audio), disabled);
         AutoSettingsActivity.GeneralPreferenceFragment fragment = AutoSettingsActivity.GeneralPreferenceFragment.getInstance();
         if (fragment != null) {
-            SwitchPreference pref = (SwitchPreference)fragment.findPreference(context.getResources().getString(R.string.sp_general_rearview_disable_audio));
+            SwitchPreference pref = (SwitchPreference)fragment.findPreference(context.getString(R.string.sp_general_rearview_disable_audio));
             pref.setChecked(disabled);
         }
         editor.apply();

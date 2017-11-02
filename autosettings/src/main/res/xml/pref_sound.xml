@@ -71,7 +71,19 @@
             android:title="@string/pref_sound_min_speed_title"
             android:key="@string/sp_sound_min_speed"
             android:defaultValue="40"
-            android:summary="@string/pref_sound_min_speed_summary" />
+            android:summary="@string/pref_sound_min_speed_summary"
+            autosettings:speedMinValue="0"
+            autosettings:speedMaxValue="150"
+            autosettings:speedStepValue="5" />
+
+        <com.dgl.auto.autosettings.SpeedPreference
+            android:title="@string/pref_sound_max_speed_title"
+            android:key="@string/sp_sound_max_speed"
+            android:defaultValue="250"
+            android:summary="@string/pref_sound_max_speed_summary"
+            autosettings:speedMinValue="150"
+            autosettings:speedMaxValue="400"
+            autosettings:speedStepValue="10" />
 
     </PreferenceCategory>
 

@@ -17,7 +17,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SpeedLocationListener implements LocationListener, GpsStatus.Listener {
+    public static final int DEFAULT_MIN_SPEED = 40;
+    public static final int DEFAULT_MAX_SPEED = 300;
+
     private static final String LOG_TAG = "SpeedLocationListener";
+    private static final int VOLUME_CHANGE_TIMEOUT = 750;
     private Context mContext;
     private ISettingManager settingManager;
     private ExecutorService es;
@@ -40,16 +44,20 @@ public class SpeedLocationListener implements LocationListener, GpsStatus.Listen
                         try {
                             int currVol = settingManager.getMcuVol();
                             currVol = currVol + dVolume;
+                            if (currVol < 0) { currVol = 0; }
+                            if (currVol > 40) { currVol = 40; }
                             settingManager.setMcuVol(currVol);
+                            Log.i(LOG_TAG, "Current Volume:" + String.valueOf(currVol));
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
                     }
 
-                    volumeChangeValue = volumeChangeValue + dVolume;
+                    volumeChangeValue = volumeChangeValue - dVolume;
                 }
 
-                try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+                //Log.i(LOG_TAG, "Volume Change:" + String.valueOf(volumeChangeValue));
+                try { Thread.sleep(VOLUME_CHANGE_TIMEOUT); } catch (InterruptedException e) { e.printStackTrace(); }
             }
         }
     }
@@ -59,60 +67,48 @@ public class SpeedLocationListener implements LocationListener, GpsStatus.Listen
         settingManager = SettingManager.getInstance();
         es = Executors.newFixedThreadPool(1);
 
-        prevSpeed = 0;
+        prevSpeed = -1;
         volumeChangeValue = 0;
         stopVolumeChange = false;
 
         es.execute(new VolumeChangeRunnable());
     }
 
-    public void stopVolumeChange() {
+    public void stop() {
         stopVolumeChange = true;
         es.shutdown();
+        prevSpeed = -1;
+        volumeChangeValue = 0;
     }
 
     @Override
     public void onGpsStatusChanged(int i) {
-
+        // TODO: При потере сигнала?
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        // TODO: Доработать!
         float currSpeed = location.getSpeed() * (float)3.6;
-        Log.i(LOG_TAG, "Speed:" + String.valueOf(currSpeed));
+        //Log.i(LOG_TAG, "Speed:" + String.valueOf(currSpeed));
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        int minSpeed = sharedPreferences.getInt(mContext.getResources().getString(R.string.sp_sound_min_speed), 0);
+        if (prevSpeed >= 0) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            int minSpeed = sharedPreferences.getInt(mContext.getString(R.string.sp_sound_min_speed), DEFAULT_MIN_SPEED);
+            int maxSpeed = sharedPreferences.getInt(mContext.getString(R.string.sp_sound_max_speed), DEFAULT_MAX_SPEED);
 
-        float ds = 0;
-        if (currSpeed > minSpeed) {
-            if (prevSpeed < minSpeed) { ds = currSpeed - minSpeed; } else { ds = currSpeed - prevSpeed; }
-        } else {
-            if (prevSpeed > minSpeed) { ds = prevSpeed - minSpeed; }
-        }
+            float ds = 0;
+            if (currSpeed > minSpeed) {
+                if (prevSpeed < minSpeed) { ds = currSpeed - minSpeed; } else { ds = currSpeed - prevSpeed; }
+            } else {
+                if (prevSpeed > minSpeed) { ds = minSpeed - prevSpeed; }
+            }
 
-        if (ds != 0) {
-            float dv = ds * 40 / 300;
-            Log.i(LOG_TAG, "dv:" + String.valueOf(dv));
-            volumeChangeValue = volumeChangeValue + dv;
-            Log.i(LOG_TAG, "Volume Change:" + String.valueOf(volumeChangeValue));
-
-            /*int volume;
-            ISettingManager sm = SettingManager.getInstance();
-            if (sm != null) {
-                try {
-                    volume = sm.getMcuVol();
-                    volume = volume + Math.round(dv);
-                    //Log.i(LOG_TAG, "volume:" + String.valueOf(volume));
-                    sm.setMcuVol(volume);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                    return;
-                }
-            }*/
-
-
+            if (ds != 0) {
+                float dv = ds * 40 / maxSpeed;
+                //Log.i(LOG_TAG, "dv:" + String.valueOf(dv));
+                volumeChangeValue = volumeChangeValue + dv;
+                //Log.i(LOG_TAG, "Volume Change:" + String.valueOf(volumeChangeValue));
+            }
         }
 
         if (currSpeed != prevSpeed) { prevSpeed = currSpeed; }
@@ -120,7 +116,7 @@ public class SpeedLocationListener implements LocationListener, GpsStatus.Listen
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-
+        // TODO: При потере сигнала?
     }
 
     @Override

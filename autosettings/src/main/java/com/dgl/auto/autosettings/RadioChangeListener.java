@@ -34,9 +34,9 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
                 if (!rm.getSeekStatus() && !rm.getScanSatus()) {
                     int currBand = rm.getBand();
                     if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
-                        editor.putInt(mContext.getResources().getString(R.string.sp_radio_lastAMfreq), rm.getCurrFreq());
+                        editor.putInt(mContext.getString(R.string.sp_radio_lastAMfreq), rm.getCurrFreq());
                     } else {
-                        editor.putInt(mContext.getResources().getString(R.string.sp_radio_lastFMfreq), rm.getCurrFreq());
+                        editor.putInt(mContext.getString(R.string.sp_radio_lastFMfreq), rm.getCurrFreq());
                     }
                 }
             } catch (RemoteException e) {
@@ -60,7 +60,7 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
             try {
                 char[] freqs = rm.getFreqList();
                 for (int i = 0; i < freqs.length; i++) {
-                    editor.putInt(String.format(mContext.getResources().getString(R.string.sp_radio_presets), i + 1), (int)freqs[i]);
+                    editor.putInt(String.format(mContext.getString(R.string.sp_radio_presets), i + 1), (int)freqs[i]);
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -82,12 +82,12 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
                 int currBand = rm.getBand();
                 int freq;
                 if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
-                    freq = sharedPreferences.getInt(mContext.getResources().getString(R.string.sp_radio_lastAMfreq), IRadioManager.IRadioConstant.RADIO_AM_DEFUALT_FREQ);
+                    freq = sharedPreferences.getInt(mContext.getString(R.string.sp_radio_lastAMfreq), IRadioManager.IRadioConstant.RADIO_AM_DEFUALT_FREQ);
                     if ((freq < rm.getMinAMFreq()) || (freq > rm.getMaxAMFreq())) {
                         freq = IRadioManager.IRadioConstant.RADIO_AM_DEFUALT_FREQ;
                     }
                 } else {
-                    freq = sharedPreferences.getInt(mContext.getResources().getString(R.string.sp_radio_lastFMfreq), IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ);
+                    freq = sharedPreferences.getInt(mContext.getString(R.string.sp_radio_lastFMfreq), IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ);
                     if ((freq < rm.getMinFMFreq()) || (freq > rm.getMaxFMFreq())) {
                         freq = IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ;
                     }

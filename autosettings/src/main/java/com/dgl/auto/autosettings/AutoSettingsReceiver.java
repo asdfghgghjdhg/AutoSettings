@@ -29,7 +29,9 @@ import java.util.Locale;
 
 public class AutoSettingsReceiver extends BroadcastReceiver {
 
-    private static final String ACTION_QUICKBOOT_POWERON = "android.intent.action.QUICKBOOT_POWERON";
+    private static final String ACTION_VOLUME_UP = "com.dgl.auto.action.VOLUME_UP";
+    private static final String ACTION_VOLUME_DOWN = "com.dgl.auto.action.VOLUME_DOWN";
+    private static final String ACTION_VOLUME_MUTE = "com.dgl.auto.action.VOLUME_MUTE";
 
     private static ISettingManager settingManager = null;
     private static IRadioManager radioManager = null;
@@ -92,6 +94,18 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             if (!booted) { return; }
             int backaudio = intent.getIntExtra("backaudio", 0);
             onRearViewAudioChange(context, backaudio != 1);
+        }
+
+        if (ACTION_VOLUME_DOWN.equalsIgnoreCase(action)) {
+            volumeDown(context);
+        }
+
+        if (ACTION_VOLUME_UP.equalsIgnoreCase(action)) {
+            volumeUp(context);
+        }
+
+        if (ACTION_VOLUME_MUTE.equalsIgnoreCase(action)) {
+            volumeMute(context);
         }
     }
 
@@ -571,9 +585,43 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
         editor.putBoolean(context.getString(R.string.sp_general_rearview_disable_audio), disabled);
         AutoSettingsActivity.GeneralPreferenceFragment fragment = AutoSettingsActivity.GeneralPreferenceFragment.getInstance();
         if (fragment != null) {
-            SwitchPreference pref = (SwitchPreference)fragment.findPreference(context.getString(R.string.sp_general_rearview_disable_audio));
-            pref.setChecked(disabled);
+            try {
+                SwitchPreference pref = (SwitchPreference)fragment.findPreference(context.getString(R.string.sp_general_rearview_disable_audio));
+                pref.setChecked(disabled);
+            } finally { }
         }
         editor.apply();
+    }
+
+    private void volumeDown(Context context) {
+        Intent intent = new Intent("AutoKeyDown");      // TODO: Set constant value
+        intent.putExtra("key", 0x10e);            // TODO: Set constant value
+        context.sendBroadcast(intent);
+        intent = new Intent("AutoKeyUp");               // TODO: Set constant value
+        intent.putExtra("key", 0x10e);            // TODO: Set constant value
+        context.sendBroadcast(intent);
+    }
+
+    private void volumeUp(Context context) {
+        Intent intent = new Intent("AutoKeyDown");      // TODO: Set constant value
+        intent.putExtra("key", 0x10d);            // TODO: Set constant value
+        context.sendBroadcast(intent);
+        intent = new Intent("AutoKeyUp");               // TODO: Set constant value
+        intent.putExtra("key", 0x10d);            // TODO: Set constant value
+        context.sendBroadcast(intent);
+    }
+
+    private void volumeMute(Context context) {
+        if (settingManager != null) {
+            try {
+                boolean isMuted = settingManager.isMcuMute();
+                settingManager.setMcuMute(isMuted ? 0 : 1);
+                Intent intent = new Intent(GlobalConstant.AutoBroadcastEvent.ACTION_MUTE_STATUS);
+                intent.putExtra(GlobalConstant.AutoBroadcastEvent.KEY_MUTE_STATUS, !isMuted);
+                context.sendBroadcast(intent);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

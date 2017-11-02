@@ -50,6 +50,16 @@
             <intent-filter>
                 <action android:name="BackAudioStatus" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.dgl.auto.action.VOLUME_UP" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.dgl.auto.action.VOLUME_DOWN" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.dgl.auto.action.VOLUME_MUTE" />
+            </intent-filter>
         </receiver>
 
         <service android:name="com.dgl.auto.autosettings.AutoSettingsService" android:exported="false" android:enabled="true">

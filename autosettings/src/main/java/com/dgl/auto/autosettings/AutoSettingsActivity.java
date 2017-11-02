@@ -325,15 +325,17 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         }
 
         public void updateVolume(int volume) {
-            SeekBarPreference volumePref = (SeekBarPreference)findPreference(getString(R.string.sp_sound_volume));
-            volumePref.setProgress(volume);
-            if (volume > 20) {
-                volumePref.setIcon(R.drawable.ic_volume_up_black_24dp);
-            } else if (volume == 0) {
-                volumePref.setIcon(R.drawable.ic_volume_mute_black_24dp);
-            } else {
-                volumePref.setIcon(R.drawable.ic_volume_down_black_24dp);
-            }
+            try {
+                SeekBarPreference volumePref = (SeekBarPreference) findPreference(getString(R.string.sp_sound_volume));
+                volumePref.setProgress(volume);
+                if (volume > 20) {
+                    volumePref.setIcon(R.drawable.ic_volume_up_black_24dp);
+                } else if (volume == 0) {
+                    volumePref.setIcon(R.drawable.ic_volume_mute_black_24dp);
+                } else {
+                    volumePref.setIcon(R.drawable.ic_volume_down_black_24dp);
+                }
+            } finally { }
         }
     }
 
@@ -397,22 +399,24 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
         }
 
         public void updateRegionInfo() {
-            ListPreference regionPref = (ListPreference)findPreference(getString(R.string.sp_radio_region));
             try {
-                int currRegion = settingManager.getRadioField();
-                regionPref.setValueIndex(currRegion);
-                regionPref.setTitle(regionPref.getEntry());
-                int minAM = radioManager.getMinAMFreq();
-                int maxAM = radioManager.getMaxAMFreq();
-                int stepAM = radioManager.getAMStep();
-                float minFM = (float)radioManager.getMinFMFreq() / 100;
-                float maxFM = (float)radioManager.getMaxFMFreq() / 100;
-                float stepFM = (float)radioManager.getFMStep() / 100;
-                String summary = String.format(regionPref.getContext().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
-                regionPref.setSummary(summary);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+                ListPreference regionPref = (ListPreference) findPreference(getString(R.string.sp_radio_region));
+                try {
+                    int currRegion = settingManager.getRadioField();
+                    regionPref.setValueIndex(currRegion);
+                    regionPref.setTitle(regionPref.getEntry());
+                    int minAM = radioManager.getMinAMFreq();
+                    int maxAM = radioManager.getMaxAMFreq();
+                    int stepAM = radioManager.getAMStep();
+                    float minFM = (float) radioManager.getMinFMFreq() / 100;
+                    float maxFM = (float) radioManager.getMaxFMFreq() / 100;
+                    float stepFM = (float) radioManager.getFMStep() / 100;
+                    String summary = String.format(regionPref.getContext().getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM);
+                    regionPref.setSummary(summary);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            } finally { }
         }
     }
 

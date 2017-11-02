@@ -20,8 +20,6 @@ import com.dgl.auto.SettingManager;
 
 public class AutoSettingsService extends Service {
 
-    public static String ENABLE_LOCATION_LISTENER = "EnableLocationListener";
-
     private ISettingManager settingManager;
     private IRadioManager radioManager;
     private ISettingManager.IDataChange mSettingsChangeListener;

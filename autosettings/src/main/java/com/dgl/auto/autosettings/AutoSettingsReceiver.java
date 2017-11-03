@@ -568,9 +568,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             int mVolume = settingManager.getMcuVol();
             editor.putInt(context.getString(R.string.sp_sound_volume), mVolume);
             AutoSettingsActivity.SoundPreferenceFragment fragment = AutoSettingsActivity.SoundPreferenceFragment.getInstance();
-            if (fragment != null) {
-                fragment.updateVolume(mVolume);
-            }
+            if (fragment != null) { fragment.updateVolume(mVolume); }
         } catch (RemoteException e) { e.printStackTrace(); }
         editor.apply();
     }

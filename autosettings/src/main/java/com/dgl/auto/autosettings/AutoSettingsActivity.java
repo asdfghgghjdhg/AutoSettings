@@ -118,7 +118,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
-        private static GeneralPreferenceFragment mInstance;
+        private static GeneralPreferenceFragment mInstance = null;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -224,7 +224,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class SoundPreferenceFragment extends PreferenceFragment {
-        private static SoundPreferenceFragment mInstance;
+        private static SoundPreferenceFragment mInstance = null;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -341,7 +341,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class RadioPreferenceFragment extends PreferenceFragment {
-        private static RadioPreferenceFragment mInstance;
+        private static RadioPreferenceFragment mInstance = null;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

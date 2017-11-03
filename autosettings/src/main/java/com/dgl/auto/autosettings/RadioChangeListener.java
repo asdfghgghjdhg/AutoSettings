@@ -13,8 +13,6 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
     private static final String LOG_TAG = "RadioChangeListener";
     private Context mContext;
 
-    //private static boolean updateInfo = true;
-
     RadioChangeListener(Context context) {
         mContext = context;
     }
@@ -99,7 +97,7 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
         }
 
         AutoSettingsActivity.RadioPreferenceFragment fragment = AutoSettingsActivity.RadioPreferenceFragment.getInstance();
-        fragment.updateRegionInfo();
+        if (fragment != null) { fragment.updateRegionInfo(); }
 
         return 0;
     }

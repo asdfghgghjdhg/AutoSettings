@@ -7,39 +7,42 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.dgl.auto.IRadioManager;
-import com.dgl.auto.RadioManager;
+import com.dgl.auto.mcumanager.MCUManager;
 
 public class RadioChangeListener implements IRadioManager.IDataChange {
     private static final String LOG_TAG = "RadioChangeListener";
     private Context mContext;
 
+    public boolean skipTunerInfoChange;
+
     RadioChangeListener(Context context) {
+        skipTunerInfoChange = false;
         mContext = context;
     }
 
     @Override
     public int onTunerInfoChange() {
-        Log.i(LOG_TAG, "onTunerInfoChange");
+        if (skipTunerInfoChange) {
+            skipTunerInfoChange = false;
+            return 0;
+        }
 
-        //if (!updateInfo) { return 0; }
+        Log.i(LOG_TAG, "onTunerInfoChange");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        IRadioManager rm = RadioManager.getInstance();
-        if (rm != null) {
-            try {
-                if (!rm.getSeekStatus() && !rm.getScanSatus()) {
-                    int currBand = rm.getBand();
-                    if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
-                        editor.putInt(mContext.getString(R.string.sp_radio_lastAMfreq), rm.getCurrFreq());
-                    } else {
-                        editor.putInt(mContext.getString(R.string.sp_radio_lastFMfreq), rm.getCurrFreq());
-                    }
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        try {
+            int freq = MCUManager.RadioControl.getFrequency();
+            String pref;
+            if (MCUManager.RadioControl.getBand() == MCUManager.RadioControl.BAND_AM) {
+                pref = mContext.getString(R.string.sp_radio_lastAMfreq);
+            } else {
+                pref = mContext.getString(R.string.sp_radio_lastFMfreq);
             }
+            editor.putInt(pref, freq);
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
 
         editor.apply();
@@ -50,22 +53,6 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
     public int onTunerPresetList() {
         Log.i(LOG_TAG, "onTunerPresetList");
 
-        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        IRadioManager rm = RadioManager.getInstance();
-        if (rm != null) {
-            try {
-                char[] freqs = rm.getFreqList();
-                for (int i = 0; i < freqs.length; i++) {
-                    editor.putInt(String.format(mContext.getString(R.string.sp_radio_presets), i + 1), (int)freqs[i]);
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        editor.commit();*/
         return 0;
     }
 
@@ -74,30 +61,21 @@ public class RadioChangeListener implements IRadioManager.IDataChange {
         Log.i(LOG_TAG, "onTunerRangeChange");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        IRadioManager rm = RadioManager.getInstance();
-        if (rm != null) {
-            try {
-                int currBand = rm.getBand();
-                int freq;
-                if ((currBand == IRadioManager.IRadioConstant.BAND_AM_1) || (currBand == IRadioManager.IRadioConstant.BAND_AM_2)) {
-                    freq = sharedPreferences.getInt(mContext.getString(R.string.sp_radio_lastAMfreq), IRadioManager.IRadioConstant.RADIO_AM_DEFUALT_FREQ);
-                    if ((freq < rm.getMinAMFreq()) || (freq > rm.getMaxAMFreq())) {
-                        freq = IRadioManager.IRadioConstant.RADIO_AM_DEFUALT_FREQ;
-                    }
-                } else {
-                    freq = sharedPreferences.getInt(mContext.getString(R.string.sp_radio_lastFMfreq), IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ);
-                    if ((freq < rm.getMinFMFreq()) || (freq > rm.getMaxFMFreq())) {
-                        freq = IRadioManager.IRadioConstant.RADIO_FM_DEFUALT_FREQ;
-                    }
-                }
-                rm.setFreq((char) freq);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
 
-        AutoSettingsActivity.RadioPreferenceFragment fragment = AutoSettingsActivity.RadioPreferenceFragment.getInstance();
-        if (fragment != null) { fragment.updateRegionInfo(); }
+        try {
+            String pref;
+            if (MCUManager.RadioControl.getBand() == MCUManager.RadioControl.BAND_AM) {
+                pref = mContext.getString(R.string.sp_radio_lastAMfreq);
+            } else {
+                pref = mContext.getString(R.string.sp_radio_lastFMfreq);
+            }
+            if (sharedPreferences.contains(pref)) {
+                int freq = sharedPreferences.getInt(pref, 0);
+                MCUManager.RadioControl.setFrequency(freq);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
         return 0;
     }

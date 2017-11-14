@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -20,22 +21,34 @@ import com.dgl.auto.SettingManager;
 
 public class AutoSettingsService extends Service {
 
+    private static final String LOG_TAG = "AutoSettingsService";
+
     private ISettingManager settingManager;
     private IRadioManager radioManager;
-    private ISettingManager.IDataChange mSettingsChangeListener;
-    private IRadioManager.IDataChange mRadioChangeListener;
+    private SettingsChangeListener mSettingsChangeListener;
+    private RadioChangeListener mRadioChangeListener;
     private SpeedLocationListener mSpeedListener;
+    private AutoSettingsServiceBinder mServiceBinder;
 
+    public class AutoSettingsServiceBinder extends Binder {
+        public AutoSettingsService getService() {
+            return AutoSettingsService.this;
+        }
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("AutoSettingsService", "onCreate");
+        Log.i(LOG_TAG, "onCreate");
         settingManager = null;
         radioManager = null;
         mSpeedListener = null;
         mSettingsChangeListener = null;
         mRadioChangeListener = null;
+        mServiceBinder = new AutoSettingsServiceBinder();
     }
 
+    @Override
     public void onDestroy() {
         if (mSpeedListener != null) {
             LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -49,12 +62,14 @@ public class AutoSettingsService extends Service {
         mSettingsChangeListener = null;
         mRadioChangeListener = null;
         mSpeedListener = null;
-        Log.i("AutoSettingsService", "onDestroy");
+        mServiceBinder = null;
+        Log.i(LOG_TAG, "onDestroy");
         super.onDestroy();
     }
 
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("AutoSettingsService", "onStartCommand");
+        Log.i(LOG_TAG, "onStartCommand");
 
         if (settingManager == null) {
             settingManager = SettingManager.getInstance();
@@ -101,9 +116,22 @@ public class AutoSettingsService extends Service {
         return START_STICKY;
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        Log.i(LOG_TAG, "onBind");
+
+        return mServiceBinder;
+    }
+
+    public void skipAudioSettingsChange() {
+        mSettingsChangeListener.skipAudioSettingsChange = true;
+    }
+
+    public void skipGeneralSettingsChange() {
+        mSettingsChangeListener.skipGeneralSettingsChange = true;
+    }
+
+    public void skipRadioInfoChange() {
+        mRadioChangeListener.skipTunerInfoChange = true;
     }
 }

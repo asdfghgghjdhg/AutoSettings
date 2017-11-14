@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="com.dgl.auto.autosettings.EqualizerPreferences">
-        <attr name="bassMaxValue" format="integer" />
-        <attr name="bassDefaultValue" format="integer" />
-        <attr name="middleMaxValue" format="integer" />
-        <attr name="middleDefaultValue" format="integer" />
-        <attr name="trebleMaxValue" format="integer" />
-        <attr name="trebleDefaultValue" format="integer" />
-        <attr name="subwooferMaxValue" format="integer" />
-        <attr name="subwooferDefaultValue" format="integer" />
-    </declare-styleable>
-
     <declare-styleable name="com.dgl.auto.autosettings.SpeedPreferences">
         <attr name="speedMaxValue" format="integer" />
         <attr name="speedMinValue" format="integer" />

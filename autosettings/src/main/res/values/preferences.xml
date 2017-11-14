@@ -5,10 +5,6 @@
     <string name="sp_general_playvideo">general_playvideo</string>
     <string name="sp_general_shortcut_touch_state">general_shortcut_touch_state</string>
     <string name="sp_general_switch_media_status">general_switch_media_status</string>
-    <string name="sp_general_rearview_addlines">general_rearview_addlines</string>
-    <string name="sp_general_mirror_rearview">general_mirror_rearview</string>
-    <string name="sp_general_rearview_disable_audio">general_rearview_disable_audio</string>
-    <string name="sp_general_swctype">general_swctype</string>
     <string name="sp_general_usb0type">general_usb0type</string>
     <string name="sp_general_usb1type">general_usb1type</string>
     <string name="sp_general_testmode">general_testmode</string>
@@ -17,6 +13,11 @@
     <string name="sp_sound_balance">sound_balance</string>
     <string name="sp_sound_fade">sound_fade</string>
     <string name="sp_sound_equalizer">sound_equalizer</string>
+    <string name="sp_sound_eq_preset">sound_equalizer_preset</string>
+    <string name="sp_sound_eq_bass">sound_equalizer_bass</string>
+    <string name="sp_sound_eq_middle">sound_equalizer_middle</string>
+    <string name="sp_sound_eq_treble">sound_equalizer_treble</string>
+    <string name="sp_sound_eq_subwoofer">sound_equalizer_subwoofer</string>
     <string name="sp_sound_loud">sound_loud</string>
     <string name="sp_sound_speed_compensation">sound_speed_compensation</string>
     <string name="sp_sound_min_speed">sound_min_speed</string>
@@ -34,6 +35,12 @@
     <string name="sp_screen_value">screen_value</string>
     <string name="sp_screen_detect_illumination">screen_detect_illumination</string>
     <string name="sp_screen_illumination_color">screen_illumination_color</string>
+
+    <string name="sp_rearview_addlines">rearview_addlines</string>
+    <string name="sp_rearview_mirror_view">rearview_mirror_view</string>
+    <string name="sp_rearview_disable_audio">rearview_disable_audio</string>
+
+    <string name="sp_swc_swctype">general_swctype</string>
 
     <string name="sp_info_carnumber">info_carnumber</string>
     <string name="sp_info_system">info_system</string>

@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/autosettings/autosettings.iml" filepath="$PROJECT_DIR$/autosettings/autosettings.iml" />
       <module fileurl="file://$PROJECT_DIR$/colorpicker-1.0.1/colorpicker-1.0.1.iml" filepath="$PROJECT_DIR$/colorpicker-1.0.1/colorpicker-1.0.1.iml" />
       <module fileurl="file://$PROJECT_DIR$/com.dgl.auto/com.dgl.auto.iml" filepath="$PROJECT_DIR$/com.dgl.auto/com.dgl.auto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mcumanager/mcumanager.iml" filepath="$PROJECT_DIR$/mcumanager/mcumanager.iml" />
       <module fileurl="file://$PROJECT_DIR$/seekbarpreference/seekbarpreference.iml" filepath="$PROJECT_DIR$/seekbarpreference/seekbarpreference.iml" />
     </modules>
   </component>

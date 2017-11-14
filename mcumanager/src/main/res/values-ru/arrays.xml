@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mcu_equalizer_presets_names">
+        <item>Пользовательские</item>
+        <!--<item>Flat</item>-->
+        <item>Джаз</item>
+        <item>Поп</item>
+        <item>Классика</item>
+        <item>Рок</item>
+        <item>Новости</item>
+        <item>Город</item>
+        <item>Электроника</item>
+        <item>Кино</item>
+        <item>Техно</item>
+    </string-array>
+
+    <string-array name="radio_regions_names">
+        <item>США</item>
+        <item>Европа</item>
+        <item>Латинская Америка</item>
+        <item>Восточная Европа (OIRT)</item>
+        <item>Китай</item>
+        <item>Япония</item>
+    </string-array>
+
+    <string-array name="mcu_swc_type_names">
+        <item>Тип 1</item>
+        <item>Тип 2</item>
+    </string-array>
+
+    <string-array name="mcu_boottime_names">
+        <item>Каждый раз</item>
+        <item>Через 2 часа</item>
+        <item>Через 12 часов</item>
+        <item>Через 24 часа</item>
+    </string-array>
+</resources>

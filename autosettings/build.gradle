@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '27.0.0'
     defaultConfig {
         applicationId "com.dgl.auto.autosettings"
         minSdkVersion 22
@@ -27,4 +27,5 @@ dependencies {
     compileOnly project(':seekbarpreference')
     implementation project(':colorpicker-1.0.1')
     compileOnly project(':com.dgl.auto')
+    implementation project(':mcumanager')
 }

@@ -1,1 +1,1 @@
-include ':autosettings', ':seekbarpreference', ':colorpicker-1.0.1', ':com.dgl.auto'
+include ':autosettings', ':seekbarpreference', ':colorpicker-1.0.1', ':com.dgl.auto', ':mcumanager'

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_swc_swcheader">
+
+        <ListPreference
+            android:title="@string/pref_swc_swctype_title"
+            android:key="@string/sp_swc_swctype"
+            android:entries="@array/mcu_swc_type_names"
+            android:entryValues="@array/mcu_swc_type_values"
+            android:dialogTitle="@null"
+            android:dialogMessage="@null"
+            android:positiveButtonText="@null"
+            android:negativeButtonText="@null" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

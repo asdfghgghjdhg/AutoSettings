@@ -3,39 +3,33 @@
 
     <string name="speed_preference_widget_text">%1$d км/ч</string>
 
-    <string name="equalizer_preference_summary_text">Текущие уровни: Бас %1$d%%, Средние %2$d%%, Высокие %3$d%%, Сабвуфер %4$d%%</string>
-    <string name="equalizer_preference_bass">Басы</string>
-    <string name="equalizer_preference_middle">Средние</string>
-    <string name="equalizer_preference_treble">Высокие</string>
-    <string name="equalizer_preference_subwoofer">Сабвуфер</string>
-    <string name="equalizer_preference_presets_title">Предустановки</string>
-
     <string name="pref_header_general">Общие</string>
     <string name="pref_header_sound">Звук</string>
     <string name="pref_header_screen">Экран</string>
-    <string name="pref_header_touch">Тач-панель</string>
-    <string name="pref_header_other">Дополнительно</string>
+    <string name="pref_header_rearview">Камера заднего вида</string>
     <string name="pref_header_radio">Радио</string>
+    <string name="pref_header_swc">Управление кнопками с руля</string>
     <string name="pref_header_info">Информация о системе</string>
 
     <string name="pref_general_generalheader">Основные</string>
+    <string name="pref_general_multimediaheader">Мультимедиа</string>
     <string name="pref_general_beep_title">Сигнал</string>
-    <string name="pref_general_boottime_title">Boot Time</string>
+    <string name="pref_general_boottime_title">Загрузка</string>
     <string name="pref_general_playing_video_title">Видео во время движения</string>
     <string name="pref_general_playing_video_summary">Разрешает воспроизведение видео во время движения. Устройство должно быть подключено к стояночному тормозу Вашего автомобиля.</string>
     <string name="pref_general_shortcut_touch_state_title">Shortcut Touch State</string>
     <string name="pref_general_switch_media_status_title">Switch Media Status</string>
 
-    <string name="pref_general_rearviewheader">Камера заднего вида</string>
-    <string name="pref_general_rearview_addlines_title">Парковочные линии</string>
-    <string name="pref_general_rearview_addlines_summary">Добавляет парковочные линии к изображению камеры заднего вида</string>
-    <string name="pref_general_mirror_rearview_title">Отразить изображение</string>
-    <string name="pref_general_mirror_rearview_summary">Отображает изображение камыре заднего вида по горизонтали</string>
-    <string name="pref_general_rearview_audio_title">Отключить звук</string>
-    <string name="pref_general_rearview_audio_summary">Отключает звук при включении камеры заднего вида</string>
+    <string name="pref_rearview_rearviewheader">Камера заднего вида</string>
+    <string name="pref_rearview_addlines_title">Парковочные линии</string>
+    <string name="pref_rearview_addlines_summary">Добавляет парковочные линии к изображению камеры заднего вида</string>
+    <string name="pref_rearview_mirror_view_title">Отразить изображение</string>
+    <string name="pref_rearview_mirror_view_summary">Отражает изображение камеры заднего вида по горизонтали</string>
+    <string name="pref_rearview_audio_title">Отключить звук</string>
+    <string name="pref_rearview_audio_summary">Отключает звук при включении камеры заднего вида</string>
 
-    <string name="pref_general_swcheader">Управление с руля</string>
-    <string name="pref_general_swctype_title">Тип кнопок</string>
+    <string name="pref_swc_swcheader">Управление кнопками с руля</string>
+    <string name="pref_swc_swctype_title">Тип кнопок</string>
 
     <string name="pref_general_usbheader">USB</string>
     <string name="pref_general_usb0_type_title">Тип USB0</string>
@@ -65,6 +59,13 @@
 
     <string name="pref_sound_eqheader">Эквалайзер</string>
     <string name="pref_sound_eq_title">Настройки эквалайзера</string>
+    <string name="pref_sound_eq_summary">Предустановки: %1$s; Басы: %2$d%%; Средние: %3$d%%; Высокие: %4$d%%; Сабвуфер: %5$d%%</string>
+    <string name="pref_sound_eq_preset_title">Предустановки</string>
+    <string name="pref_sound_eq_custom_title">Пользовательские настройки</string>
+    <string name="pref_sound_eq_bass_title">Басы</string>
+    <string name="pref_sound_eq_middle_title">Средние</string>
+    <string name="pref_sound_eq_treble_title">Высокие</string>
+    <string name="pref_sound_eq_subwoofer_title">Сабвуфер</string>
     <string name="pref_sound_loudmode">Тонокомпенсация</string>
 
     <string name="pref_sound_speedcompheader">Звуковая компенсация скорости</string>
@@ -75,33 +76,11 @@
     <string name="pref_sound_max_speed_title">Скорость максимальной громкости</string>
     <string name="pref_sound_max_speed_summary">Задает скорость, при которой громкость достигнет своего максимума. Может быть меньше или больше реальной максимальной скорости автомобиля.</string>
 
-    <string-array name="sound_equalizer_presets_names">
-        <item>Пользовательские</item>
-        <item>Джаз</item>
-        <item>Поп</item>
-        <item>Классическая музыка</item>
-        <item>Рок</item>
-        <item>Новости</item>
-        <item>Город</item>
-        <item>Электроника</item>
-        <item>Кино</item>
-        <item>Техно</item>
-    </string-array>
-
     <string name="pref_radio_regionheader">Настройки региона</string>
     <string name="pref_radio_region_title">Регион</string>
     <string name="pref_radio_region_summary">AM %1$dkHz - %2$dkHz шаг %3$dkHz, FM %4$.2fMHz - %5$.2fMHz шаг %6$.2fMHz</string>
 
-    <string-array name="radio_regions_names">
-        <item>США</item>
-        <item>Европа</item>
-        <item>Латинская Америка</item>
-        <item>Восточная Европа (OIRT)</item>
-        <item>Китай</item>
-        <item>Япония</item>
-    </string-array>
-
-    <string name="pref_screen_brightnessheader">Яркость / Контрастность</string>
+    <string name="pref_screen_brightnessheader">Экран</string>
     <string name="pref_screen_brightness_title">Яркость</string>
     <string name="pref_screen_contrast_title">Контрастность</string>
 
@@ -116,4 +95,7 @@
     <string name="pref_info_can_title">Версия CAN</string>
     <string name="pref_info_bt_title">Версия Bluetooth</string>
     <string name="pref_info_system_title">Версия системы</string>
+
+    <string name="pref_mcu_unaviable_summary">Управление MCU недоступно</string>
+
 </resources>

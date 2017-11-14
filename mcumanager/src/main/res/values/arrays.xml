@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mcu_equalizer_presets_names">
+        <item>Custom</item>
+        <!--<item>Flat</item>-->
+        <item>Jazz</item>
+        <item>Pop</item>
+        <item>Classic</item>
+        <item>Rock</item>
+        <item>News</item>
+        <item>City</item>
+        <item>Electronic</item>
+        <item>Movie</item>
+        <item>Techno</item>
+    </string-array>
+
+    <string-array name="mcu_equalizer_presets_values">
+        <item>custom</item>
+        <!--<item>flat</item>-->
+        <item>jazz</item>
+        <item>pop</item>
+        <item>classic</item>
+        <item>rock</item>
+        <item>news</item>
+        <item>city</item>
+        <item>electronic</item>
+        <item>movie</item>
+        <item>techno</item>
+    </string-array>
+
+    <string-array name="mcu_radio_regions_names">
+        <item>USA</item>
+        <item>Europe</item>
+        <item>Latin america</item>
+        <item>East Europe (OIRT)</item>
+        <item>China</item>
+        <item>Japan</item>
+    </string-array>
+
+    <string-array name="mcu_radio_regions_values">
+        <item>usa</item>
+        <item>europe</item>
+        <item>latin</item>
+        <item>oirt</item>
+        <item>china</item>
+        <item>japan</item>
+    </string-array>
+
+    <string-array name="mcu_swc_type_names">
+        <item>Type 1</item>
+        <item>type 2</item>
+    </string-array>
+
+    <string-array name="mcu_swc_type_values">
+        <item>type1</item>
+        <item>type2</item>
+    </string-array>
+
+    <string-array name="mcu_usb_type_names">
+        <item>USB 2.0</item>
+        <item>USB 1.1</item>
+    </string-array>
+
+    <string-array name="mcu_usb_type_values">
+        <item>usb20</item>
+        <item>usb11</item>
+    </string-array>
+
+    <string-array name="mcu_boottime_names">
+        <item>Every time</item>
+        <item>After 2 hours</item>
+        <item>After 12 hours</item>
+        <item>After 24 hours</item>
+    </string-array>
+
+    <string-array name="mcu_boottime_values">
+        <item>everytime</item>
+        <item>2hours</item>
+        <item>12hours</item>
+        <item>24hours</item>
+    </string-array>
+</resources>

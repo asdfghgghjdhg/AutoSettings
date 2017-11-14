@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="mcu_max_volume_value">40</integer>
+    <integer name="mcu_max_balance_value">14</integer>
+    <integer name="mcu_max_fade_value">14</integer>
+
+    <integer name="mcu_max_bass_value">14</integer>
+    <integer name="mcu_max_middle_value">14</integer>
+    <integer name="mcu_max_treble_value">14</integer>
+    <integer name="mcu_max_subwoofer_value">14</integer>
+
+    <integer name="mcu_max_contrast_value">127</integer>
+    <integer name="mcu_max_hsb_hue_value">127</integer>
+    <integer name="mcu_max_hsb_saturation_value">127</integer>
+    <integer name="mcu_max_hsb_brightness_value">127</integer>
+</resources>

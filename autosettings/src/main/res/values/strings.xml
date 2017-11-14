@@ -3,22 +3,16 @@
 
     <string name="speed_preference_widget_text">%1$d km/h</string>
 
-    <string name="equalizer_preference_summary_text">Current levels: Bass %1$d%%, Middle %2$d%%, Treble %3$d%%, Subwoofer %4$d%%</string>
-    <string name="equalizer_preference_bass">Bass</string>
-    <string name="equalizer_preference_middle">Middle</string>
-    <string name="equalizer_preference_treble">Treble</string>
-    <string name="equalizer_preference_subwoofer">Subwoofer</string>
-    <string name="equalizer_preference_presets_title">Preset</string>
-
     <string name="pref_header_general">General</string>
     <string name="pref_header_sound">Sound</string>
     <string name="pref_header_radio">Radio</string>
     <string name="pref_header_screen">Screen</string>
-    <string name="pref_header_touch">Touch panel</string>
-    <string name="pref_header_other">Other</string>
+    <string name="pref_header_rearview">Rear View Camera</string>
+    <string name="pref_header_swc">Steering Wheel Control</string>
     <string name="pref_header_info">System information</string>
 
     <string name="pref_general_generalheader">General</string>
+    <string name="pref_general_multimediaheader">Multimedia</string>
     <string name="pref_general_beep_title">Beep</string>
     <string name="pref_general_boottime_title">Boot Time</string>
     <string name="pref_general_playing_video_title">Play Video While Driving</string>
@@ -26,16 +20,16 @@
     <string name="pref_general_shortcut_touch_state_title">Shortcut Touch State</string>
     <string name="pref_general_switch_media_status_title">Switch Media Status</string>
 
-    <string name="pref_general_rearviewheader">Rear View Camera</string>
-    <string name="pref_general_rearview_addlines_title">Add parking lines</string>
-    <string name="pref_general_rearview_addlines_summary">Adds parking lines to rear view camera image</string>
-    <string name="pref_general_mirror_rearview_title">Mirror Rear View Image</string>
-    <string name="pref_general_mirror_rearview_summary">Horrizontally mirrors image of rear view camera</string>
-    <string name="pref_general_rearview_audio_title">Disable Audio</string>
-    <string name="pref_general_rearview_audio_summary">Disables sound when rear view camera is on</string>
+    <string name="pref_rearview_rearviewheader">Rear View Camera</string>
+    <string name="pref_rearview_addlines_title">Add parking lines</string>
+    <string name="pref_rearview_addlines_summary">Adds parking lines to rear view camera image</string>
+    <string name="pref_rearview_mirror_view_title">Mirror Rear View Image</string>
+    <string name="pref_rearview_mirror_view_summary">Horrizontally mirrors image of rear view camera</string>
+    <string name="pref_rearview_audio_title">Disable Audio</string>
+    <string name="pref_rearview_audio_summary">Disables sound when rear view camera is on</string>
 
-    <string name="pref_general_swcheader">Steering Wheel Control</string>
-    <string name="pref_general_swctype_title">SWC Type</string>
+    <string name="pref_swc_swcheader">Steering Wheel Control</string>
+    <string name="pref_swc_swctype_title">SWC Type</string>
 
     <string name="pref_general_usbheader">USB</string>
     <string name="pref_general_usb0_type_title">USB0 Type</string>
@@ -43,23 +37,6 @@
 
     <string name="pref_general_otherheader">Other</string>
     <string name="pref_general_testmode_title">Test Mode</string>
-
-    <string-array name="general_boottime_names">
-        <item>Every time</item>
-        <item>2 hours</item>
-        <item>12 hours</item>
-        <item>24 hours</item>
-    </string-array>
-
-    <string-array name="general_swctype_names">
-        <item>Type 1</item>
-        <item>Type 2</item>
-    </string-array>
-
-    <string-array name="general_usbtype_names">
-        <item>USB 2.0</item>
-        <item>USB 1.1</item>
-    </string-array>
 
     <string name="pref_sound_volumeheader">General volume</string>
     <string name="pref_sound_volume_title">Volume level</string>
@@ -70,6 +47,13 @@
 
     <string name="pref_sound_eqheader">Equalizer</string>
     <string name="pref_sound_eq_title">Equalizer settings</string>
+    <string name="pref_sound_eq_summary">Preset: %1$s; Bass: %2$d%%; Middle: %3$d%%; Treble: %4$d%%; Subwoofer: %5$d%%</string>
+    <string name="pref_sound_eq_preset_title">Presets</string>
+    <string name="pref_sound_eq_custom_title">Custom settings</string>
+    <string name="pref_sound_eq_bass_title">Bass</string>
+    <string name="pref_sound_eq_middle_title">Middle</string>
+    <string name="pref_sound_eq_treble_title">Treble</string>
+    <string name="pref_sound_eq_subwoofer_title">Subwoofer</string>
     <string name="pref_sound_loudmode">Loud mode</string>
 
     <string name="pref_sound_speedcompheader">Speed compensation</string>
@@ -83,33 +67,11 @@
     <string name="pref_sound_volume_offset">Volume offset</string>
     <string name="pref_sound_volume_offset_summary">Value: %1$s</string>
 
-    <string-array name="sound_equalizer_presets_names">
-        <item>Custom</item>
-        <item>Jazz</item>
-        <item>Pop</item>
-        <item>Classic</item>
-        <item>Rock</item>
-        <item>News</item>
-        <item>City</item>
-        <item>Electronic</item>
-        <item>Movie</item>
-        <item>Techno</item>
-    </string-array>
-
     <string name="pref_radio_regionheader">Region settings</string>
     <string name="pref_radio_region_title">Region</string>
     <string name="pref_radio_region_summary">AM %1$dkHz - %2$dkHz step %3$dkHz, FM %4$.2fMHz - %5$.2fMHz step %6$.2fMHz</string>
 
-    <string-array name="radio_regions_names">
-        <item>USA</item>
-        <item>Europe</item>
-        <item>Latin america</item>
-        <item>East Europe (OIRT)</item>
-        <item>China</item>
-        <item>Japan</item>
-    </string-array>
-
-    <string name="pref_screen_brightnessheader">Brightness / Contrast</string>
+    <string name="pref_screen_brightnessheader">Screen</string>
     <string name="pref_screen_brightness_title">Brightness</string>
     <string name="pref_screen_contrast_title">Contrast</string>
 
@@ -124,5 +86,7 @@
     <string name="pref_info_can_title">CAN Version</string>
     <string name="pref_info_bt_title">Bluetooth Version</string>
     <string name="pref_info_system_title">System Version</string>
+
+    <string name="pref_mcu_unaviable_summary">Turned off because MCU unaviable</string>
 
 </resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_rearview_rearviewheader">
+
+        <SwitchPreference
+            android:title="@string/pref_rearview_addlines_title"
+            android:key="@string/sp_rearview_addlines"
+            android:icon="@drawable/ic_border_clear_black_24dp"
+            android:summary="@string/pref_rearview_addlines_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:title="@string/pref_rearview_mirror_view_title"
+            android:key="@string/sp_rearview_mirror_view"
+            android:icon="@drawable/ic_switch_video_black_24dp"
+            android:summary="@string/pref_rearview_mirror_view_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:title="@string/pref_rearview_audio_title"
+            android:key="@string/sp_rearview_disable_audio"
+            android:icon="@drawable/ic_volume_off_black_24dp"
+            android:summary="@string/pref_rearview_audio_summary"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

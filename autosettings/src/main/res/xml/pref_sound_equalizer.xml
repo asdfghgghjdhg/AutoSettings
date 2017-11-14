@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/pref_sound_eq_title"
+    android:icon="@drawable/ic_equalizer_black_24dp">
+
+    <PreferenceCategory android:title="@string/pref_sound_eq_preset_title">
+
+        <ListPreference
+            android:key="@string/sp_sound_eq_preset"
+            android:defaultValue="0"
+            android:positiveButtonText="@null"
+            android:negativeButtonText="@null"
+            android:entries="@array/mcu_equalizer_presets_names"
+            android:entryValues="@array/mcu_equalizer_presets_values" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_sound_eq_custom_title">
+
+        <com.dgl.auto.autosettings.PaddedSeekBarPreference
+            android:title="@string/pref_sound_eq_bass_title"
+            android:key="@string/sp_sound_eq_bass"
+            android:defaultValue="0"
+            android:max="@integer/mcu_max_bass_value"
+            android:enabled="false" />
+
+        <com.dgl.auto.autosettings.PaddedSeekBarPreference
+            android:title="@string/pref_sound_eq_middle_title"
+            android:key="@string/sp_sound_eq_middle"
+            android:defaultValue="0"
+            android:max="@integer/mcu_max_middle_value"
+            android:enabled="false" />
+
+        <com.dgl.auto.autosettings.PaddedSeekBarPreference
+            android:title="@string/pref_sound_eq_treble_title"
+            android:key="@string/sp_sound_eq_treble"
+            android:defaultValue="0"
+            android:max="@integer/mcu_max_treble_value"
+            android:enabled="false" />
+
+        <com.dgl.auto.autosettings.PaddedSeekBarPreference
+            android:title="@string/pref_sound_eq_subwoofer_title"
+            android:key="@string/sp_sound_eq_subwoofer"
+            android:defaultValue="0"
+            android:max="@integer/mcu_max_subwoofer_value" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

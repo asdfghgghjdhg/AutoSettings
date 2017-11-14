@@ -4,11 +4,18 @@
 
     <header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$GeneralPreferenceFragment"
+        android:id="@id/general_fragment"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/pref_header_general" />
 
     <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$ScreenPreferenceFragment"
+        android:icon="@drawable/ic_settings_brightness_black_24dp"
+        android:title="@string/pref_header_screen" />
+
+    <header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$SoundPreferenceFragment"
+        android:id="@id/sound_fragment"
         android:icon="@drawable/ic_volume_up_black_24dp"
         android:title="@string/pref_header_sound" />
 
@@ -18,9 +25,14 @@
         android:title="@string/pref_header_radio" />
 
     <header
-        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$ScreenPreferenceFragment"
-        android:icon="@drawable/ic_settings_brightness_black_24dp"
-        android:title="@string/pref_header_screen" />
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$RearViewPreferenceFragment"
+        android:icon="@drawable/ic_videocam_black_24dp"
+        android:title="@string/pref_header_rearview" />
+
+    <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$SWCPreferenceFragment"
+        android:icon="@drawable/icons8_steering_wheel"
+        android:title="@string/pref_header_swc" />
 
     <header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$InfoPreferenceFragment"

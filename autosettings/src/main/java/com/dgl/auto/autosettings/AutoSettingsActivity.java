@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 import com.dgl.auto.mcumanager.MCUManager;
 import com.jaredrummler.android.colorpicker.ColorPreference;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -158,6 +161,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity implements
                 || SoundPreferenceFragment.class.getName().equals(fragmentName)
                 || EqualizerPreferenceFragment.class.getName().equals(fragmentName)
                 || RadioPreferenceFragment.class.getName().equals(fragmentName)
+                || NavigationPreferenceFragment.class.getName().equals(fragmentName)
                 || ScreenPreferenceFragment.class.getName().equals(fragmentName)
                 || RearViewPreferenceFragment.class.getName().equals(fragmentName)
                 || SWCPreferenceFragment.class.getName().equals(fragmentName)
@@ -251,6 +255,8 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity implements
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
             if (!isAdded()) { return; }
             if (s == null) { return; }
+
+            Log.i(LOG_TAG, "onSharedPreferenceChanged: " + s);
 
             if (s.equals(getString(R.string.sp_general_boottime))) {
                 ListPreference pBootTime = (ListPreference)findPreference(s);
@@ -431,6 +437,7 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity implements
                 String value = sharedPreferences.getString(getString(R.string.sp_sound_eq_preset), getResources().getStringArray(R.array.mcu_equalizer_presets_values)[0]);
                 String[] values = getResources().getStringArray(R.array.mcu_equalizer_presets_values);
                 int index = Arrays.asList(values).indexOf(value);
+                index = index < 0 ? 0 : index;
                 int bass = sharedPreferences.getInt(getString(R.string.sp_sound_eq_bass), 0);
                 int middle = sharedPreferences.getInt(getString(R.string.sp_sound_eq_middle), 0);
                 int treble = sharedPreferences.getInt(getString(R.string.sp_sound_eq_treble), 0);
@@ -675,6 +682,137 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity implements
                     float maxFM = (float) region.getMaxFMFrequency() / 1000;
                     float stepFM = (float) region.getFMStep() / 1000;
                     pRegion.setSummary(String.format(getString(R.string.pref_radio_region_summary), minAM, maxAM, stepAM, minFM, maxFM, stepFM));
+                }
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class NavigationPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+        private SharedPreferences.OnSharedPreferenceChangeListener mSPChangeListener;
+        private Preference.OnPreferenceChangeListener mPreferenceChangeListener;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.pref_navigation);
+            setHasOptionsMenu(true);
+
+            mSPChangeListener = this;
+            SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+            sharedPreferences.registerOnSharedPreferenceChangeListener(mSPChangeListener);
+
+            mPreferenceChangeListener = (AutoSettingsActivity)getActivity();
+
+            ListPreference pPackage = (ListPreference)findPreference(getString(R.string.sp_navigation_package));
+            if (pPackage != null) {
+                try {
+                    List<PackageInfo>packages = getActivity().getPackageManager().getInstalledPackages(0);
+                    ArrayList<String> valuesList = new ArrayList<>();
+                    ArrayList<String> namesList = new ArrayList<>();
+                    for (PackageInfo packageInfo : packages) {
+                        if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) continue;
+                        valuesList.add(packageInfo.packageName);
+                        namesList.add(packageInfo.applicationInfo.loadLabel(getActivity().getPackageManager()).toString());
+                    }
+                    if (valuesList.size() == 0) {
+                        pPackage.setEnabled(false);
+                        pPackage.setSummary(R.string.pref_navigation_package_summary_noapps);
+                    } else {
+                        String[] values = valuesList.toArray(new String[valuesList.size()]);
+                        String[] names = namesList.toArray(new String[namesList.size()]);
+                        pPackage.setEntries(names);
+                        pPackage.setEntryValues(values);
+                        pPackage.setValue(MCUManager.NavigationControl.getPackageName());
+                        pPackage.setOnPreferenceChangeListener(mPreferenceChangeListener);
+                        if (pPackage.getEntry() == null) {
+                            pPackage.setSummary(R.string.pref_navigation_package_summary_notselected);
+                        }
+                    }
+                } catch (RemoteException e) {
+                    pPackage.setEnabled(false);
+                    pPackage.setSummary(R.string.pref_mcu_unaviable_summary);
+                }
+            }
+
+            SwitchPreference pAutorun = (SwitchPreference)findPreference(getString(R.string.sp_navigation_autorun));
+            if (pAutorun != null) {
+                try {
+                    pAutorun.setChecked(MCUManager.NavigationControl.getAutorunNavigation());
+                    pAutorun.setSummary(R.string.pref_navigation_autorun_summary);
+                    pAutorun.setOnPreferenceChangeListener(mPreferenceChangeListener);
+                    if ((pPackage != null) && (pPackage.getEntry() == null)) {
+                        pAutorun.setEnabled(false);
+                    }
+                } catch (RemoteException e) {
+                    pAutorun.setEnabled(false);
+                    pAutorun.setSummary(R.string.pref_mcu_unaviable_summary);
+                }
+            }
+
+            PercentagePreference pVolumeMix = (PercentagePreference)findPreference(getString(R.string.sp_navigation_volumemix));
+            if (pVolumeMix != null) {
+                try {
+                    pVolumeMix.setPercentage(MCUManager.NavigationControl.getGPSVolumeMix());
+                    pVolumeMix.setOnPreferenceChangeListener(mPreferenceChangeListener);
+                } catch (RemoteException e) {
+                    pVolumeMix.setEnabled(false);
+                    pVolumeMix.setSummary(R.string.pref_mcu_unaviable_summary);
+                }
+            }
+        }
+
+        @Override
+        public void onDestroy() {
+            getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(mSPChangeListener);
+            super.onDestroy();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                getActivity().onBackPressed();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+            if (!isAdded()) { return; }
+            if (s == null) { return; }
+
+            if (s.equals(getString(R.string.sp_navigation_package))) {
+                ListPreference pPackage = (ListPreference)findPreference(s);
+                if (pPackage != null) {
+                    pPackage.setValue(sharedPreferences.getString(s, ""));
+                    SwitchPreference pAutorun = (SwitchPreference)findPreference(getString(R.string.sp_navigation_autorun));
+                    PercentagePreference pVolumeMix = (PercentagePreference)findPreference(getString(R.string.sp_navigation_volumemix));
+                    if (pPackage.getEntry() == null) {
+                        pPackage.setSummary(R.string.pref_navigation_package_summary_notselected);
+                        pAutorun.setEnabled(false);
+                        pVolumeMix.setEnabled(false);
+                    } else {
+                        pAutorun.setEnabled(true);
+                        pVolumeMix.setEnabled(true);
+                    }
+                }
+            }
+
+            if (s.equals(getString(R.string.sp_navigation_autorun))) {
+                SwitchPreference pAutorun = (SwitchPreference)findPreference(s);
+                if (pAutorun != null) {
+                    pAutorun.setChecked(sharedPreferences.getBoolean(s, false));
+                }
+            }
+
+            if (s.equals(getString(R.string.sp_navigation_volumemix))) {
+                PercentagePreference pVolumeMix = (PercentagePreference)findPreference(s);
+                if (pVolumeMix != null) {
+                    pVolumeMix.setPercentage(sharedPreferences.getInt(s, 0));
                 }
             }
         }
@@ -1215,6 +1353,38 @@ public class AutoSettingsActivity extends AppCompatPreferenceActivity implements
                 mAutoSettingsService.skipGeneralSettingsChange();
                 mAutoSettingsService.skipRadioInfoChange();
                 MCUManager.RadioControl.setRegionIndex(index);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        // Навигация
+        if (preference.getKey().equalsIgnoreCase(getString(R.string.sp_navigation_package))) {
+            try {
+                mAutoSettingsService.skipGeneralSettingsChange();
+                MCUManager.NavigationControl.setPackageName((String)value);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        if (preference.getKey().equalsIgnoreCase(getString(R.string.sp_navigation_autorun))) {
+            try {
+                mAutoSettingsService.skipGeneralSettingsChange();
+                MCUManager.NavigationControl.setAutorunNavigation((boolean)value);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        if (preference.getKey().equalsIgnoreCase(getString(R.string.sp_navigation_volumemix))) {
+            try {
+                mAutoSettingsService.skipGeneralSettingsChange();
+                MCUManager.NavigationControl.setGPSVolumeMix((int)value);
             } catch (RemoteException e) {
                 e.printStackTrace();
                 return false;

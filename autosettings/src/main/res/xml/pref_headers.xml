@@ -25,6 +25,11 @@
         android:title="@string/pref_header_radio" />
 
     <header
+        android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$NavigationPreferenceFragment"
+        android:icon="@drawable/ic_directions_black_24dp"
+        android:title="@string/pref_header_navigation" />
+
+    <header
         android:fragment="com.dgl.auto.autosettings.AutoSettingsActivity$RearViewPreferenceFragment"
         android:icon="@drawable/ic_videocam_black_24dp"
         android:title="@string/pref_header_rearview" />

@@ -438,6 +438,90 @@ public class MCUManager {
 
     }
 
+    public static class NavigationControl {
+
+        private static final float MAX_GPS_VOLUMEMIX_VALUE = (float)0.3;
+
+        public static boolean getAutorunNavigation() throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                return sm.getAutoRunNaviValue();
+            }
+
+            throw new RemoteException();
+        }
+
+        public static int getGPSVolumeMix() throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                float value = sm.getGPSVolumeMixValue();
+                return Math.round(value * 100 / MAX_GPS_VOLUMEMIX_VALUE);
+            }
+
+            throw new RemoteException();
+        }
+
+        public static int getMode() throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                return sm.getNaviMode();
+            }
+
+            throw new RemoteException();
+        }
+
+        public static String getPackageName() throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                return sm.getNaviPackageName();
+            }
+
+            throw new RemoteException();
+        }
+
+        public static void setAutorunNavigation(boolean on) throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                sm.setAutoRunNaviValue(on);
+                return;
+            }
+
+            throw new RemoteException();
+        }
+
+        public static void setGPSVolumeMix(int percentage) throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                float value = (float)percentage * MAX_GPS_VOLUMEMIX_VALUE / 100;
+                sm.setGPSVolumeMixValue(value);
+                return;
+            }
+
+            throw new RemoteException();
+        }
+
+        public static void setMode(int mode) throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                sm.setNaviMode(mode);
+                return;
+            }
+
+            throw new RemoteException();
+        }
+
+        public static void setPackageName(String name) throws RemoteException {
+            ISettingManager sm = SettingManager.getInstance();
+            if (sm != null) {
+                sm.setNaviPackageName(name);
+                return;
+            }
+
+            throw new RemoteException();
+        }
+
+    }
+
     public static class RadioControl {
 
         public enum RadioBand {AM, FM}

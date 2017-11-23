@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autosettings="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/pref_navigation_navigationheader">
+
+        <com.dgl.auto.autosettings.AppPreference
+            android:title="@string/pref_navigation_package_title"
+            android:key="@string/sp_navigation_package"
+            android:icon="@drawable/ic_apps_black_24dp"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:widgetLayout="@layout/app_preference_widget" />
+
+        <SwitchPreference
+            android:title="@string/pref_navigation_autorun_title"
+            android:key="@string/sp_navigation_autorun"
+            android:summary="@string/pref_navigation_autorun_summary"
+            android:defaultValue="false" />
+
+        <com.dgl.auto.autosettings.PercentagePreference
+            android:title="@string/pref_navigation_volumemix_title"
+            android:key="@string/sp_navigation_volumemix"
+            android:summary="@string/pref_navigation_volumemix_summary"
+            autosettings:minValue="0"
+            autosettings:maxValue="100"
+            autosettings:stepValue="5" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

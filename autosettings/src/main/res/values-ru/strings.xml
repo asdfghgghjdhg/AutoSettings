@@ -31,25 +31,6 @@
     <string name="pref_swc_swcheader">Управление кнопками с руля</string>
     <string name="pref_swc_swctype_title">Тип кнопок</string>
 
-    <string name="pref_general_usbheader">USB</string>
-    <string name="pref_general_usb0_type_title">Тип USB0</string>
-    <string name="pref_general_usb1_type_title">Тип USB1</string>
-
-    <string name="pref_general_otherheader">Другое</string>
-    <string name="pref_general_testmode_title">Test Mode</string>
-
-    <string-array name="general_boottime_names">
-        <item>Каждый раз</item>
-        <item>2 часа</item>
-        <item>12 часов</item>
-        <item>24 часа</item>
-    </string-array>
-
-    <string-array name="general_swctype_names">
-        <item>Тип 1</item>
-        <item>Тип 2</item>
-    </string-array>
-
     <string name="pref_sound_volumeheader">Общая громкость</string>
     <string name="pref_sound_volume_title">Уровень громкости</string>
 

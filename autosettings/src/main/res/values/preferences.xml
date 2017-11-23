@@ -28,6 +28,10 @@
     <string name="sp_radio_lastAMfreq">radio_lastAMfreq</string>
     <string name="sp_radio_lastFMfreq">radio_lastFMfreq</string>
 
+    <string name="sp_navigation_autorun">navigation_autorun</string>
+    <string name="sp_navigation_package">navigation_package</string>
+    <string name="sp_navigation_volumemix">navigation_volumemix</string>
+
     <string name="sp_screen_brightness">screen_brightness</string>
     <string name="sp_screen_contrast">screen_contrast</string>
     <string name="sp_screen_hue">screen_hue</string>

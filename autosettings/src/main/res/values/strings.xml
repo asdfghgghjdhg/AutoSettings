@@ -2,11 +2,13 @@
     <string name="app_name">AutoSettings</string>
 
     <string name="speed_preference_widget_text">%1$d km/h</string>
+    <string name="percentage_preference_widget_text">%1$d %%</string>
 
     <string name="pref_header_general">General</string>
     <string name="pref_header_sound">Sound</string>
     <string name="pref_header_radio">Radio</string>
     <string name="pref_header_screen">Screen</string>
+    <string name="pref_header_navigation">Navigation</string>
     <string name="pref_header_rearview">Rear View Camera</string>
     <string name="pref_header_swc">Steering Wheel Control</string>
     <string name="pref_header_info">System information</string>
@@ -30,13 +32,6 @@
 
     <string name="pref_swc_swcheader">Steering Wheel Control</string>
     <string name="pref_swc_swctype_title">SWC Type</string>
-
-    <string name="pref_general_usbheader">USB</string>
-    <string name="pref_general_usb0_type_title">USB0 Type</string>
-    <string name="pref_general_usb1_type_title">USB1 Type</string>
-
-    <string name="pref_general_otherheader">Other</string>
-    <string name="pref_general_testmode_title">Test Mode</string>
 
     <string name="pref_sound_volumeheader">General volume</string>
     <string name="pref_sound_volume_title">Volume level</string>
@@ -70,6 +65,15 @@
     <string name="pref_radio_regionheader">Region settings</string>
     <string name="pref_radio_region_title">Region</string>
     <string name="pref_radio_region_summary">AM %1$dkHz - %2$dkHz step %3$dkHz, FM %4$.2fMHz - %5$.2fMHz step %6$.2fMHz</string>
+
+    <string name="pref_navigation_navigationheader">Navigation</string>
+    <string name="pref_navigation_autorun_title">Autorun</string>
+    <string name="pref_navigation_autorun_summary">Autorun navigation at startup</string>
+    <string name="pref_navigation_package_title">Navigation App</string>
+    <string name="pref_navigation_package_summary_noapps">No any navigation app intsalled</string>
+    <string name="pref_navigation_package_summary_notselected">Navigation app is not selected yet</string>
+    <string name="pref_navigation_volumemix_title">Volume Mix</string>
+    <string name="pref_navigation_volumemix_summary">Sets other sounds volume percentage when navigation app playing</string>
 
     <string name="pref_screen_brightnessheader">Screen</string>
     <string name="pref_screen_brightness_title">Brightness</string>

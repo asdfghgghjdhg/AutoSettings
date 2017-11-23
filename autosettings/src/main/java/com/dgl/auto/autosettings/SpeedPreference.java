@@ -39,7 +39,7 @@ public class SpeedPreference extends DialogPreference implements NumberPicker.On
     public SpeedPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.com_dgl_auto_autosettings_SpeedPreferences);
         mSpeedMinValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMinValue, DEFAULT_MIN_VALUE);
         mSpeedMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMaxValue, DEFAULT_MAX_VALUE);
         mSpeedStepValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedStepValue, DEFAULT_STEP_VALUE);
@@ -52,7 +52,7 @@ public class SpeedPreference extends DialogPreference implements NumberPicker.On
     public SpeedPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.com_dgl_auto_autosettings_SpeedPreferences);
         mSpeedMinValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMinValue, DEFAULT_MIN_VALUE);
         mSpeedMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMaxValue, DEFAULT_MAX_VALUE);
         mSpeedStepValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedStepValue, DEFAULT_STEP_VALUE);
@@ -65,7 +65,7 @@ public class SpeedPreference extends DialogPreference implements NumberPicker.On
     public SpeedPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.com_dgl_auto_autosettings_SpeedPreferences);
         mSpeedMinValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMinValue, DEFAULT_MIN_VALUE);
         mSpeedMaxValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedMaxValue, DEFAULT_MAX_VALUE);
         mSpeedStepValue = a.getInt(R.styleable.com_dgl_auto_autosettings_SpeedPreferences_speedStepValue, DEFAULT_STEP_VALUE);

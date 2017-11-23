@@ -5,4 +5,10 @@
         <attr name="speedMinValue" format="integer" />
         <attr name="speedStepValue" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="com.dgl.auto.autosettings.PercentagePreferences">
+        <attr name="maxValue" format="integer" />
+        <attr name="minValue" format="integer" />
+        <attr name="stepValue" format="integer" />
+    </declare-styleable>
 </resources>

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.dgl.auto.constant.GlobalConstant;
 import com.dgl.auto.mcumanager.MCUManager;
@@ -21,6 +22,8 @@ import java.util.Locale;
 
 public class AutoSettingsReceiver extends BroadcastReceiver {
 
+    private static final String LOG_TAG = "AutoSettingsReceiver";
+
     private static final String ACTION_VOLUME_UP = "com.dgl.auto.action.VOLUME_UP";
     private static final String ACTION_VOLUME_DOWN = "com.dgl.auto.action.VOLUME_DOWN";
     private static final String ACTION_VOLUME_MUTE = "com.dgl.auto.action.VOLUME_MUTE";
@@ -30,6 +33,9 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+
+        Log.i(LOG_TAG, "onReveive: " + action);
+
         File fileToWrite = new File(context.getFilesDir(), "broadcast.txt");
         String date_str = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.US).format(System.currentTimeMillis());
         String output =  date_str + ": action:" + action + "\n";

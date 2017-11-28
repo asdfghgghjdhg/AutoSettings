@@ -89,6 +89,10 @@ public class SettingsChangeListener implements ISettingManager.IDataChange {
                 default: swcTypeIndex = 0;
             }
             editor.putString(mContext.getString(R.string.sp_swc_swctype), mContext.getResources().getStringArray(R.array.mcu_swc_type_values)[swcTypeIndex]);
+
+            editor.putString(mContext.getString(R.string.sp_navigation_package), MCUManager.NavigationControl.getPackageName());
+            editor.putBoolean(mContext.getString(R.string.sp_navigation_autorun), MCUManager.NavigationControl.getAutorunNavigation());
+            editor.putInt(mContext.getString(R.string.sp_navigation_volumemix), MCUManager.NavigationControl.getGPSVolumeMix());
         } catch (RemoteException e) {
             e.printStackTrace();
         }

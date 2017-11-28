@@ -34,7 +34,7 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        Log.i(LOG_TAG, "onReveive: " + action);
+        Log.i(LOG_TAG, "onReceive: " + action);
 
         File fileToWrite = new File(context.getFilesDir(), "broadcast.txt");
         String date_str = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.US).format(System.currentTimeMillis());
@@ -264,6 +264,35 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
             e.printStackTrace();
         }
 
+        // Навигация
+        try {
+            if (sharedPreferences.contains(context.getString(R.string.sp_navigation_package))) {
+                MCUManager.NavigationControl.setPackageName(sharedPreferences.getString(context.getString(R.string.sp_navigation_package), ""));
+            } else {
+                editor.putString(context.getString(R.string.sp_navigation_package), MCUManager.NavigationControl.getPackageName());
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (sharedPreferences.contains(context.getString(R.string.sp_navigation_autorun))) {
+                MCUManager.NavigationControl.setAutorunNavigation(sharedPreferences.getBoolean(context.getString(R.string.sp_navigation_autorun), false));
+            } else {
+                editor.putBoolean(context.getString(R.string.sp_navigation_autorun), MCUManager.NavigationControl.getAutorunNavigation());
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (sharedPreferences.contains(context.getString(R.string.sp_navigation_volumemix))) {
+                MCUManager.NavigationControl.setGPSVolumeMix(sharedPreferences.getInt(context.getString(R.string.sp_navigation_volumemix), 0));
+            } else {
+                editor.putInt(context.getString(R.string.sp_navigation_volumemix), MCUManager.NavigationControl.getGPSVolumeMix());
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
         // Экран
         try {
             if (sharedPreferences.contains(context.getString(R.string.sp_screen_contrast))) {
@@ -443,6 +472,23 @@ public class AutoSettingsReceiver extends BroadcastReceiver {
                 pref = context.getString(R.string.sp_radio_lastFMfreq);
             }
             editor.putInt(pref, freq);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        // Навигация
+        try {
+            editor.putString(context.getString(R.string.sp_navigation_package), MCUManager.NavigationControl.getPackageName());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        try {
+            editor.putBoolean(context.getString(R.string.sp_navigation_autorun), MCUManager.NavigationControl.getAutorunNavigation());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        try {
+            editor.putInt(context.getString(R.string.sp_navigation_volumemix), MCUManager.NavigationControl.getGPSVolumeMix());
         } catch (RemoteException e) {
             e.printStackTrace();
         }

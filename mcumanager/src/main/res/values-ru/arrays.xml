@@ -14,7 +14,7 @@
         <item>Техно</item>
     </string-array>
 
-    <string-array name="radio_regions_names">
+    <string-array name="mcu_radio_regions_names">
         <item>США</item>
         <item>Европа</item>
         <item>Латинская Америка</item>

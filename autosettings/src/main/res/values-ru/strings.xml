@@ -61,6 +61,15 @@
     <string name="pref_radio_region_title">Регион</string>
     <string name="pref_radio_region_summary">AM %1$dkHz - %2$dkHz шаг %3$dkHz, FM %4$.2fMHz - %5$.2fMHz шаг %6$.2fMHz</string>
 
+    <string name="pref_navigation_navigationheader">Навигация</string>
+    <string name="pref_navigation_autorun_title">Автозапуск</string>
+    <string name="pref_navigation_autorun_summary">Автозапуск программы навигации при загрузке</string>
+    <string name="pref_navigation_package_title">Программа навигации</string>
+    <string name="pref_navigation_package_summary_noapps">Ни одной программы навигации не установлено</string>
+    <string name="pref_navigation_package_summary_notselected">Программа навигации пока не выбрана</string>
+    <string name="pref_navigation_volumemix_title">Затухание звука</string>
+    <string name="pref_navigation_volumemix_summary">Громкость основного звукого потока во время использования программы навигации</string>
+
     <string name="pref_screen_brightnessheader">Экран</string>
     <string name="pref_screen_brightness_title">Яркость</string>
     <string name="pref_screen_contrast_title">Контрастность</string>
